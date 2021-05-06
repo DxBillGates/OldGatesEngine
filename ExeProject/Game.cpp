@@ -23,8 +23,8 @@ bool Game::LoadContents()
 	Shader* testShader = new Shader(&graphicsDevice,std::wstring(L"Simple"));
 	testShader->Create({InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, {RangeType::CBV,RangeType::CBV});
 
+	delete testShader;
 
-	using namespace GatesEngine;
 	auto* g = gameObjectManager.Add(new GameObject());
 
 	return true;
@@ -45,7 +45,7 @@ bool Game::Update()
 
 void Game::Draw()
 {
-	graphicsDevice.ClearRenderTarget({1,0,0,0});
+	graphicsDevice.ClearRenderTarget({135,206,235,0});
 	sceneManager->Draw();
 	graphicsDevice.ScreenFlip();
 }

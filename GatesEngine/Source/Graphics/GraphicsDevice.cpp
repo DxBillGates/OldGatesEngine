@@ -97,7 +97,12 @@ void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, Render
 		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, nullptr);
 	}
 	//useRenderTarget‚ðcolor‚Å“h‚è‚Â‚Ô‚·
-	float rgba[] = { color.x,color.y,color.z,color.w };
+	Vector4 setColor = color;
+	if (setColor.x > 1)setColor.x /= 255.0f;
+	if (setColor.y > 1)setColor.y /= 255.0f;
+	if (setColor.z > 1)setColor.z /= 255.0f;
+
+	float rgba[] = { setColor.x,setColor.y,setColor.z,setColor.w };
 	mCmdList->ClearRenderTargetView(rtvHandle, rgba, 0, nullptr);
 
 	mCmdList->RSSetViewports(1, &mViewport);
