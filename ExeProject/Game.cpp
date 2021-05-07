@@ -20,8 +20,8 @@ bool Game::LoadContents()
 	sceneManager->ChangeScene("SampleScene");
 
 	using namespace GatesEngine;
-	Shader* testShader = new Shader(&graphicsDevice,std::wstring(L"Simple"));
-	testShader->Create({InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, {RangeType::CBV,RangeType::CBV});
+	Shader* testShader = new Shader(&graphicsDevice,std::wstring(L"Default"));
+	testShader->Create({InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, {RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV });
 
 	delete testShader;
 
@@ -46,6 +46,8 @@ bool Game::Update()
 void Game::Draw()
 {
 	graphicsDevice.ClearRenderTarget({135,206,235,0});
+	//mainCamera.SetCmdList();
+	//mainWorldLight.SetCmdList();
 	sceneManager->Draw();
 	graphicsDevice.ScreenFlip();
 }
