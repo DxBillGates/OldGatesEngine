@@ -25,6 +25,7 @@
     <ClInclude Include="Header\GameObject\GameObject.h" />
     <ClInclude Include="Header\GameObject\GameObjectManager.h" />
     <ClInclude Include="Header\Graphics\COMRelease.h" />
+    <ClInclude Include="Header\Graphics\DescriptorHeapManager.h" />
     <ClInclude Include="Header\Graphics\GraphicsDevice.h" />
     <ClInclude Include="Header\Graphics\Pipeline.h" />
     <ClInclude Include="Header\Graphics\RenderTarget.h" />
@@ -48,6 +49,7 @@
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
+    <ClCompile Include="Source\Graphics\DescriptorHeapManager.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="Source\Graphics\Pipeline.cpp" />
     <ClCompile Include="Source\Graphics\RenderTarget.cpp" />

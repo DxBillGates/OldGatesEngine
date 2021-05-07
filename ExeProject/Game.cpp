@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "SampleScene.h"
-#include "Header/Graphics/Shader.h"
 
 Game::Game():Application()
 {
@@ -12,6 +11,7 @@ Game::Game(const GatesEngine::Math::Vector2& wSize, const char* title):Applicati
 
 Game::~Game()
 {
+	delete testShader;
 }
 
 bool Game::LoadContents()
@@ -20,10 +20,8 @@ bool Game::LoadContents()
 	sceneManager->ChangeScene("SampleScene");
 
 	using namespace GatesEngine;
-	Shader* testShader = new Shader(&graphicsDevice,std::wstring(L"Default"));
+	testShader = new Shader(&graphicsDevice,std::wstring(L"Default"));
 	testShader->Create({InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, {RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV });
-
-	delete testShader;
 
 	auto* g = gameObjectManager.Add(new GameObject());
 
@@ -46,6 +44,8 @@ bool Game::Update()
 void Game::Draw()
 {
 	graphicsDevice.ClearRenderTarget({135,206,235,0});
+	graphicsDevice.SetDescriptorHeap();
+	testShader->Set();
 	//mainCamera.SetCmdList();
 	//mainWorldLight.SetCmdList();
 	sceneManager->Draw();

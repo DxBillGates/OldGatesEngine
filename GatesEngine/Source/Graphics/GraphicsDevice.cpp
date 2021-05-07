@@ -1,6 +1,7 @@
 #include "..\..\Header\Graphics\GraphicsDevice.h"
 #include "..\..\Header\Graphics\COMRelease.h"
 #include "..\..\Header\Graphics\RenderTarget.h"
+#include "..\..\Header\Graphics\DescriptorHeapManager.h"
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -24,6 +25,7 @@ GatesEngine::GraphicsDevice::GraphicsDevice()
 	, mDepthBuffer(nullptr)
 	, mFence(nullptr)
 	, mFenceValue(0)
+	, descriptorHeapManager(nullptr)
 {
 #ifdef _DEBUG
 	HRESULT result;
@@ -59,6 +61,8 @@ GatesEngine::GraphicsDevice::~GraphicsDevice()
 	COM_RELEASE(mDepthBuffer);
 	COM_RELEASE(mDsvHeap);
 	COM_RELEASE(mFence);
+
+	delete descriptorHeapManager;
 }
 
 bool GatesEngine::GraphicsDevice::Create(Window* mainWindow)
@@ -71,6 +75,9 @@ bool GatesEngine::GraphicsDevice::Create(Window* mainWindow)
 	CreateRtv();
 	CreateDsv();
 	CreateFence();
+
+	descriptorHeapManager = new DescriptorHeapManager(this, 640, 64);
+
 	return true;
 }
 
@@ -150,6 +157,11 @@ void GatesEngine::GraphicsDevice::SetViewport(const Vector2& size, const Vector2
 	mRect = { 0,0,(int)size.x,(int)size.y };
 }
 
+void GatesEngine::GraphicsDevice::SetDescriptorHeap()
+{
+	descriptorHeapManager->Set();
+}
+
 ID3D12Device* GatesEngine::GraphicsDevice::GetDevice()
 {
 	return mDevice;
@@ -173,6 +185,11 @@ ID3D12Resource* GatesEngine::GraphicsDevice::GetCurrentFrameBuffer()
 ID3D12DescriptorHeap* GatesEngine::GraphicsDevice::GetRtvHeap()
 {
 	return nullptr;
+}
+
+GatesEngine::DescriptorHeapManager* GatesEngine::GraphicsDevice::GetDescriptorHeapManager()
+{
+	return descriptorHeapManager;
 }
 
 void GatesEngine::GraphicsDevice::CreateDxgiFactory()

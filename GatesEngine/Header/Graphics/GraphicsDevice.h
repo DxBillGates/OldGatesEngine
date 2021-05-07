@@ -8,6 +8,7 @@
 
 namespace GatesEngine
 {
+	class DescriptorHeapManager;
 	class RenderTarget;
 	class GraphicsDevice
 	{
@@ -31,6 +32,8 @@ namespace GatesEngine
 		ID3D12Resource*              mDepthBuffer;
 		ID3D12Fence*                 mFence;
 		UINT64                       mFenceValue;
+
+		DescriptorHeapManager* descriptorHeapManager;
 	private:
 		void CreateDxgiFactory();
 		void CreateDevice();
@@ -49,11 +52,13 @@ namespace GatesEngine
 		void ScreenFlip();
 		void SetResourceBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
 		void SetViewport(const Vector2& size, const Vector2& pos = {});
+		void SetDescriptorHeap();
 
 		ID3D12Device* GetDevice();
 		ID3D12GraphicsCommandList* GetCmdList();
 		IDXGISwapChain4* GetSwapChain();
 		ID3D12Resource* GetCurrentFrameBuffer();
 		ID3D12DescriptorHeap* GetRtvHeap();
+		DescriptorHeapManager* GetDescriptorHeapManager();
 	};
 }
