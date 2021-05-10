@@ -43,6 +43,9 @@ namespace GatesEngine
 			static float Determinant(const Matrix4x4& m);
 
 			Axis GetAxis();
+			static Matrix4x4 GetViewMatrixLookAt(const Vector3& pos, const Vector3& focasPos, const Vector3& upDir);
+			static Matrix4x4 GetViewMatrixLookTo(const Vector3& pos, const Vector3& direction, const Vector3& upDir);
+			static Matrix4x4 GetPerspectiveMatrix(float fov, float aspect, float nearClip = 1.0f, float farClip = 10000.0f);
 		};
 		Matrix4x4& operator*=(Matrix4x4& m1, const Matrix4x4& m2);
 		Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2);

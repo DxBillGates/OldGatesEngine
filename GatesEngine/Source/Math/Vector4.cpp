@@ -1,4 +1,5 @@
 #include "..\..\Header\Math\Vector4.h"
+#include <math.h>
 
 GatesEngine::Math::Vector4::Vector4()
 	:x(0), y(0), z(0), w(0)
@@ -12,6 +13,27 @@ GatesEngine::Math::Vector4::Vector4(float xyzw): x(xyzw), y(xyzw), z(xyzw), w(xy
 GatesEngine::Math::Vector4::Vector4(float x, float y, float z, float w)
 	: x(x), y(y), z(z), w(w)
 {
+}
+
+GatesEngine::Math::Vector4::Vector4(const Vector3& v)
+	: x(v.x), y(v.y), z(v.z), w(0)
+{
+}
+
+float GatesEngine::Math::Vector4::Length()
+{
+	return sqrtf(x * x + y * y + z * z);
+}
+
+GatesEngine::Math::Vector4 GatesEngine::Math::Vector4::Normalize()
+{
+	return *this / Length();
+}
+
+GatesEngine::Math::Vector4 GatesEngine::Math::Vector4::Normalize(const Vector4& v)
+{
+	Vector4 v1 = v;
+	return v1 / v1.Length();
 }
 
 GatesEngine::Math::Vector4 GatesEngine::Math::Vector4::operator+()

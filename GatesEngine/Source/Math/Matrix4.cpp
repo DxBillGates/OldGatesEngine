@@ -198,6 +198,54 @@ GatesEngine::Math::Axis GatesEngine::Math::Matrix4x4::GetAxis()
 	return GetAxis(*this);
 }
 
+GatesEngine::Math::Matrix4x4 GatesEngine::Math::Matrix4x4::GetViewMatrixLookAt(const Vector3& pos, const Vector3& focasPos, const Vector3& upDir)
+{
+	Vector3 dir = (focasPos - pos);
+	return GetViewMatrixLookTo(pos,dir.Normalize(),upDir);
+}
+
+GatesEngine::Math::Matrix4x4 GatesEngine::Math::Matrix4x4::GetViewMatrixLookTo(const Vector3& pos, const Vector3& direction, const Vector3& upDir)
+{
+	Matrix4x4 result;
+	Vector3 xAxis, yAxis, zAxis;
+	zAxis = direction;
+	xAxis = Vector3::Normalize(Vector3::Cross(upDir, zAxis));
+	yAxis = Vector3::Cross(zAxis, xAxis);
+	Vector3 negpos = Vector3(-pos.x, -pos.y, -pos.z);
+	result =
+	{
+		xAxis.x,xAxis.y,xAxis.z,0,
+		yAxis.x,yAxis.y,yAxis.z,0,
+		zAxis.x,zAxis.y,zAxis.z,0,
+		0,0,0,1,
+	};
+	result = Matrix4x4::Transpose(result);
+	result.m[3][0] = Vector3::Dot(xAxis, negpos);
+	result.m[3][1] = Vector3::Dot(yAxis, negpos);
+	result.m[3][2] = Vector3::Dot(zAxis, negpos);
+	result.m[3][3] = 1;
+	return result;
+}
+
+GatesEngine::Math::Matrix4x4 GatesEngine::Math::Matrix4x4::GetPerspectiveMatrix(float fov, float aspect, float nearClip, float farClip)
+{
+	Matrix4x4 result;
+	float tanTheta = tanf(fov / 2);
+	float x, y, width, height;
+	x = 1.0f / tanTheta;
+	y = 1.0f / tanTheta * aspect;
+	width = 1 / (farClip - nearClip) * farClip;
+	height = -nearClip / (farClip - nearClip) * farClip;
+	result =
+	{
+		x,0,0,0,
+		0,y,0,0,
+		0,0,width,1,
+		0,0,height,0
+	};
+	return result;
+}
+
 GatesEngine::Math::Matrix4x4 & GatesEngine::Math::operator*=(Matrix4x4 & m1, const Matrix4x4 & m2)
 {
 	Matrix4x4 result;

@@ -20,10 +20,11 @@ bool Game::LoadContents()
 	sceneManager->ChangeScene("SampleScene");
 
 	using namespace GatesEngine;
-	testShader = new Shader(&graphicsDevice,std::wstring(L"Default"));
-	testShader->Create({InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, {RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV });
+	testShader = new Shader(&graphicsDevice, std::wstring(L"Default"));
+	testShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV });
 
 	testCBuffer.Create(&graphicsDevice, 0);
+	testCBuffer.Map({Math::Matrix4x4::Identity()});
 
 	auto* g = gameObjectManager.Add(new GameObject());
 
@@ -48,9 +49,9 @@ void Game::Draw()
 	graphicsDevice.ClearRenderTarget({135,206,235,0});
 	graphicsDevice.SetDescriptorHeap();
 	testShader->Set();
+	mainCameraInfo.Set();
+	worldLightInfo.Set();
 	testCBuffer.Set();
-	//mainCamera.SetCmdList();
-	//mainWorldLight.SetCmdList();
 	sceneManager->Draw();
 	graphicsDevice.ScreenFlip();
 }

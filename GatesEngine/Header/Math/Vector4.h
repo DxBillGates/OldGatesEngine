@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector3.h"
 namespace GatesEngine
 {
 	namespace Math
@@ -9,6 +10,12 @@ namespace GatesEngine
 			Vector4();
 			Vector4(float xyzw);
 			Vector4(float x, float y, float z, float w);
+			Vector4(const Vector3& v);
+
+			float Length();
+			Vector4 Normalize();
+
+			static Vector4 Normalize(const Vector4& v);
 
 			Vector4 operator+();
 			Vector4 operator-();

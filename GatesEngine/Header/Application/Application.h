@@ -5,6 +5,7 @@
 #include "..\..\Header\Scene\SceneManager.h"
 #include "..\..\Header\GameObject\GameObjectManager.h"
 #include "..\Graphics\GraphicsDevice.h"
+#include "..\Graphics\CBuffer.h"
 
 namespace GatesEngine
 {
@@ -17,6 +18,8 @@ namespace GatesEngine
 		SceneManager* sceneManager;
 		GameObjectManager gameObjectManager;
 		GraphicsDevice graphicsDevice;
+		CBuffer<B2> mainCameraInfo;
+		CBuffer<B3> worldLightInfo;
 	public:
 		Application();
 		Application(const Math::Vector2& wSize, const char* title);
