@@ -2,10 +2,12 @@
 #include "Header/Application/Application.h"
 #include "Header/GameObject/GameObject.h"
 #include "Header/Graphics/Shader.h"
+#include "Header/Graphics/CBuffer.h"
 
 class Game : public GatesEngine::Application
 {
 private:
+	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer;
 	GatesEngine::Shader* testShader;
 public:
 	Game();

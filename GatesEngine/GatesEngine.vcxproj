@@ -24,6 +24,8 @@
     <ClInclude Include="Header\Component\Component.h" />
     <ClInclude Include="Header\GameObject\GameObject.h" />
     <ClInclude Include="Header\GameObject\GameObjectManager.h" />
+    <ClInclude Include="Header\Graphics\CBuffer.h" />
+    <ClInclude Include="Header\Graphics\CBufferStruct.h" />
     <ClInclude Include="Header\Graphics\COMRelease.h" />
     <ClInclude Include="Header\Graphics\DescriptorHeapManager.h" />
     <ClInclude Include="Header\Graphics\GraphicsDevice.h" />

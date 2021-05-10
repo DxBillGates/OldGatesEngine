@@ -23,6 +23,8 @@ bool Game::LoadContents()
 	testShader = new Shader(&graphicsDevice,std::wstring(L"Default"));
 	testShader->Create({InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, {RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV });
 
+	testCBuffer.Create(&graphicsDevice, 0);
+
 	auto* g = gameObjectManager.Add(new GameObject());
 
 	return true;
@@ -46,6 +48,7 @@ void Game::Draw()
 	graphicsDevice.ClearRenderTarget({135,206,235,0});
 	graphicsDevice.SetDescriptorHeap();
 	testShader->Set();
+	testCBuffer.Set();
 	//mainCamera.SetCmdList();
 	//mainWorldLight.SetCmdList();
 	sceneManager->Draw();
