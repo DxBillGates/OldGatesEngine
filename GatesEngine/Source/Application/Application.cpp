@@ -17,14 +17,14 @@ GatesEngine::Application::Application(const Math::Vector2& wSize, const char* ti
 	mainWindow.PreviewWindow();
 	graphicsDevice.Create(&mainWindow);
 
-	Math::Vector3 cameraPos{ 0,0,-100 }, cameraTargetPos{ 0,0,0 }, cameraUp{0,1,0};
+	Math::Vector3 cameraPos{ 0,0,-20 }, cameraTargetPos{ 0,0,0 }, cameraUp{0,1,0};
 	mainCameraInfo.Create(&graphicsDevice, 2);
 	mainCameraInfo.Map({ Math::Matrix4x4::GetViewMatrixLookAt(cameraPos,cameraTargetPos,cameraUp),
 						 Math::Matrix4x4::GetPerspectiveMatrix(90,mainWindow.GetWindowAspect()),
 						 Math::Vector4(cameraPos) });
 
 	worldLightInfo.Create(&graphicsDevice,3);
-	worldLightInfo.Map({ Math::Vector4(0,1,1,0).Normalize(),Math::Vector4(1,0,0,0) });
+	worldLightInfo.Map({ Math::Vector4(0,1,1,0).Normalize(),Math::Vector4(1,0,0,1) });
 }
 
 GatesEngine::Application::~Application()

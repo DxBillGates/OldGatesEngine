@@ -87,7 +87,7 @@ void GatesEngine::Pipeline::Create(std::vector<ID3DBlob*> blobs)
 		psoDesc.GS.pShaderBytecode = blobs[2]->GetBufferPointer();
 	}
 	psoDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
-	psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+	psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	psoDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
 	psoDesc.RasterizerState.DepthClipEnable = true;
 	psoDesc.DepthStencilState.DepthEnable = true;

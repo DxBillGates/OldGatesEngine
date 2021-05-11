@@ -20,11 +20,30 @@ bool Game::LoadContents()
 	sceneManager->ChangeScene("SampleScene");
 
 	using namespace GatesEngine;
+	using namespace GatesEngine::Math;
 	testShader = new Shader(&graphicsDevice, std::wstring(L"Default"));
 	testShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV });
 
 	testCBuffer.Create(&graphicsDevice, 0);
 	testCBuffer.Map({Math::Matrix4x4::Identity()});
+
+	//“K“–‚Éè‘Å‚¿‚ÅƒƒbƒVƒ…ì‚é
+	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
+	std::vector<VertexInfo::Vertex_UV_Normal>* vertices = testMeshData.GetVertices();
+	std::vector<unsigned short>* indices = testMeshData.GetIndices();
+
+	vertices->push_back({Vector3(),Vector2(),Vector3(0,0,-1)});
+	vertices->push_back({Vector3(10,0,0),Vector2(),Vector3(0,0,-1)});
+	vertices->push_back({Vector3(10,-10,0),Vector2(),Vector3(0,0,-1)});
+	vertices->push_back({Vector3(0,-10,0),Vector2(),Vector3(0,0,-1)});
+
+	indices->push_back(0);
+	indices->push_back(1);
+	indices->push_back(2);
+	indices->push_back(2);
+	indices->push_back(3);
+	indices->push_back(0);
+	testMesh.Create(&graphicsDevice, testMeshData);
 
 	auto* g = gameObjectManager.Add(new GameObject());
 
@@ -39,6 +58,8 @@ bool Game::Initialize()
 
 bool Game::Update()
 {
+	testCBuffer.Map({ GatesEngine::Math::Matrix4x4::RotationY(angle) });
+	angle += 0.0001f;
 	gameObjectManager.Update();
 	sceneManager->Update();
 	return true;
@@ -52,6 +73,7 @@ void Game::Draw()
 	mainCameraInfo.Set();
 	worldLightInfo.Set();
 	testCBuffer.Set();
+	testMesh.Draw();
 	sceneManager->Draw();
 	graphicsDevice.ScreenFlip();
 }
