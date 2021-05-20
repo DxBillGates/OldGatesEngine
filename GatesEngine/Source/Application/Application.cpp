@@ -8,6 +8,7 @@ GatesEngine::Application::Application()
 GatesEngine::Application::Application(const Math::Vector2& wSize, const char* title)
 	: timer(Util::Timer())
 	, mainWindow(Window())
+	, input(Input::GetInstance())
 	, sceneManager(SceneManager::GetInstance())
 	, gameObjectManager(GameObjectManager())
 	, mainCameraInfo({})
@@ -15,6 +16,7 @@ GatesEngine::Application::Application(const Math::Vector2& wSize, const char* ti
 {
 	mainWindow.Create(wSize, title);
 	mainWindow.PreviewWindow();
+	input->Create(mainWindow.GetHandle(), mainWindow.GetHInstance());
 	graphicsDevice.Create(&mainWindow);
 
 	Math::Vector3 cameraPos{ 0,0,-20 }, cameraTargetPos{ 0,0,0 }, cameraUp{0,1,0};
@@ -55,9 +57,12 @@ void GatesEngine::Application::Run()
 	if (!LoadContents())return;
 	if (!Initialize())return;
 
-	while (true)
+	input->Initialize();
+
+	while (!input->GetKeyboard()->CheckPressTrigger(GatesEngine::Keys::ESC))
 	{
 		if (timer.Update())continue;
+		input->Update();
 		if (!Update())break;
 		Draw();
 		if (!mainWindow.ProcessMessage())break;

@@ -38,6 +38,11 @@
     <ClInclude Include="Header\Graphics\Shader.h" />
     <ClInclude Include="Header\Graphics\Texture.h" />
     <ClInclude Include="Header\Graphics\VertexInfo.h" />
+    <ClInclude Include="Header\Input\Input.h" />
+    <ClInclude Include="Header\Input\Keyboard.h" />
+    <ClInclude Include="Header\Input\Keys.h" />
+    <ClInclude Include="Header\Input\Mouse.h" />
+    <ClInclude Include="Header\Input\MouseButtons.h" />
     <ClInclude Include="Header\Math\Easing.h" />
     <ClInclude Include="Header\Math\Math.h" />
     <ClInclude Include="Header\Math\Matrix4.h" />
@@ -65,6 +70,9 @@
     <ClCompile Include="Source\Graphics\RootSignature.cpp" />
     <ClCompile Include="Source\Graphics\Shader.cpp" />
     <ClCompile Include="Source\Graphics\Texture.cpp" />
+    <ClCompile Include="Source\Input\Input.cpp" />
+    <ClCompile Include="Source\Input\Keyboard.cpp" />
+    <ClCompile Include="Source\Input\Mouse.cpp" />
     <ClCompile Include="Source\Math\Easing.cpp" />
     <ClCompile Include="Source\Math\Math.cpp" />
     <ClCompile Include="Source\Math\Matrix4.cpp" />

@@ -2,6 +2,7 @@
 #include "..\..\Header\Math\Vector2.h"
 #include "..\..\Header\Util\Timer.h"
 #include "..\Window\Window.h"
+#include "..\Input\Input.h"
 #include "..\..\Header\Scene\SceneManager.h"
 #include "..\..\Header\GameObject\GameObjectManager.h"
 #include "..\Graphics\GraphicsDevice.h"
@@ -15,6 +16,7 @@ namespace GatesEngine
 	protected:
 		Util::Timer timer;
 		Window mainWindow;
+		Input* input;
 		SceneManager* sceneManager;
 		GameObjectManager gameObjectManager;
 		GraphicsDevice graphicsDevice;

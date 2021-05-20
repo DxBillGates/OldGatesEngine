@@ -55,6 +55,12 @@
     <Filter Include="Source\Window">
       <UniqueIdentifier>{92c95973-59a9-4124-b410-c8b7610b83ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header\Input">
+      <UniqueIdentifier>{b7dff169-4c4f-4039-8b37-303518737dda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Input">
+      <UniqueIdentifier>{2fb53e7e-a14b-4ce1-988a-47d8cae481cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\Math\Easing.h">
@@ -147,6 +153,21 @@
     <ClInclude Include="Header\Graphics\RenderTexture.h">
       <Filter>Header\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Header\Input\Input.h">
+      <Filter>Header\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Input\Keyboard.h">
+      <Filter>Header\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Input\Keys.h">
+      <Filter>Header\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Input\Mouse.h">
+      <Filter>Header\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Input\MouseButtons.h">
+      <Filter>Header\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Easing.cpp">
@@ -223,6 +244,15 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\Texture.cpp">
       <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\Input.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\Keyboard.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\Mouse.cpp">
+      <Filter>Source\Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
