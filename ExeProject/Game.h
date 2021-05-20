@@ -4,14 +4,18 @@
 #include "Header/Graphics/Shader.h"
 #include "Header/Graphics/CBuffer.h"
 #include "Header/Graphics/Mesh.h"
+#include "Header/Graphics/RenderTexture.h"
 
 class Game : public GatesEngine::Application
 {
 private:
 	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer;
+	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer2;
 	GatesEngine::Shader* testShader;
+	GatesEngine::Shader* testTexShader;
 	GatesEngine::Mesh testMesh;
 	float angle;
+	GatesEngine::RenderTexture testRenderTex;
 public:
 	Game();
 	Game(const GatesEngine::Math::Vector2& wSize, const char* title);

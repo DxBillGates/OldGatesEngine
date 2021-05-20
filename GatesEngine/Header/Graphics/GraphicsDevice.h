@@ -48,6 +48,7 @@ namespace GatesEngine
 
 		bool Create(Window* mainWindow);
 		void ClearRenderTarget(const Vector4& color = { 0,0,0,0 }, RenderTarget* renderTarget = nullptr);
+		void ClearRenderTargetWithOutDsv(const Vector4& color = { 0,0,0,0 }, RenderTarget* renderTarget = nullptr);
 		void ClearDepthStencil();
 		void ScreenFlip();
 		void SetResourceBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
@@ -58,6 +59,7 @@ namespace GatesEngine
 		ID3D12GraphicsCommandList* GetCmdList();
 		IDXGISwapChain4* GetSwapChain();
 		ID3D12Resource* GetCurrentFrameBuffer();
+		ID3D12Resource* GetDepthBuffer();
 		ID3D12DescriptorHeap* GetRtvHeap();
 		DescriptorHeapManager* GetDescriptorHeapManager();
 	};

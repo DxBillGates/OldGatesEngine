@@ -27,7 +27,7 @@ bool GatesEngine::RenderTarget::Create(GraphicsDevice* wrapper, std::vector<ID3D
 	result = wrapper->GetDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
 	//ビューの生成
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
 	int i = 0;
@@ -39,7 +39,7 @@ bool GatesEngine::RenderTarget::Create(GraphicsDevice* wrapper, std::vector<ID3D
 		pResources[i] = (*resources)[i];
 		++i;
 	}
-	graphicsDevice = wrapper;
+	pGraphicsDevice = wrapper;
 	return false;
 }
 
@@ -54,12 +54,12 @@ bool GatesEngine::RenderTarget::Create(GraphicsDevice* wrapper, ID3D12Resource* 
 	result = wrapper->GetDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
 	//ビューの生成
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle = rtvHeap->GetCPUDescriptorHandleForHeapStart();
 	wrapper->GetDevice()->CreateRenderTargetView(resource, &rtvDesc, rtvHeapHandle);
 	pResources[0] = resource;
-	graphicsDevice = wrapper;
+	pGraphicsDevice = wrapper;
 	return false;
 }

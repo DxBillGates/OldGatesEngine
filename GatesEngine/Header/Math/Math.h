@@ -11,5 +11,7 @@ namespace GatesEngine
 	namespace Math
 	{
 		const float PI = 3.14159265f;
+
+		float ConvertToRadian(float value);
 	}
 }

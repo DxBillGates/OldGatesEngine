@@ -29,11 +29,12 @@ void GatesEngine::RootSignature::CreateSampler(D3D12_STATIC_SAMPLER_DESC& sample
 	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 	samplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
-	samplerDesc.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
 	samplerDesc.MinLOD = 0.0f;
 	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
 	samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	samplerDesc.MaxAnisotropy = 16;
 }
 
 GatesEngine::RootSignature::RootSignature(GraphicsDevice* graphicsDevice, const std::vector<RangeType>& rangeTypes)
@@ -69,6 +70,7 @@ void GatesEngine::RootSignature::Create()
 	//éwíËÇ≥ÇÍÇΩèáÇ…ê›íË
 	int cbvCount = 0;
 	samplerCount = 0;
+	bool isSampler = false;
 	for (int i = 0; i < (int)rangeType.size(); ++i)
 	{
 		switch (rangeType[i])
@@ -89,11 +91,12 @@ void GatesEngine::RootSignature::Create()
 			rootParam[i].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 			CreateSampler(samplerDesc[samplerCount]);
 			++samplerCount;
+			isSampler = true;
 			break;
 		}
 	}
-	rootSignatureDesc.pStaticSamplers = samplerDesc;
-	rootSignatureDesc.NumStaticSamplers = samplerCount;
+	rootSignatureDesc.pStaticSamplers = isSampler ? &samplerDesc[0] : samplerDesc;
+	rootSignatureDesc.NumStaticSamplers = isSampler ? 1 : 0;
 	rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 	rootSignatureDesc.pParameters = rootParam;
 	rootSignatureDesc.NumParameters = (int)rangeType.size();

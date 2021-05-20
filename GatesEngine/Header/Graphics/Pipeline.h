@@ -36,7 +36,7 @@ namespace GatesEngine
 		Pipeline(GraphicsDevice* graphicsDevice,RootSignature* rootSignature, const std::vector<InputLayout>& inputLayouts, 
 			     BlendMode blendMode = BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 		~Pipeline();
-		void Create(std::vector<ID3DBlob*> blobs);
+		void Create(std::vector<ID3DBlob*> blobs, bool depthFlag);
 
 		ID3D12PipelineState* GetSolidPso();
 		ID3D12PipelineState* GetWirePso();

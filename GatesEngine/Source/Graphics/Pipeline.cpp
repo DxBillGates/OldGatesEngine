@@ -52,7 +52,7 @@ GatesEngine::Pipeline::~Pipeline()
 	COM_RELEASE(wirePso);
 }
 
-void GatesEngine::Pipeline::Create(std::vector<ID3DBlob*> blobs)
+void GatesEngine::Pipeline::Create(std::vector<ID3DBlob*> blobs, bool depthFlag)
 {
 	D3D12_INPUT_ELEMENT_DESC* inputDesc = new D3D12_INPUT_ELEMENT_DESC[(int)inputLayout.size()];
 	//引数のインプットレイアウトからPSOのインプットレイアウトを設定
@@ -89,18 +89,26 @@ void GatesEngine::Pipeline::Create(std::vector<ID3DBlob*> blobs)
 	psoDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 	psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	psoDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
-	psoDesc.RasterizerState.DepthClipEnable = true;
-	psoDesc.DepthStencilState.DepthEnable = true;
-	psoDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	psoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
-	psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	if (depthFlag)
+	{
+		psoDesc.RasterizerState.DepthClipEnable = true;
+		psoDesc.DepthStencilState.DepthEnable = true;
+		psoDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+		psoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+		psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	}
+	else
+	{
+		psoDesc.DepthStencilState.DepthEnable = FALSE;
+		psoDesc.DepthStencilState.StencilEnable = FALSE;
+	}
 	psoDesc.BlendState.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 	psoDesc.BlendState.RenderTarget[0] = blendDesc;
 	psoDesc.InputLayout.pInputElementDescs = inputDesc;
 	psoDesc.InputLayout.NumElements = (int)inputLayout.size();
 	psoDesc.PrimitiveTopologyType = topologyType;
 	psoDesc.NumRenderTargets = 1;
-	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	psoDesc.SampleDesc.Count = 1;
 	psoDesc.pRootSignature = rootSignature->Get();
 	result = pGraphicsDevice->GetDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&solidPso));

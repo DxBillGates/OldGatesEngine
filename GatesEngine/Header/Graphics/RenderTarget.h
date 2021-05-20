@@ -6,8 +6,8 @@ namespace GatesEngine
 	class GraphicsDevice;
 	class RenderTarget
 	{
-	private:
-		GraphicsDevice* graphicsDevice;
+	protected:
+		GraphicsDevice* pGraphicsDevice;
 		ID3D12DescriptorHeap* rtvHeap;
 		std::vector<ID3D12Resource*> pResources;
 	public:

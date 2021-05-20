@@ -33,8 +33,10 @@
     <ClInclude Include="Header\Graphics\MeshData.h" />
     <ClInclude Include="Header\Graphics\Pipeline.h" />
     <ClInclude Include="Header\Graphics\RenderTarget.h" />
+    <ClInclude Include="Header\Graphics\RenderTexture.h" />
     <ClInclude Include="Header\Graphics\RootSignature.h" />
     <ClInclude Include="Header\Graphics\Shader.h" />
+    <ClInclude Include="Header\Graphics\Texture.h" />
     <ClInclude Include="Header\Graphics\VertexInfo.h" />
     <ClInclude Include="Header\Math\Easing.h" />
     <ClInclude Include="Header\Math\Math.h" />
@@ -59,8 +61,10 @@
     <ClCompile Include="Source\Graphics\Mesh.cpp" />
     <ClCompile Include="Source\Graphics\Pipeline.cpp" />
     <ClCompile Include="Source\Graphics\RenderTarget.cpp" />
+    <ClCompile Include="Source\Graphics\RenderTexture.cpp" />
     <ClCompile Include="Source\Graphics\RootSignature.cpp" />
     <ClCompile Include="Source\Graphics\Shader.cpp" />
+    <ClCompile Include="Source\Graphics\Texture.cpp" />
     <ClCompile Include="Source\Math\Easing.cpp" />
     <ClCompile Include="Source\Math\Math.cpp" />
     <ClCompile Include="Source\Math\Matrix4.cpp" />

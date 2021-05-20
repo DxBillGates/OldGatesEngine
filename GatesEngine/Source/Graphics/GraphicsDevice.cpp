@@ -67,7 +67,7 @@ GatesEngine::GraphicsDevice::~GraphicsDevice()
 
 bool GatesEngine::GraphicsDevice::Create(Window* mainWindow)
 {
-	SetViewport({600,600}, Vector2());
+	SetViewport(mainWindow->GetWindowSize(), Vector2());
 	CreateDxgiFactory();
 	CreateDevice();
 	CreateCmdList();
@@ -95,12 +95,50 @@ void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, Render
 		rtvHandle.ptr += mSwapChain->GetCurrentBackBufferIndex() * mDevice->GetDescriptorHandleIncrementSize(renderTarget->GetHeap()->GetDesc().Type);
 		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
 		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
-		ClearDepthStencil();
 	}
 	else
 	{
 		renderTarget->Prepare();
 		rtvHandle = renderTarget->GetHeap()->GetCPUDescriptorHandleForHeapStart();
+		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
+		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
+	}
+	//useRenderTargetをcolorで塗りつぶす
+	Vector4 setColor = color;
+	if (setColor.x > 1)setColor.x /= 255.0f;
+	if (setColor.y > 1)setColor.y /= 255.0f;
+	if (setColor.z > 1)setColor.z /= 255.0f;
+
+	float rgba[] = { setColor.x,setColor.y,setColor.z,setColor.w };
+	mCmdList->ClearRenderTargetView(rtvHandle, rgba, 0, nullptr);
+	ClearDepthStencil();
+
+	mCmdList->RSSetViewports(1, &mViewport);
+	mCmdList->RSSetScissorRects(1, &mRect);
+	mCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+void GatesEngine::GraphicsDevice::ClearRenderTargetWithOutDsv(const Vector4& color, RenderTarget* renderTarget)
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle;
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle;
+
+	//useRenderTargetがnullptrの場合はバックバッファをレンダ―ターゲットとする
+	if (renderTarget == nullptr)
+	{
+		renderTarget = mRenderTarget;
+		SetResourceBarrier(mFrameBuffer[mSwapChain->GetCurrentBackBufferIndex()], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		rtvHandle = renderTarget->GetHeap()->GetCPUDescriptorHandleForHeapStart();
+		rtvHandle.ptr += mSwapChain->GetCurrentBackBufferIndex() * mDevice->GetDescriptorHandleIncrementSize(renderTarget->GetHeap()->GetDesc().Type);
+		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
+		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, nullptr);
+		//ClearDepthStencil();
+	}
+	else
+	{
+		renderTarget->Prepare();
+		rtvHandle = renderTarget->GetHeap()->GetCPUDescriptorHandleForHeapStart();
+		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
 		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, nullptr);
 	}
 	//useRenderTargetをcolorで塗りつぶす
@@ -180,6 +218,11 @@ IDXGISwapChain4* GatesEngine::GraphicsDevice::GetSwapChain()
 ID3D12Resource* GatesEngine::GraphicsDevice::GetCurrentFrameBuffer()
 {
 	return mFrameBuffer[mSwapChain->GetCurrentBackBufferIndex()];
+}
+
+ID3D12Resource* GatesEngine::GraphicsDevice::GetDepthBuffer()
+{
+	return mDepthBuffer;
 }
 
 ID3D12DescriptorHeap* GatesEngine::GraphicsDevice::GetRtvHeap()
@@ -289,7 +332,7 @@ void GatesEngine::GraphicsDevice::CreateDsv()
 	resDesc.Width = (UINT64)mViewport.Width;
 	resDesc.Height = (UINT64)mViewport.Height;
 	resDesc.DepthOrArraySize = 1;
-	resDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	resDesc.Format = DXGI_FORMAT_R32_TYPELESS;
 	resDesc.SampleDesc.Count = 1;
 	resDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 	//デプスバッファのフォーマットと最大深度値を設定
@@ -306,7 +349,7 @@ void GatesEngine::GraphicsDevice::CreateDsv()
 	result = mDevice->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&mDsvHeap));
 	//DSVの生成
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-	dsvDesc.Format = resDesc.Format;
+	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	mDevice->CreateDepthStencilView(mDepthBuffer, &dsvDesc, mDsvHeap->GetCPUDescriptorHandleForHeapStart());
 }

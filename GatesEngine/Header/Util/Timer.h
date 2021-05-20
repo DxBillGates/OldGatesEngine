@@ -15,14 +15,17 @@ namespace GatesEngine
 			LARGE_INTEGER timeFreq;
 			LARGE_INTEGER startBuffer;
 			LARGE_INTEGER endBuffer;
+			float setFrameRate;
+			bool isSetFrameRate;
 		public:
 			Timer();
 			virtual ~Timer();
 			void SetIsShow(bool b);
 			float GetElapsedTime();
-			bool Wait(const float setFrameRate = 60);
 			void Start();
 			void End(bool isShow = true, const char* addComment = "");
+			bool Update();
+			void SetFrameRate(float value);
 		};
 	}
 }

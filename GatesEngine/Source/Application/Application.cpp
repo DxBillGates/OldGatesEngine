@@ -40,7 +40,7 @@ bool GatesEngine::Application::Initialize()
 {
 	return true;
 }
-
+				
 bool GatesEngine::Application::Update()
 {
 	return true;
@@ -57,6 +57,7 @@ void GatesEngine::Application::Run()
 
 	while (true)
 	{
+		if (timer.Update())continue;
 		if (!Update())break;
 		Draw();
 		if (!mainWindow.ProcessMessage())break;

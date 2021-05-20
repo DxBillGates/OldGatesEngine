@@ -2,7 +2,17 @@
 #include <stdio.h>
 #pragma comment(lib,"winmm.lib")
 
-GatesEngine::Util::Timer::Timer() :isShow(true), fps(0), frameTime(0), timeStart({}), timeEnd({}), timeFreq({})
+GatesEngine::Util::Timer::Timer()
+	:isShow(true)
+	, fps(0)
+	, frameTime(0)
+	, timeStart({})
+	, timeEnd({})
+	, timeFreq({})
+	, startBuffer({})
+	, endBuffer({})
+	, setFrameRate(0)
+	, isSetFrameRate(false)
 {
 	QueryPerformanceFrequency(&timeFreq);
 	QueryPerformanceCounter(&timeStart);
@@ -22,8 +32,24 @@ float GatesEngine::Util::Timer::GetElapsedTime()
 	return (float)frameTime;
 }
 
-bool GatesEngine::Util::Timer::Wait(const float setFrameRate)
+void GatesEngine::Util::Timer::Start()
 {
+	QueryPerformanceCounter(&startBuffer);
+}
+
+void GatesEngine::Util::Timer::End(bool isShow, const char* addComment)
+{
+	QueryPerformanceCounter(&endBuffer);
+	double elapsedTime = static_cast<double>(endBuffer.QuadPart - startBuffer.QuadPart) / static_cast<double>(timeFreq.QuadPart);
+	float fps = 1.0f / (float)elapsedTime;
+	if (isShow)printf("%3.5fms : %3.0f :%s\n", (float)elapsedTime * 1000, fps, addComment);
+}
+
+bool GatesEngine::Util::Timer::Update()
+{
+	if (!isSetFrameRate)return false;
+	if (setFrameRate <= 0)return false;
+
 	const float SET_FRAME_TIME = 1.0f / setFrameRate;
 	QueryPerformanceCounter(&timeEnd);
 	frameTime = static_cast<double>(timeEnd.QuadPart - timeStart.QuadPart) / static_cast<double>(timeFreq.QuadPart);
@@ -42,14 +68,8 @@ bool GatesEngine::Util::Timer::Wait(const float setFrameRate)
 	return false;
 }
 
-void GatesEngine::Util::Timer::Start()
+void GatesEngine::Util::Timer::SetFrameRate(float value)
 {
-	QueryPerformanceCounter(&startBuffer);
-}
-
-void GatesEngine::Util::Timer::End(bool isShow, const char * addComment)
-{
-	QueryPerformanceCounter(&endBuffer);
-	double elapsedTime = static_cast<double>(endBuffer.QuadPart - startBuffer.QuadPart) / static_cast<double>(timeFreq.QuadPart);
-	if (isShow)printf("%3.5fms : %s\n", elapsedTime * 1000, addComment);
+	setFrameRate = value;
+	isSetFrameRate = true;
 }
