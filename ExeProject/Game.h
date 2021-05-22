@@ -11,9 +11,12 @@ class Game : public GatesEngine::Application
 private:
 	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer;
 	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer2;
+	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer3;
 	GatesEngine::Shader* testShader;
 	GatesEngine::Shader* testTexShader;
+	GatesEngine::Shader* testLineShader;
 	GatesEngine::Mesh testMesh;
+	GatesEngine::Mesh testLineMesh;
 	float angle;
 	GatesEngine::RenderTexture testRenderTex;
 public:

@@ -61,6 +61,12 @@
     <Filter Include="Source\Input">
       <UniqueIdentifier>{2fb53e7e-a14b-4ce1-988a-47d8cae481cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header\Graphics\Helper">
+      <UniqueIdentifier>{65f0518e-038a-4b60-995d-0cef15d3b0ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Helper">
+      <UniqueIdentifier>{3d6f668f-b668-4407-bced-8e31cdfefe29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\Math\Easing.h">
@@ -168,6 +174,12 @@
     <ClInclude Include="Header\Input\MouseButtons.h">
       <Filter>Header\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Header\Graphics\Camera.h">
+      <Filter>Header\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Graphics\Helper\MeshHelper.h">
+      <Filter>Header\Graphics\Helper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Easing.cpp">
@@ -253,6 +265,12 @@
     </ClCompile>
     <ClCompile Include="Source\Input\Mouse.cpp">
       <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Camera.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Helper\MeshHelper.cpp">
+      <Filter>Source\Graphics\Helper</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

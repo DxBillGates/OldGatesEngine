@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "SampleScene.h"
+#include "Header/Graphics/Helper/MeshHelper.h"
 
 Game::Game():Application()
 {
@@ -13,6 +14,7 @@ Game::~Game()
 {
 	delete testShader;
 	delete testTexShader;
+	delete testLineShader;
 }
 
 bool Game::LoadContents()
@@ -28,28 +30,24 @@ bool Game::LoadContents()
 	testTexShader = new Shader(&graphicsDevice, std::wstring(L"Texture"));
 	testTexShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV },BlendMode::BLENDMODE_ALPHA,D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,false);
 
+	testLineShader = new Shader(&graphicsDevice, std::wstring(L"Line"));
+	testLineShader->Create({ InputLayout::POSITION }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE, false);
+
 	testCBuffer.Create(&graphicsDevice, 0);
 	testCBuffer.Map({Math::Matrix4x4::Identity()});
 	testCBuffer2.Create(&graphicsDevice, 0);
 	testCBuffer2.Map({ Math::Matrix4x4::Identity() });
 	testCBuffer2.Map({ Math::Matrix4x4::Translate({-30,0,0}) });
-	//“K“–‚Éè‘Å‚¿‚ÅƒƒbƒVƒ…ì‚é
+	testCBuffer3.Create(&graphicsDevice, 0);
+	testCBuffer3.Map({ Math::Matrix4x4::Identity() });
+	
 	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
-	std::vector<VertexInfo::Vertex_UV_Normal>* vertices = testMeshData.GetVertices();
-	std::vector<unsigned short>* indices = testMeshData.GetIndices();
-
-	vertices->push_back({Vector3(),Vector2(0,0),Vector3(0,0,-1)});
-	vertices->push_back({Vector3(10,0,0),Vector2(1,0),Vector3(0,0,-1)});
-	vertices->push_back({Vector3(10,-10,0),Vector2(1,1),Vector3(0,0,-1)});
-	vertices->push_back({Vector3(0,-10,0),Vector2(0,1),Vector3(0,0,-1)});
-
-	indices->push_back(0);
-	indices->push_back(1);
-	indices->push_back(2);
-	indices->push_back(2);
-	indices->push_back(3);
-	indices->push_back(0);
+	MeshHelper::CreateQuad({ 100,100 }, { 1,1 }, testMeshData);
 	testMesh.Create(&graphicsDevice, testMeshData);
+
+	MeshData<VertexInfo::Vertex> testLineMeshData;
+	MeshHelper::CreateGrid({ 10000,10000 }, 100, testLineMeshData);
+	testLineMesh.Create(&graphicsDevice, testLineMeshData);
 
 	auto* g = gameObjectManager.Add(new GameObject());
 
@@ -64,6 +62,7 @@ bool Game::Initialize()
 {
 	gameObjectManager.Start();
 	timer.SetFrameRate(144);
+	timer.SetIsShow(false);
 	return true;
 }
 
@@ -82,7 +81,7 @@ void Game::Draw()
 	graphicsDevice.SetDescriptorHeap();
 	testShader->Set();
 	//testTexShader->Set();
-	mainCameraInfo.Set();
+	mainCamera.Set();
 	worldLightInfo.Set();
 	testCBuffer.Set();
 	
@@ -91,16 +90,18 @@ void Game::Draw()
 	testRenderTex.EndDraw();
 
 	graphicsDevice.ClearRenderTargetWithOutDsv({ 135,206,235,0 });
+
 	testTexShader->Set();
-	mainCameraInfo.Set();
 	//worldLightInfo.Set();
 	testCBuffer2.Set();
-
 	graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(5, graphicsDevice.GetDescriptorHeapManager()->GetSRVHandleForGPU(1));
 	testRenderTex.Set();
-
 	testMesh.Draw();
 
+	graphicsDevice.GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+	testLineShader->Set();
+	testCBuffer3.Set();
+	testLineMesh.Draw();
 
 	graphicsDevice.ScreenFlip();
 }

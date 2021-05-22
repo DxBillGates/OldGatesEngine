@@ -24,11 +24,13 @@
     <ClInclude Include="Header\Component\Component.h" />
     <ClInclude Include="Header\GameObject\GameObject.h" />
     <ClInclude Include="Header\GameObject\GameObjectManager.h" />
+    <ClInclude Include="Header\Graphics\Camera.h" />
     <ClInclude Include="Header\Graphics\CBuffer.h" />
     <ClInclude Include="Header\Graphics\CBufferStruct.h" />
     <ClInclude Include="Header\Graphics\COMRelease.h" />
     <ClInclude Include="Header\Graphics\DescriptorHeapManager.h" />
     <ClInclude Include="Header\Graphics\GraphicsDevice.h" />
+    <ClInclude Include="Header\Graphics\Helper\MeshHelper.h" />
     <ClInclude Include="Header\Graphics\Mesh.h" />
     <ClInclude Include="Header\Graphics\MeshData.h" />
     <ClInclude Include="Header\Graphics\Pipeline.h" />
@@ -61,8 +63,10 @@
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
+    <ClCompile Include="Source\Graphics\Camera.cpp" />
     <ClCompile Include="Source\Graphics\DescriptorHeapManager.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsDevice.cpp" />
+    <ClCompile Include="Source\Graphics\Helper\MeshHelper.cpp" />
     <ClCompile Include="Source\Graphics\Mesh.cpp" />
     <ClCompile Include="Source\Graphics\Pipeline.cpp" />
     <ClCompile Include="Source\Graphics\RenderTarget.cpp" />

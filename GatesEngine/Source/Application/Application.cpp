@@ -11,7 +11,6 @@ GatesEngine::Application::Application(const Math::Vector2& wSize, const char* ti
 	, input(Input::GetInstance())
 	, sceneManager(SceneManager::GetInstance())
 	, gameObjectManager(GameObjectManager())
-	, mainCameraInfo({})
 	, worldLightInfo({})
 {
 	mainWindow.Create(wSize, title);
@@ -19,14 +18,11 @@ GatesEngine::Application::Application(const Math::Vector2& wSize, const char* ti
 	input->Create(mainWindow.GetHandle(), mainWindow.GetHInstance());
 	graphicsDevice.Create(&mainWindow);
 
-	Math::Vector3 cameraPos{ 0,0,-20 }, cameraTargetPos{ 0,0,0 }, cameraUp{0,1,0};
-	mainCameraInfo.Create(&graphicsDevice, 2);
-	mainCameraInfo.Map({ Math::Matrix4x4::GetViewMatrixLookAt(cameraPos,cameraTargetPos,cameraUp),
-						 Math::Matrix4x4::GetPerspectiveMatrix(90,mainWindow.GetWindowAspect()),
-						 Math::Vector4(cameraPos) });
-
 	worldLightInfo.Create(&graphicsDevice,3);
 	worldLightInfo.Map({ Math::Vector4(0,1,1,0).Normalize(),Math::Vector4(1,0,0,1) });
+
+	mainCamera.SetGraphicsDevice(&graphicsDevice);
+	mainCamera.SetMainWindow(&mainWindow);
 }
 
 GatesEngine::Application::~Application()
@@ -54,15 +50,18 @@ void GatesEngine::Application::Draw()
 
 void GatesEngine::Application::Run()
 {
+	input->Initialize();
+	mainCamera.Initialize();
+
 	if (!LoadContents())return;
 	if (!Initialize())return;
 
-	input->Initialize();
 
 	while (!input->GetKeyboard()->CheckPressTrigger(GatesEngine::Keys::ESC))
 	{
 		if (timer.Update())continue;
 		input->Update();
+		mainCamera.Update();
 		if (!Update())break;
 		Draw();
 		if (!mainWindow.ProcessMessage())break;

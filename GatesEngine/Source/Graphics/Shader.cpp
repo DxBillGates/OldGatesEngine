@@ -48,7 +48,7 @@ void GatesEngine::Shader::Create(const std::vector<InputLayout>& inputLayouts, c
 	rootSignature = new RootSignature(pGraphicsDevice, rangeTypes);
 	rootSignature->Create();
 
-	pipeline = new Pipeline(pGraphicsDevice, rootSignature, inputLayouts);
+	pipeline = new Pipeline(pGraphicsDevice, rootSignature, inputLayouts,blendMode,topologyType);
 	pipeline->Create({vsBlob,psBlob,gsBlob},depthFlag);
 
 	isCreate = true;

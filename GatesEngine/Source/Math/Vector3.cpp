@@ -19,7 +19,12 @@ float GatesEngine::Math::Vector3::Length()
 
 GatesEngine::Math::Vector3 GatesEngine::Math::Vector3::Normalize()
 {
-	return *this / Length();
+	float length = Length();
+	if (length == 0)
+	{
+		return Vector3();
+	}
+	return *this / length;
 }
 
 float GatesEngine::Math::Vector3::Distance(const Vector3 & v1, const Vector3 & v2)
@@ -31,7 +36,12 @@ float GatesEngine::Math::Vector3::Distance(const Vector3 & v1, const Vector3 & v
 GatesEngine::Math::Vector3 GatesEngine::Math::Vector3::Normalize(const Vector3 & v)
 {
 	Vector3 v1 = v;
-	return v1 / v1.Length();
+	float length = v1.Length();
+	if (length == 0)
+	{
+		return Vector3();
+	}
+	return v1 / length;
 }
 
 GatesEngine::Math::Vector3 GatesEngine::Math::Vector3::Cross(const Vector3 & v1, const Vector3 & v2)
