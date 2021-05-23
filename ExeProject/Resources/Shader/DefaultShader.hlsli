@@ -41,3 +41,9 @@ struct DefaultVSOutput
 	float2 uv : TEXCOORD;
 	float3 normal : NORMAL;
 };
+
+struct LineVSOutput
+{
+	float4 svpos : SV_POSITION;
+	float4 pos : POSITION;
+};

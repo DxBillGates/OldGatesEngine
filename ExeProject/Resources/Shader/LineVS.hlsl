@@ -1,6 +1,9 @@
 #include "DefaultShader.hlsli"
 
-float4 main( float4 pos : POSITION ) : SV_POSITION
+LineVSOutput main(float4 pos : POSITION)
 {
-	return mul(projMatrix, mul(viewMatrix, mul(modelMatrix, pos)));
+	LineVSOutput o;
+	o.svpos = mul(projMatrix, mul(viewMatrix, mul(modelMatrix, pos)));
+	o.pos = pos;
+	return o;
 }
