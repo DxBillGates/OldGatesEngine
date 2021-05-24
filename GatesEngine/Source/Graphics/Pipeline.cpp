@@ -70,6 +70,10 @@ void GatesEngine::Pipeline::Create(std::vector<ID3DBlob*> blobs, bool depthFlag)
 		{
 			inputDesc[i] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
 		}
+		else if (inputLayout[i] == InputLayout::COLOR)
+		{
+			inputDesc[i] = { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+		}
 	}
 	//ÉuÉåÉìÉhê›íË
 	D3D12_RENDER_TARGET_BLEND_DESC blendDesc = {};

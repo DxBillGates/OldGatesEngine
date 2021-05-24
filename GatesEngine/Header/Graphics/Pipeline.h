@@ -16,6 +16,7 @@ namespace GatesEngine
 		POSITION,
 		TEXCOORD,
 		NORMAL,
+		COLOR,
 	};
 
 	class Pipeline

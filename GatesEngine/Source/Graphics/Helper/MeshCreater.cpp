@@ -38,12 +38,12 @@ void GatesEngine::MeshCreater::CreateQuad(Math::Vector2 size, Math::Vector2 uvMa
 	indices->push_back(0);
 }
 
-void GatesEngine::MeshCreater::CreateGrid(Math::Vector2 size, float spaceInterval, MeshData<VertexInfo::Vertex>& meshData)
+void GatesEngine::MeshCreater::CreateGrid(Math::Vector2 size, float spaceInterval, MeshData<VertexInfo::Vertex_Color>& meshData)
 {
 	int width = (int)size.x / spaceInterval;
 	int depth = (int)size.y / spaceInterval;
 
-	std::vector<VertexInfo::Vertex>* vertices = meshData.GetVertices();
+	std::vector<VertexInfo::Vertex_Color>* vertices = meshData.GetVertices();
 	std::vector<unsigned short>* indices = meshData.GetIndices();
 
 	Math::Vector2 offset = Math::Vector2(-size.x / 2, -size.y / 2);
@@ -52,15 +52,19 @@ void GatesEngine::MeshCreater::CreateGrid(Math::Vector2 size, float spaceInterva
 	for (int w = 0; w <= width; ++w)
 	{
 		float x = w * spaceInterval;
-		vertices->push_back({ Math::Vector3(offset.x + x,0,offset.y) });
-		vertices->push_back({ Math::Vector3(offset.x + x,0,maxOffset.y) });
+		GatesEngine::Math::Vector4 color = { 1,1,1,1 };
+		if (offset.x + x == 0)color = {0,0,1,1};
+		vertices->push_back({ Math::Vector3(offset.x + x,0,offset.y),color });
+		vertices->push_back({ Math::Vector3(offset.x + x,0,maxOffset.y),color });
 	}
 
 	for (int d = 0; d <= depth; ++d)
 	{
 		float z = d * spaceInterval;
-		vertices->push_back({ Math::Vector3(offset.x,0   ,offset.y + z) });
-		vertices->push_back({ Math::Vector3(maxOffset.x,0,offset.y + z) });
+		GatesEngine::Math::Vector4 color = { 1,1,1,1 };
+		if (offset.y + z  == 0)color = { 1,0,0,1 };
+		vertices->push_back({ Math::Vector3(offset.x,0   ,offset.y + z),color });
+		vertices->push_back({ Math::Vector3(maxOffset.x,0,offset.y + z),color });
 	}
 
 	for (int i = 0; i < (int)vertices->size(); i += 2)

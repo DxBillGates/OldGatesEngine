@@ -38,7 +38,6 @@ void GatesEngine::Mouse::Update()
 		device->Acquire();
 		result = device->GetDeviceState(sizeof(currentMouseState), &currentMouseState);
 	}
-
 	POINT mousePoint{};
 	GetCursorPos(&mousePoint);
 	mouseMove.x = mousePos.x - mousePoint.x;

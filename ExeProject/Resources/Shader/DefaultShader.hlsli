@@ -46,4 +46,5 @@ struct LineVSOutput
 {
 	float4 svpos : SV_POSITION;
 	float4 pos : POSITION;
+	float4 color : COLOR;
 };

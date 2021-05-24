@@ -37,5 +37,11 @@ namespace GatesEngine
 			GatesEngine::Math::Vector3 normal;
 			GatesEngine::Math::Vector4 color;
 		};
+
+		struct Vertex_Color
+		{
+			GatesEngine::Math::Vector3 pos;
+			GatesEngine::Math::Vector4 color;
+		};
 	}
 }

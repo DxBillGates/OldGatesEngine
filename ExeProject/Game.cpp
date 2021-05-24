@@ -31,7 +31,7 @@ bool Game::LoadContents()
 	testTexShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV },BlendMode::BLENDMODE_ALPHA,D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,false);
 
 	testLineShader = new Shader(&graphicsDevice, std::wstring(L"Line"));
-	testLineShader->Create({ InputLayout::POSITION }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE, false);
+	testLineShader->Create({ InputLayout::POSITION,InputLayout::COLOR }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE, false);
 
 	testCBuffer.Create(&graphicsDevice, 0);
 	testCBuffer.Map({Math::Matrix4x4::Identity()});
@@ -47,7 +47,7 @@ bool Game::LoadContents()
 	testMesh.Create(&graphicsDevice, testMeshData);
 
 	//ÉOÉäÉbÉhê∂ê¨
-	MeshData<VertexInfo::Vertex> testLineMeshData;
+	MeshData<VertexInfo::Vertex_Color> testLineMeshData;
 	MeshCreater::CreateGrid({ 10000,10000 }, 100, testLineMeshData);
 	testLineMesh.Create(&graphicsDevice, testLineMeshData);
 
@@ -64,7 +64,7 @@ bool Game::Initialize()
 {
 	gameObjectManager.Start();
 	timer.SetFrameRate(144);
-	timer.SetIsShow(true);
+	timer.SetIsShow(false);
 	return true;
 }
 

@@ -40,7 +40,18 @@ void GatesEngine::Camera::Update()
 	//ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚ðŽæ“¾
 	if (input->GetMouse()->GetCheckHitButton(MouseButtons::RIGHT_CLICK))
 	{
-		//input->GetMouse()->SetMouseCursor({ 1920 / 2,1080 / 2 });
+		input->GetMouse()->SetMouseCursor({ 1920 / 2,1080 / 2 });
+		//Math::Vector2 inputPos = input->GetMouse()->GetMousePos();
+		//Math::Vector2 newPos;
+		//newPos.x = inputPos.x <= 0 ? 1920 : inputPos.x;
+		//newPos.x = inputPos.x > 1920 ? 0: newPos.x;
+		//newPos.y = inputPos.y <= 0 ? 1070 : inputPos.y;
+		//newPos.y = inputPos.y > 1070 ? 0 : newPos.y;
+		//if (inputPos.x != newPos.x || inputPos.y != newPos.y)
+		//{
+		//	input->GetMouse()->SetMouseCursor({ newPos.x,newPos.y});
+		//}
+
 		Math::Vector2 inputValue = input->GetMouse()->GetMouseMove() / 500.0f;
 
 		pitch -= inputValue.y;
