@@ -118,7 +118,7 @@ void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, Render
 	mCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void GatesEngine::GraphicsDevice::ClearRenderTargetWithOutDsv(const Vector4& color, RenderTarget* renderTarget)
+void GatesEngine::GraphicsDevice::ClearRenderTargetOutDsv(const Vector4& color, RenderTarget* renderTarget)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle;
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle;

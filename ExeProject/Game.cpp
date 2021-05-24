@@ -41,10 +41,12 @@ bool Game::LoadContents()
 	testCBuffer3.Create(&graphicsDevice, 0);
 	testCBuffer3.Map({ Math::Matrix4x4::Identity() });
 	
+	//板ポリ生成
 	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
 	MeshCreater::CreateQuad({ 100,100 }, { 1,1 }, testMeshData);
 	testMesh.Create(&graphicsDevice, testMeshData);
 
+	//グリッド生成
 	MeshData<VertexInfo::Vertex> testLineMeshData;
 	MeshCreater::CreateGrid({ 10000,10000 }, 100, testLineMeshData);
 	testLineMesh.Create(&graphicsDevice, testLineMeshData);
@@ -62,7 +64,7 @@ bool Game::Initialize()
 {
 	gameObjectManager.Start();
 	timer.SetFrameRate(144);
-	timer.SetIsShow(false);
+	timer.SetIsShow(true);
 	return true;
 }
 
@@ -89,7 +91,7 @@ void Game::Draw()
 	sceneManager->Draw();
 	testRenderTex.EndDraw();
 
-	graphicsDevice.ClearRenderTargetWithOutDsv({ 135,206,235,0 });
+	graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 });
 
 	testTexShader->Set();
 	//worldLightInfo.Set();

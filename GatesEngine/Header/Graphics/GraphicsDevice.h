@@ -48,7 +48,7 @@ namespace GatesEngine
 
 		bool Create(Window* mainWindow);
 		void ClearRenderTarget(const Vector4& color = { 0,0,0,0 }, RenderTarget* renderTarget = nullptr);
-		void ClearRenderTargetWithOutDsv(const Vector4& color = { 0,0,0,0 }, RenderTarget* renderTarget = nullptr);
+		void ClearRenderTargetOutDsv(const Vector4& color = { 0,0,0,0 }, RenderTarget* renderTarget = nullptr);
 		void ClearDepthStencil();
 		void ScreenFlip();
 		void SetResourceBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);

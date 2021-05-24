@@ -40,8 +40,8 @@ void GatesEngine::Camera::Update()
 	//ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚ðŽæ“¾
 	if (input->GetMouse()->GetCheckHitButton(MouseButtons::RIGHT_CLICK))
 	{
-		input->GetMouse()->SetMouseCursor({ 1920 / 2,1080 / 2 });
-		Math::Vector2 inputValue = input->GetMouse()->GetMouseMove() / 500;
+		//input->GetMouse()->SetMouseCursor({ 1920 / 2,1080 / 2 });
+		Math::Vector2 inputValue = input->GetMouse()->GetMouseMove() / 500.0f;
 
 		pitch -= inputValue.y;
 		yaw -= inputValue.x;
