@@ -4,7 +4,7 @@
 
 namespace GatesEngine
 {
-	namespace MeshHelper
+	namespace MeshCreater
 	{
 		void CreatePlane(Math::Vector2 size, Math::Vector2 uvMax, MeshData<VertexInfo::Vertex_UV_Normal>& meshData);
 		void CreateQuad(Math::Vector2 size, Math::Vector2 uvMax, MeshData<VertexInfo::Vertex_UV_Normal>& meshData);

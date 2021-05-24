@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "SampleScene.h"
-#include "Header/Graphics/Helper/MeshHelper.h"
+#include "..\GatesEngine\Header\Graphics\Helper\MeshCreater.h"
 
 Game::Game():Application()
 {
@@ -42,11 +42,11 @@ bool Game::LoadContents()
 	testCBuffer3.Map({ Math::Matrix4x4::Identity() });
 	
 	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
-	MeshHelper::CreateQuad({ 100,100 }, { 1,1 }, testMeshData);
+	MeshCreater::CreateQuad({ 100,100 }, { 1,1 }, testMeshData);
 	testMesh.Create(&graphicsDevice, testMeshData);
 
 	MeshData<VertexInfo::Vertex> testLineMeshData;
-	MeshHelper::CreateGrid({ 10000,10000 }, 100, testLineMeshData);
+	MeshCreater::CreateGrid({ 10000,10000 }, 100, testLineMeshData);
 	testLineMesh.Create(&graphicsDevice, testLineMeshData);
 
 	auto* g = gameObjectManager.Add(new GameObject());

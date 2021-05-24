@@ -177,7 +177,7 @@
     <ClInclude Include="Header\Graphics\Camera.h">
       <Filter>Header\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Header\Graphics\Helper\MeshHelper.h">
+    <ClInclude Include="Header\Graphics\Helper\MeshCreater.h">
       <Filter>Header\Graphics\Helper</Filter>
     </ClInclude>
   </ItemGroup>
@@ -269,7 +269,7 @@
     <ClCompile Include="Source\Graphics\Camera.cpp">
       <Filter>Source\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Helper\MeshHelper.cpp">
+    <ClCompile Include="Source\Graphics\Helper\MeshCreater.cpp">
       <Filter>Source\Graphics\Helper</Filter>
     </ClCompile>
   </ItemGroup>

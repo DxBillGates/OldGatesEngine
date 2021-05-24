@@ -1,6 +1,6 @@
-#include "..\..\..\Header\Graphics\Helper\MeshHelper.h"
+#include "..\..\..\Header\Graphics\Helper\MeshCreater.h"
 
-void GatesEngine::MeshHelper::CreatePlane(Math::Vector2 size, Math::Vector2 uvMax, MeshData<VertexInfo::Vertex_UV_Normal>& meshData)
+void GatesEngine::MeshCreater::CreatePlane(Math::Vector2 size, Math::Vector2 uvMax, MeshData<VertexInfo::Vertex_UV_Normal>& meshData)
 {
 	std::vector<VertexInfo::Vertex_UV_Normal>* vertices = meshData.GetVertices();
 	std::vector<unsigned short>* indices = meshData.GetIndices();
@@ -19,7 +19,7 @@ void GatesEngine::MeshHelper::CreatePlane(Math::Vector2 size, Math::Vector2 uvMa
 	indices->push_back(0);
 }
 
-void GatesEngine::MeshHelper::CreateQuad(Math::Vector2 size, Math::Vector2 uvMax, MeshData<VertexInfo::Vertex_UV_Normal>& meshData)
+void GatesEngine::MeshCreater::CreateQuad(Math::Vector2 size, Math::Vector2 uvMax, MeshData<VertexInfo::Vertex_UV_Normal>& meshData)
 {
 	std::vector<VertexInfo::Vertex_UV_Normal>* vertices = meshData.GetVertices();
 	std::vector<unsigned short>* indices = meshData.GetIndices();
@@ -38,7 +38,7 @@ void GatesEngine::MeshHelper::CreateQuad(Math::Vector2 size, Math::Vector2 uvMax
 	indices->push_back(0);
 }
 
-void GatesEngine::MeshHelper::CreateGrid(Math::Vector2 size, float spaceInterval, MeshData<VertexInfo::Vertex>& meshData)
+void GatesEngine::MeshCreater::CreateGrid(Math::Vector2 size, float spaceInterval, MeshData<VertexInfo::Vertex>& meshData)
 {
 	int width = (int)size.x / spaceInterval;
 	int depth = (int)size.y / spaceInterval;
