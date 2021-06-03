@@ -180,6 +180,9 @@
     <ClInclude Include="Header\Graphics\Helper\MeshCreater.h">
       <Filter>Header\Graphics\Helper</Filter>
     </ClInclude>
+    <ClInclude Include="Header\Component\MeshComponent.h">
+      <Filter>Header\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Easing.cpp">
@@ -271,6 +274,9 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\Helper\MeshCreater.cpp">
       <Filter>Source\Graphics\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\MeshComponent.cpp">
+      <Filter>Source\Component</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -12,5 +12,6 @@ namespace GatesEngine
 		GameObject* Add(GameObject* newGameObject);
 		void Start();
 		void Update();
+		void Draw();
 	};
 }

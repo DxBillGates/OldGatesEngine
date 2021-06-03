@@ -5,6 +5,7 @@
 #include "Header/Graphics/CBuffer.h"
 #include "Header/Graphics/Mesh.h"
 #include "Header/Graphics/RenderTexture.h"
+#include "..\GatesEngine\Header\Component\MeshComponent.h"
 
 class Game : public GatesEngine::Application
 {
@@ -19,6 +20,7 @@ private:
 	GatesEngine::Mesh testLineMesh;
 	float angle;
 	GatesEngine::RenderTexture testRenderTex;
+	GatesEngine::MeshComponent* m;
 public:
 	Game();
 	Game(const GatesEngine::Math::Vector2& wSize, const char* title);

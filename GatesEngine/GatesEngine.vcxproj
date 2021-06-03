@@ -22,6 +22,7 @@
     <ClInclude Include="Header\Application\Application.h" />
     <ClInclude Include="Header\Component\Behaviour.h" />
     <ClInclude Include="Header\Component\Component.h" />
+    <ClInclude Include="Header\Component\MeshComponent.h" />
     <ClInclude Include="Header\GameObject\GameObject.h" />
     <ClInclude Include="Header\GameObject\GameObjectManager.h" />
     <ClInclude Include="Header\Graphics\Camera.h" />
@@ -61,6 +62,7 @@
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Component\Behaviour.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
+    <ClCompile Include="Source\Component\MeshComponent.cpp" />
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
     <ClCompile Include="Source\Graphics\Camera.cpp" />

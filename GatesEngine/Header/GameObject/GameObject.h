@@ -1,5 +1,6 @@
 #pragma once
 #include "..\Component\Behaviour.h"
+#include "..\Component\MeshComponent.h"
 #include <vector>
 
 namespace GatesEngine
@@ -9,6 +10,7 @@ namespace GatesEngine
 	private:
 		std::vector<Component*> components;
 		std::vector<Behaviour*> behaviors;
+		MeshComponent* pMeshComponent;
 		const char* name;
 		const char* tag;
 	public:
@@ -24,6 +26,9 @@ namespace GatesEngine
 		T* AddBehavior();
 		template <typename T>
 		T* GetComponent();
+
+		MeshComponent* GetMeshComponent();
+		void SetMeshComponent(MeshComponent* pMeshComponent);
 	};
 	template<typename T>
 	inline T* GameObject::AddComponent()

@@ -33,3 +33,15 @@ void GatesEngine::GameObjectManager::Update()
 		(*itr)->Update();
 	}
 }
+
+void GatesEngine::GameObjectManager::Draw()
+{
+	for (auto itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	{
+		auto* meshComponent = (*itr)->GetMeshComponent();
+		if (meshComponent)
+		{
+			meshComponent->GetMesh()->Draw();
+		}
+	}
+}

@@ -47,3 +47,13 @@ void GatesEngine::GameObject::Update()
 		(*itr)->Update();
 	}
 }
+
+GatesEngine::MeshComponent* GatesEngine::GameObject::GetMeshComponent()
+{
+	return pMeshComponent;
+}
+
+void GatesEngine::GameObject::SetMeshComponent(MeshComponent* pMeshComponent)
+{
+	this->pMeshComponent = pMeshComponent;
+}

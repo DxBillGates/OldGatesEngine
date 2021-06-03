@@ -52,6 +52,8 @@ bool Game::LoadContents()
 	testLineMesh.Create(&graphicsDevice, testLineMeshData);
 
 	auto* g = gameObjectManager.Add(new GameObject());
+	m = g->AddComponent<MeshComponent>();
+	m->SetMesh(&testMesh);
 
 	testRenderTex.Create(&graphicsDevice, { 1920,1080 });
 
@@ -87,8 +89,9 @@ void Game::Draw()
 	worldLightInfo.Set();
 	testCBuffer.Set();
 	
-	testMesh.Draw();
-	sceneManager->Draw();
+	//testMesh.Draw();
+	//sceneManager->Draw();
+	gameObjectManager.Draw();
 	testRenderTex.EndDraw();
 
 	graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 });
