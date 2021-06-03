@@ -41,7 +41,11 @@ void GatesEngine::GameObjectManager::Draw()
 		auto* meshComponent = (*itr)->GetMeshComponent();
 		if (meshComponent)
 		{
-			meshComponent->GetMesh()->Draw();
+			auto* mesh = meshComponent->GetMesh();
+			if (mesh)
+			{
+				mesh->Draw();
+			}
 		}
 	}
 }
