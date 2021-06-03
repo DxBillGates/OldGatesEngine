@@ -40,8 +40,8 @@ void GatesEngine::MeshCreater::CreateQuad(Math::Vector2 size, Math::Vector2 uvMa
 
 void GatesEngine::MeshCreater::CreateGrid(Math::Vector2 size, float spaceInterval, MeshData<VertexInfo::Vertex_Color>& meshData)
 {
-	int width = (int)size.x / spaceInterval;
-	int depth = (int)size.y / spaceInterval;
+	int width = (int)(size.x / spaceInterval);
+	int depth = (int)(size.y / spaceInterval);
 
 	std::vector<VertexInfo::Vertex_Color>* vertices = meshData.GetVertices();
 	std::vector<unsigned short>* indices = meshData.GetIndices();
