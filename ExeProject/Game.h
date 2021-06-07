@@ -12,12 +12,15 @@ private:
 	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer;
 	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer2;
 	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer3;
+	GatesEngine::CBuffer<GatesEngine::Math::Vector4> bloomInfo;
 	GatesEngine::Shader* testShader;
 	GatesEngine::Shader* testTexShader;
 	GatesEngine::Shader* testLineShader;
+	GatesEngine::Shader* testPostEffectShader;
 	GatesEngine::Mesh testMesh;
 	GatesEngine::Mesh testLineMesh;
 	float angle;
+	float binfo;
 	GatesEngine::RenderTexture testRenderTex;
 public:
 	Game();

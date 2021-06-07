@@ -15,6 +15,7 @@ Game::~Game()
 	delete testShader;
 	delete testTexShader;
 	delete testLineShader;
+	delete testPostEffectShader;
 }
 
 bool Game::LoadContents()
@@ -33,6 +34,9 @@ bool Game::LoadContents()
 	testLineShader = new Shader(&graphicsDevice, std::wstring(L"Line"));
 	testLineShader->Create({ InputLayout::POSITION,InputLayout::COLOR }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE, false);
 
+	testPostEffectShader = new Shader(&graphicsDevice, std::wstring(L"TestPostEffect"));
+	testPostEffectShader->Create({InputLayout::POSITION,InputLayout::TEXCOORD,InputLayout::NORMAL}, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV,RangeType::CBV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
+
 	testCBuffer.Create(&graphicsDevice, 0);
 	testCBuffer.Map({Math::Matrix4x4::Identity()});
 	testCBuffer2.Create(&graphicsDevice, 0);
@@ -40,6 +44,9 @@ bool Game::LoadContents()
 	testCBuffer2.Map({ Math::Matrix4x4::Translate({-30,0,0}) });
 	testCBuffer3.Create(&graphicsDevice, 0);
 	testCBuffer3.Map({ Math::Matrix4x4::Identity() });
+	bloomInfo.Create(&graphicsDevice, 6);
+	binfo = 5;
+	bloomInfo.Map({ binfo,0,0,0 });
 	
 	//î¬É|Éäê∂ê¨
 	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
@@ -70,6 +77,21 @@ bool Game::Initialize()
 
 bool Game::Update()
 {
+	if (input->GetKeyboard()->CheckPressTrigger(GatesEngine::Keys::I))
+	{
+		++binfo;
+	}
+	if (input->GetKeyboard()->CheckPressTrigger(GatesEngine::Keys::K))
+	{
+		--binfo;
+		if (binfo <= 0)
+		{
+			binfo = 1;
+		}
+	}
+	printf("%f\n", binfo);
+	bloomInfo.Map({ binfo,0,0,0 });
+
 	testCBuffer.Map({ GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::Translate({0,0,0}) });
 	angle += 1.0f * timer.GetElapsedTime();
 	gameObjectManager.Update();
@@ -93,9 +115,11 @@ void Game::Draw()
 
 	graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 });
 
-	testTexShader->Set();
+	//testTexShader->Set();
+	testPostEffectShader->Set();
 	//worldLightInfo.Set();
 	testCBuffer2.Set();
+	bloomInfo.Set();
 	graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(5, graphicsDevice.GetDescriptorHeapManager()->GetSRVHandleForGPU(1));
 	testRenderTex.Set();
 	testMesh.Draw();

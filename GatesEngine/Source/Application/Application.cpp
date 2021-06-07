@@ -57,7 +57,7 @@ void GatesEngine::Application::Run()
 	if (!Initialize())return;
 
 
-	while (!input->GetKeyboard()->CheckPressTrigger(GatesEngine::Keys::ESC))
+	while (!input->GetKeyboard()->CheckPressTrigger(GatesEngine::Keys::ESCAPE))
 	{
 		if (timer.Update())continue;
 		input->Update();
