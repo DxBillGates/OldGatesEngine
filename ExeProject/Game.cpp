@@ -77,7 +77,7 @@ bool Game::Initialize()
 bool Game::Update()
 {
 	testCBuffer.Map({ GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::Translate({0,0,0}) });
-	testCBuffer2.Map({ GatesEngine::Math::Matrix4x4::Translate(g->GetTransform().position) });
+	testCBuffer2.Map({ GatesEngine::Math::Matrix4x4::RotationY(g->GetTransform().rotation.y) * GatesEngine::Math::Matrix4x4::Translate(g->GetTransform().position) });
 	angle += 1.0f * timer.GetElapsedTime();
 	gameObjectManager.Update();
 	sceneManager->Update();
