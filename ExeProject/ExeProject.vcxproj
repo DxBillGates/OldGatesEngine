@@ -131,6 +131,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SampleScene.cpp" />
     <ClCompile Include="TestBehaviour.cpp" />
+    <ClCompile Include="TestBehaviour2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GatesEngine\GatesEngine.vcxproj">
@@ -141,6 +142,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="SampleScene.h" />
     <ClInclude Include="TestBehaviour.h" />
+    <ClInclude Include="TestBehaviour2.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\DefaultPS.hlsl">

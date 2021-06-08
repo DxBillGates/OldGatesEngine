@@ -2,6 +2,7 @@
 #include "SampleScene.h"
 #include "..\GatesEngine\Header\Graphics\Helper\MeshCreater.h"
 #include "TestBehaviour.h"
+#include "TestBehaviour2.h"
 
 Game::Game():Application()
 {
@@ -56,6 +57,7 @@ bool Game::LoadContents()
 	g = gameObjectManager.Add(new GameObject());
 	g->GetTransform().position = Vector3(100, 100, 100);
 	g->AddBehavior<TestBehaviour>();
+	g->AddBehavior<TestBehaviour2>();
 
 	testRenderTex.Create(&graphicsDevice, { 1920,1080 });
 
@@ -74,8 +76,8 @@ bool Game::Initialize()
 
 bool Game::Update()
 {
-	testCBuffer.Map({ GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::Translate(g->GetTransform().position) });
-	//testCBuffer2.Map({ GatesEngine::Math::Matrix4x4::Translate(g->GetTransform().position) });
+	testCBuffer.Map({ GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::Translate({0,0,0}) });
+	testCBuffer2.Map({ GatesEngine::Math::Matrix4x4::Translate(g->GetTransform().position) });
 	angle += 1.0f * timer.GetElapsedTime();
 	gameObjectManager.Update();
 	sceneManager->Update();
