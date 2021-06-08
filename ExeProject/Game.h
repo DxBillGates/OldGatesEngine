@@ -17,6 +17,7 @@ private:
 	GatesEngine::Shader* testLineShader;
 	GatesEngine::Mesh testMesh;
 	GatesEngine::Mesh testLineMesh;
+	GatesEngine::GameObject* g;
 	float angle;
 	GatesEngine::RenderTexture testRenderTex;
 public:

@@ -4,12 +4,14 @@
 namespace GatesEngine
 {
 	class Application;
+	class SceneManager;
 	class Scene
 	{
 	protected:
 		GameObjectManager gameObjectManager;
 		const char* sceneName;
 		bool changeNextSceneFlag;
+		Application* pApp;
 	public:
 		Scene();
 		Scene(const char* sceneName);
@@ -20,5 +22,6 @@ namespace GatesEngine
 		virtual void Draw() = 0;
 		const char* GetSceneName();
 		bool IsChangeScene();
+		Application* GetApplication();
 	};
 }

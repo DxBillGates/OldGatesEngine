@@ -6,9 +6,10 @@ GatesEngine::SceneManager* GatesEngine::SceneManager::GetInstance()
 	return &instance;
 }
 
-void GatesEngine::SceneManager::AddScene(Scene* newScene)
+GatesEngine::Scene* GatesEngine::SceneManager::AddScene(Scene* newScene)
 {
 	scenes.push_back(newScene);
+	return newScene;
 }
 
 void GatesEngine::SceneManager::ChangeScene(const char* sceneName)

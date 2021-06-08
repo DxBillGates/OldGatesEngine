@@ -77,3 +77,8 @@ GatesEngine::SceneManager* GatesEngine::Application::GetSceneManager()
 {
 	return sceneManager;
 }
+
+GatesEngine::GraphicsDevice* GatesEngine::Application::GetGraphicsDevice()
+{
+	return &graphicsDevice;
+}

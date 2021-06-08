@@ -1,12 +1,15 @@
 #include "..\..\Header\GameObject\GameObject.h"
 #include "..\..\Header\Component\Component.h"
 #include "..\..\Header\Component\Behaviour.h"
+#include "..\..\Header\GameObject\GameObjectManager.h"
+#include "..\..\Header\Scene\Scene.h"
+#include "..\..\Header\Application\Application.h"
 
-GatesEngine::GameObject::GameObject():name("none"),tag("none")
+GatesEngine::GameObject::GameObject():GameObject("none","none")
 {
 }
 
-GatesEngine::GameObject::GameObject(const char* name, const char* tag):name(name),tag(tag)
+GatesEngine::GameObject::GameObject(const char* name, const char* tag) : name(name), tag(tag), manager(nullptr),transform(Math::Transform())
 {
 }
 
@@ -46,4 +49,19 @@ void GatesEngine::GameObject::Update()
 	{
 		(*itr)->Update();
 	}
+}
+
+GatesEngine::Math::Transform& GatesEngine::GameObject::GetTransform()
+{
+	return transform;
+}
+
+void GatesEngine::GameObject::SetManager(GameObjectManager* manager)
+{
+	this->manager = manager;
+}
+
+GatesEngine::GameObjectManager* GatesEngine::GameObject::GetManager()
+{
+	return manager;
 }

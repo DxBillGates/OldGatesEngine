@@ -1,14 +1,19 @@
 #pragma once
 #include "..\Component\Behaviour.h"
+#include "..\..\Header\Graphics\CBuffer.h"
+#include "..\..\Header\Math\Transform.h"
 #include <vector>
 
 namespace GatesEngine
 {
+	class GameObjectManager;
 	class GameObject
 	{
 	private:
 		std::vector<Component*> components;
 		std::vector<Behaviour*> behaviors;
+		GameObjectManager* manager;
+		Math::Transform transform;
 		const char* name;
 		const char* tag;
 	public:
@@ -17,6 +22,10 @@ namespace GatesEngine
 		~GameObject();
 		void Start();
 		void Update();
+
+		Math::Transform& GetTransform();
+		void SetManager(GameObjectManager* manager);
+		GameObjectManager* GetManager();
 
 		template <typename T>
 		T* AddComponent();
@@ -48,6 +57,7 @@ namespace GatesEngine
 		if (pComponent != nullptr)
 		{
 			behaviors.push_back(pComponent);
+			pComponent->SetGameObject(this);
 			return t;
 		}
 		return nullptr;

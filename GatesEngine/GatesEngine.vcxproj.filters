@@ -180,6 +180,9 @@
     <ClInclude Include="Header\Graphics\Helper\MeshCreater.h">
       <Filter>Header\Graphics\Helper</Filter>
     </ClInclude>
+    <ClInclude Include="Header\Math\Transform.h">
+      <Filter>Header\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Easing.cpp">

@@ -12,7 +12,7 @@ namespace GatesEngine
 	protected:
 	public:
 		static SceneManager* GetInstance();
-		void AddScene(Scene* newScene);
+		Scene* AddScene(Scene* newScene);
 		void ChangeScene(const char* sceneName);
 		Scene* GetCurrentScene();
 		Scene* GetBeforeScene();

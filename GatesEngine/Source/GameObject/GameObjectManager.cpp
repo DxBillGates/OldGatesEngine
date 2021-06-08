@@ -1,6 +1,6 @@
 #include "..\..\Header\GameObject\GameObjectManager.h"
 
-GatesEngine::GameObjectManager::GameObjectManager()
+GatesEngine::GameObjectManager::GameObjectManager():scene(nullptr)
 {
 }
 
@@ -15,7 +15,18 @@ GatesEngine::GameObjectManager::~GameObjectManager()
 GatesEngine::GameObject* GatesEngine::GameObjectManager::Add(GameObject* newGameObject)
 {
 	gameObjects.push_back(newGameObject);
+	newGameObject->SetManager(this);
 	return newGameObject;
+}
+
+void GatesEngine::GameObjectManager::SetScene(Scene* setScene)
+{
+	scene = setScene;
+}
+
+GatesEngine::Scene* GatesEngine::GameObjectManager::GetScene()
+{
+	return scene;
 }
 
 void GatesEngine::GameObjectManager::Start()

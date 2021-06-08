@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "SampleScene.h"
 #include "..\GatesEngine\Header\Graphics\Helper\MeshCreater.h"
+#include "TestBehaviour.h"
 
 Game::Game():Application()
 {
@@ -19,7 +20,8 @@ Game::~Game()
 
 bool Game::LoadContents()
 {
-	sceneManager->AddScene(new SampleScene("SampleScene", this));
+	auto* s = sceneManager->AddScene(new SampleScene("SampleScene", this));
+	gameObjectManager.SetScene(s);
 	sceneManager->ChangeScene("SampleScene");
 
 	using namespace GatesEngine;
@@ -51,7 +53,9 @@ bool Game::LoadContents()
 	MeshCreater::CreateGrid({ 10000,10000 }, 100, testLineMeshData);
 	testLineMesh.Create(&graphicsDevice, testLineMeshData);
 
-	auto* g = gameObjectManager.Add(new GameObject());
+	g = gameObjectManager.Add(new GameObject());
+	g->GetTransform().position = Vector3(100, 100, 100);
+	g->AddBehavior<TestBehaviour>();
 
 	testRenderTex.Create(&graphicsDevice, { 1920,1080 });
 
@@ -70,7 +74,8 @@ bool Game::Initialize()
 
 bool Game::Update()
 {
-	testCBuffer.Map({ GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::Translate({0,0,0}) });
+	testCBuffer.Map({ GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::Translate(g->GetTransform().position) });
+	//testCBuffer2.Map({ GatesEngine::Math::Matrix4x4::Translate(g->GetTransform().position) });
 	angle += 1.0f * timer.GetElapsedTime();
 	gameObjectManager.Update();
 	sceneManager->Update();
