@@ -8,6 +8,8 @@
 
 namespace GatesEngine
 {
+	class ShaderManager;
+	class MeshManager;
 	class DescriptorHeapManager;
 	class RenderTarget;
 	class GraphicsDevice
@@ -34,6 +36,8 @@ namespace GatesEngine
 		UINT64                       mFenceValue;
 
 		DescriptorHeapManager* descriptorHeapManager;
+		ShaderManager* shaderManager;
+		MeshManager* meshManager;
 	private:
 		void CreateDxgiFactory();
 		void CreateDevice();
@@ -62,5 +66,7 @@ namespace GatesEngine
 		ID3D12Resource* GetDepthBuffer();
 		ID3D12DescriptorHeap* GetRtvHeap();
 		DescriptorHeapManager* GetDescriptorHeapManager();
+		ShaderManager* GetShaderManager();
+		MeshManager* GetMeshManager();
 	};
 }

@@ -67,6 +67,12 @@
     <Filter Include="Source\Graphics\Helper">
       <UniqueIdentifier>{3d6f668f-b668-4407-bced-8e31cdfefe29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header\Graphics\Manager">
+      <UniqueIdentifier>{ebbdcb30-53df-4ebf-bbad-92d0777a12bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Manager">
+      <UniqueIdentifier>{d6ec8435-146e-4fe8-8f23-c34c2a1ddc4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\Math\Easing.h">
@@ -180,6 +186,12 @@
     <ClInclude Include="Header\Graphics\Helper\MeshCreater.h">
       <Filter>Header\Graphics\Helper</Filter>
     </ClInclude>
+    <ClInclude Include="Header\Graphics\Manager\ShaderManager.h">
+      <Filter>Header\Graphics\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Graphics\Manager\MeshManager.h">
+      <Filter>Header\Graphics\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Easing.cpp">
@@ -271,6 +283,12 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\Helper\MeshCreater.cpp">
       <Filter>Source\Graphics\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Manager\ShaderManager.cpp">
+      <Filter>Source\Graphics\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Manager\MeshManager.cpp">
+      <Filter>Source\Graphics\Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

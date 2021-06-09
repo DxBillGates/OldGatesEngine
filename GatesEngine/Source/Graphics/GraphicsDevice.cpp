@@ -2,6 +2,8 @@
 #include "..\..\Header\Graphics\COMRelease.h"
 #include "..\..\Header\Graphics\RenderTarget.h"
 #include "..\..\Header\Graphics\DescriptorHeapManager.h"
+#include "..\..\Header\Graphics\Manager\ShaderManager.h"
+#include "..\..\Header\Graphics\Manager\MeshManager.h"
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -26,6 +28,8 @@ GatesEngine::GraphicsDevice::GraphicsDevice()
 	, mFence(nullptr)
 	, mFenceValue(0)
 	, descriptorHeapManager(nullptr)
+	, shaderManager(nullptr)
+	, meshManager(nullptr)
 {
 #ifdef _DEBUG
 	HRESULT result;
@@ -63,6 +67,8 @@ GatesEngine::GraphicsDevice::~GraphicsDevice()
 	COM_RELEASE(mFence);
 
 	delete descriptorHeapManager;
+	delete shaderManager;
+	delete meshManager;
 }
 
 bool GatesEngine::GraphicsDevice::Create(Window* mainWindow)
@@ -77,6 +83,8 @@ bool GatesEngine::GraphicsDevice::Create(Window* mainWindow)
 	CreateFence();
 
 	descriptorHeapManager = new DescriptorHeapManager(this, 640, 64);
+	shaderManager = new ShaderManager(this);
+	meshManager = new MeshManager(this);
 
 	return true;
 }
@@ -233,6 +241,16 @@ ID3D12DescriptorHeap* GatesEngine::GraphicsDevice::GetRtvHeap()
 GatesEngine::DescriptorHeapManager* GatesEngine::GraphicsDevice::GetDescriptorHeapManager()
 {
 	return descriptorHeapManager;
+}
+
+GatesEngine::ShaderManager* GatesEngine::GraphicsDevice::GetShaderManager()
+{
+	return shaderManager;
+}
+
+GatesEngine::MeshManager* GatesEngine::GraphicsDevice::GetMeshManager()
+{
+	return meshManager;
 }
 
 void GatesEngine::GraphicsDevice::CreateDxgiFactory()
