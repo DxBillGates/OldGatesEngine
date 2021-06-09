@@ -5,6 +5,8 @@
 #include "Header/Graphics/CBuffer.h"
 #include "Header/Graphics/Mesh.h"
 #include "Header/Graphics/RenderTexture.h"
+#include "BigConstantBuffer.h"
+#include "CBV_SRV_UAV_Heap.h"
 
 class Game : public GatesEngine::Application
 {
@@ -19,6 +21,8 @@ private:
 	GatesEngine::Mesh testLineMesh;
 	float angle;
 	GatesEngine::RenderTexture testRenderTex;
+	BigConstantBuffer test;
+	CBV_SRV_UAV_Heap testHeap;
 public:
 	Game();
 	Game(const GatesEngine::Math::Vector2& wSize, const char* title);

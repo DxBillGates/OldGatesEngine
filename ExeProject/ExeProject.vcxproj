@@ -127,6 +127,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BigConstantBuffer.cpp" />
+    <ClCompile Include="CBV_SRV_UAV_Heap.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SampleScene.cpp" />
@@ -137,6 +139,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BigConstantBuffer.h" />
+    <ClInclude Include="CBV_SRV_UAV_Heap.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="SampleScene.h" />
   </ItemGroup>

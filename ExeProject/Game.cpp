@@ -2,11 +2,11 @@
 #include "SampleScene.h"
 #include "..\GatesEngine\Header\Graphics\Helper\MeshCreater.h"
 
-Game::Game():Application()
+Game::Game() :Application()
 {
 }
 
-Game::Game(const GatesEngine::Math::Vector2& wSize, const char* title):Application(wSize,title)
+Game::Game(const GatesEngine::Math::Vector2& wSize, const char* title) : Application(wSize, title)
 {
 }
 
@@ -25,22 +25,22 @@ bool Game::LoadContents()
 	using namespace GatesEngine;
 	using namespace GatesEngine::Math;
 	testShader = new Shader(&graphicsDevice, std::wstring(L"Default"));
-	testShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV});
+	testShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV });
 
 	testTexShader = new Shader(&graphicsDevice, std::wstring(L"Texture"));
-	testTexShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV },BlendMode::BLENDMODE_ALPHA,D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,false);
+	testTexShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
 
 	testLineShader = new Shader(&graphicsDevice, std::wstring(L"Line"));
 	testLineShader->Create({ InputLayout::POSITION,InputLayout::COLOR }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE, false);
 
 	testCBuffer.Create(&graphicsDevice, 0);
-	testCBuffer.Map({Math::Matrix4x4::Identity()});
+	testCBuffer.Map({ Math::Matrix4x4::Identity() });
 	testCBuffer2.Create(&graphicsDevice, 0);
 	testCBuffer2.Map({ Math::Matrix4x4::Identity() });
 	testCBuffer2.Map({ Math::Matrix4x4::Translate({-30,0,0}) });
 	testCBuffer3.Create(&graphicsDevice, 0);
 	testCBuffer3.Map({ Math::Matrix4x4::Identity() });
-	
+
 	//板ポリ生成
 	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
 	MeshCreater::CreateQuad({ 100,100 }, { 1,1 }, testMeshData);
@@ -56,6 +56,18 @@ bool Game::LoadContents()
 	testRenderTex.Create(&graphicsDevice, { 1920,1080 });
 
 	graphicsDevice.GetDescriptorHeapManager()->CreateSRV(graphicsDevice.GetDepthBuffer());
+
+	//定数バッファを256*valueバイト分確保
+	int value = 10000;
+	testHeap.SetGraphicsDevice(&graphicsDevice);
+	testHeap.Create({ (float)value,64,0 });
+
+	test.SetGraphicsDevice(&graphicsDevice);
+	test.SetHeap(&testHeap);
+	test.CreateBuffer();
+
+
+	Matrix4x4 a = Matrix4x4::Identity();
 
 	return true;
 }
@@ -74,25 +86,39 @@ bool Game::Update()
 	angle += 1.0f * timer.GetElapsedTime();
 	gameObjectManager.Update();
 	sceneManager->Update();
+	test.ResetCurrentUseNumber();
 	return true;
 }
 
 void Game::Draw()
 {
 	graphicsDevice.ClearRenderTarget({ 1,1,1,1 }, &testRenderTex);
-	graphicsDevice.SetDescriptorHeap();
 	testShader->Set();
+
+	GatesEngine::Math::Matrix4x4 m = GatesEngine::Math::Matrix4x4::RotationY(angle);
+	test.BindAndAttachData(0, &m, sizeof(m));
+	GatesEngine::B2& cameraData = mainCamera.GetData();
+	test.BindAndAttachData(2, &cameraData, sizeof(cameraData));
+	GatesEngine::B3 light = { GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) };
+	test.BindAndAttachData(3, &light, sizeof(light));
+
+	//graphicsDevice.SetDescriptorHeap();
 	//testTexShader->Set();
-	mainCamera.Set();
-	worldLightInfo.Set();
-	testCBuffer.Set();
-	
+	//mainCamera.Set();
+	//worldLightInfo.Set();
+	//testCBuffer.Set();
+
 	testMesh.Draw();
 	sceneManager->Draw();
 	testRenderTex.EndDraw();
 
 	graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 });
+	graphicsDevice.SetDescriptorHeap();
 
+	//graphicsDevice.SetDescriptorHeap();
+	//testTexShader->Set();
+	mainCamera.Set();
+	worldLightInfo.Set();
 	testTexShader->Set();
 	//worldLightInfo.Set();
 	testCBuffer2.Set();
