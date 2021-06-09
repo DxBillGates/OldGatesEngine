@@ -97,7 +97,7 @@ void Game::Draw()
 
 	GatesEngine::Math::Matrix4x4 m = GatesEngine::Math::Matrix4x4::RotationY(angle);
 	test.BindAndAttachData(0, &m, sizeof(m));
-	GatesEngine::B2& cameraData = mainCamera.GetData();
+	GatesEngine::B2 cameraData = mainCamera.GetData();
 	test.BindAndAttachData(2, &cameraData, sizeof(cameraData));
 	GatesEngine::B3 light = { GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) };
 	test.BindAndAttachData(3, &light, sizeof(light));

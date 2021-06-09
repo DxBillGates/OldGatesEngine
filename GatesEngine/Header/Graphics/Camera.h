@@ -36,6 +36,6 @@ namespace GatesEngine
 		void Set();
 		void SetGraphicsDevice(GraphicsDevice* device);
 		void SetMainWindow(Window* mainWindow);
-		B2& GetData();
+		B2 GetData();
 	};
 }
