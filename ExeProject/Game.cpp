@@ -3,6 +3,7 @@
 #include "..\GatesEngine\Header\Graphics\Helper\MeshCreater.h"
 #include "Header/Graphics/Manager/ShaderManager.h"
 #include "Header/Graphics/Manager/MeshManager.h"
+#include "Header/Graphics/CBufferAllocater.h"
 
 Game::Game():Application()
 {

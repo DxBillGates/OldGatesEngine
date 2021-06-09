@@ -4,6 +4,8 @@
 #include "..\..\Header\Graphics\DescriptorHeapManager.h"
 #include "..\..\Header\Graphics\Manager\ShaderManager.h"
 #include "..\..\Header\Graphics\Manager\MeshManager.h"
+#include "..\..\Header\Graphics\CBVSRVUAVHeap.h"
+#include "..\..\Header\Graphics\CBufferAllocater.h"
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -30,6 +32,8 @@ GatesEngine::GraphicsDevice::GraphicsDevice()
 	, descriptorHeapManager(nullptr)
 	, shaderManager(nullptr)
 	, meshManager(nullptr)
+	, cbvSrvUavHeap(nullptr)
+	, cBufferAllocater(nullptr)
 {
 #ifdef _DEBUG
 	HRESULT result;
@@ -69,6 +73,8 @@ GatesEngine::GraphicsDevice::~GraphicsDevice()
 	delete descriptorHeapManager;
 	delete shaderManager;
 	delete meshManager;
+	delete cBufferAllocater;
+	delete cbvSrvUavHeap;
 }
 
 bool GatesEngine::GraphicsDevice::Create(Window* mainWindow)
@@ -85,6 +91,16 @@ bool GatesEngine::GraphicsDevice::Create(Window* mainWindow)
 	descriptorHeapManager = new DescriptorHeapManager(this, 640, 64);
 	shaderManager = new ShaderManager(this);
 	meshManager = new MeshManager(this);
+	cbvSrvUavHeap = new CBVSRVUAVHeap();
+	cBufferAllocater = new CBufferAllocater();
+
+	cbvSrvUavHeap->SetGraphicsDevice(this);
+	cbvSrvUavHeap->Create({ 10000,256,0 });
+
+	cBufferAllocater->SetGraphicsDevice(this);
+	cBufferAllocater->SetHeap(cbvSrvUavHeap);
+	cBufferAllocater->Create();
+
 
 	return true;
 }
@@ -251,6 +267,16 @@ GatesEngine::ShaderManager* GatesEngine::GraphicsDevice::GetShaderManager()
 GatesEngine::MeshManager* GatesEngine::GraphicsDevice::GetMeshManager()
 {
 	return meshManager;
+}
+
+GatesEngine::CBVSRVUAVHeap* GatesEngine::GraphicsDevice::GetCBVSRVUAVHeap()
+{
+	return cbvSrvUavHeap;
+}
+
+GatesEngine::CBufferAllocater* GatesEngine::GraphicsDevice::GetCBufferAllocater()
+{
+	return cBufferAllocater;
 }
 
 void GatesEngine::GraphicsDevice::CreateDxgiFactory()

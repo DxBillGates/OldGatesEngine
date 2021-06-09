@@ -11,6 +11,8 @@ namespace GatesEngine
 	class ShaderManager;
 	class MeshManager;
 	class DescriptorHeapManager;
+	class CBVSRVUAVHeap;
+	class CBufferAllocater;
 	class RenderTarget;
 	class GraphicsDevice
 	{
@@ -38,6 +40,8 @@ namespace GatesEngine
 		DescriptorHeapManager* descriptorHeapManager;
 		ShaderManager* shaderManager;
 		MeshManager* meshManager;
+		CBVSRVUAVHeap* cbvSrvUavHeap;
+		CBufferAllocater* cBufferAllocater;
 	private:
 		void CreateDxgiFactory();
 		void CreateDevice();
@@ -68,5 +72,7 @@ namespace GatesEngine
 		DescriptorHeapManager* GetDescriptorHeapManager();
 		ShaderManager* GetShaderManager();
 		MeshManager* GetMeshManager();
+		CBVSRVUAVHeap* GetCBVSRVUAVHeap();
+		CBufferAllocater* GetCBufferAllocater();
 	};
 }
