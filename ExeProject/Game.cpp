@@ -25,12 +25,22 @@ bool Game::LoadContents()
 	using namespace GatesEngine;
 	using namespace GatesEngine::Math;
 	testShader = new Shader(&graphicsDevice, std::wstring(L"Default"));
+	testShaderManager.Add(testShader, "Default");
+	//auto* testShader = graphicsDevice.GetShaderManager().Add(new Shader(&graphicsDevice, std::wstring(L"Default"),"DefaultShader"));
+	//testShader.SetInputLayout();
+	//testShader.SetRange();
+	//testShader.SetBlendMode();
+	//testShader.SetTopologyType();
+	//testShader.SetDepthTest();
+	//testShader.Create();
 	testShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV});
 
 	testTexShader = new Shader(&graphicsDevice, std::wstring(L"Texture"));
+	testShaderManager.Add(testTexShader, "Texture");
 	testTexShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV },BlendMode::BLENDMODE_ALPHA,D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,false);
 
 	testLineShader = new Shader(&graphicsDevice, std::wstring(L"Line"));
+	testShaderManager.Add(testLineShader, "Line");
 	testLineShader->Create({ InputLayout::POSITION,InputLayout::COLOR }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE, false);
 
 	testCBuffer.Create(&graphicsDevice, 0);
@@ -81,7 +91,8 @@ void Game::Draw()
 {
 	graphicsDevice.ClearRenderTarget({ 1,1,1,1 }, &testRenderTex);
 	graphicsDevice.SetDescriptorHeap();
-	testShader->Set();
+	//testShader->Set();
+	testShaderManager.GetShader("Default")->Set();
 	//testTexShader->Set();
 	mainCamera.Set();
 	worldLightInfo.Set();
@@ -93,7 +104,8 @@ void Game::Draw()
 
 	graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 });
 
-	testTexShader->Set();
+	testShaderManager.GetShader("Texture")->Set();
+	//testTexShader->Set();
 	//worldLightInfo.Set();
 	testCBuffer2.Set();
 	graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(5, graphicsDevice.GetDescriptorHeapManager()->GetSRVHandleForGPU(1));
@@ -101,7 +113,8 @@ void Game::Draw()
 	testMesh.Draw();
 
 	graphicsDevice.GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
-	testLineShader->Set();
+	testShaderManager.GetShader("Line")->Set();
+	//testLineShader->Set();
 	testCBuffer3.Set();
 	testLineMesh.Draw();
 
