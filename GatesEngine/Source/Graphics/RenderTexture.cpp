@@ -1,5 +1,6 @@
 #include "..\..\Header\Graphics\RenderTexture.h"
 #include "..\..\Header\Graphics\DescriptorHeapManager.h"
+#include "..\..\Header\Graphics\CBVSRVUAVHeap.h"
 #include "..\..\Header\Graphics\COMRelease.h"
 
 GatesEngine::RenderTexture::RenderTexture()
@@ -54,14 +55,15 @@ void GatesEngine::RenderTexture::Create(GraphicsDevice* graphicsDevice, const Ga
 	pResources[0] = texBuff;
 	//pGraphicsDevice = wrapper;
 
-	graphicsDevice->GetDescriptorHeapManager()->CreateSRV(texBuff);
+	graphicsDevice->GetCBVSRVUAVHeap()->CreateSRV(texBuff);
+	//graphicsDevice->GetDescriptorHeapManager()->CreateSRV(texBuff);
 
 	pGraphicsDevice = graphicsDevice;
 }
 
 void GatesEngine::RenderTexture::Set()
 {
-	pGraphicsDevice->GetCmdList()->SetGraphicsRootDescriptorTable(4, pGraphicsDevice->GetDescriptorHeapManager()->GetSRVHandleForGPU(0));
+	pGraphicsDevice->GetCmdList()->SetGraphicsRootDescriptorTable(4, pGraphicsDevice->GetCBVSRVUAVHeap()->GetSRVHandleForSRV(0));
 }
 
 void GatesEngine::RenderTexture::EndDraw()

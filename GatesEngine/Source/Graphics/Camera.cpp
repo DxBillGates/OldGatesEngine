@@ -116,3 +116,9 @@ void GatesEngine::Camera::SetMainWindow(Window* mainWindow)
 {
 	pMainWindow = mainWindow;
 }
+
+GatesEngine::B2 GatesEngine::Camera::GetData()
+{
+	B2 data = { viewMatrix,projectionMatrix,position };
+	return data;
+}

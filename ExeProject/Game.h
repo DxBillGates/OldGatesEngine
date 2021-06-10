@@ -9,9 +9,6 @@
 class Game : public GatesEngine::Application
 {
 private:
-	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer;
-	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer2;
-	GatesEngine::CBuffer<GatesEngine::B0> testCBuffer3;
 	float angle;
 	GatesEngine::RenderTexture testRenderTex;
 public:

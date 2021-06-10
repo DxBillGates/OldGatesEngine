@@ -32,7 +32,7 @@ void GatesEngine::CBufferAllocater::Create()
 	resDesc.MipLevels = 1;
 	resDesc.SampleDesc.Count = 1;
 	resDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	resDesc.Width = ((1 + 0xff) & ~0xff) * (int)heap->GetUseCount().x;
+	resDesc.Width = (UINT64)((1 + 0xff) & ~0xff) * (int)heap->GetUseCount().x;
 	HRESULT result = graphicsDevice->GetDevice()->CreateCommittedResource(&heapProp, D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&buffer));
 
 	buffer->Map(0, {}, (void**)&mappedBuffer);
@@ -58,15 +58,15 @@ void GatesEngine::CBufferAllocater::BindAndAttachData(int descIndex, const void*
 	memcpy(mappedBuffer + top, data, size);
 
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbDesc = {};
-	cbDesc.BufferLocation = buffer->GetGPUVirtualAddress() + top * 0x100;
+	cbDesc.BufferLocation = buffer->GetGPUVirtualAddress() + (UINT64)top * 0x100;
 	cbDesc.SizeInBytes = sizeAligned;
 
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = heap->GetHeap()->GetCPUDescriptorHandleForHeapStart();
-	cpuHandle.ptr += graphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * currentUseNumber;
+	cpuHandle.ptr += (UINT64)graphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * currentUseNumber;
 	graphicsDevice->GetDevice()->CreateConstantBufferView(&cbDesc, cpuHandle);
 
 	D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = heap->GetHeap()->GetGPUDescriptorHandleForHeapStart();
-	gpuHandle.ptr += graphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * currentUseNumber;
+	gpuHandle.ptr += (UINT64)graphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * currentUseNumber;
 
 	ID3D12DescriptorHeap* ppHeaps[] = { heap->GetHeap() };
 	graphicsDevice->GetCmdList()->SetDescriptorHeaps(1, ppHeaps);
