@@ -1,9 +1,6 @@
 #include "Game.h"
 #include "SampleScene.h"
-#include "..\GatesEngine\Header\Graphics\Helper\MeshCreater.h"
-#include "Header/Graphics/Manager/ShaderManager.h"
-#include "Header/Graphics/Manager/MeshManager.h"
-#include "Header/Graphics/CBufferAllocater.h"
+#include "Header/Graphics/Graphics.h"
 
 Game::Game():Application()
 {
@@ -57,7 +54,7 @@ bool Game::Initialize()
 {
 	gameObjectManager.Start();
 	timer.SetFrameRate(144);
-	timer.SetIsShow(false);
+	timer.SetIsShow(true);
 	return true;
 }
 
@@ -96,20 +93,20 @@ void Game::Draw()
 
 
 	//RenderTexture使わないバージョン
-	graphicsDevice.ClearRenderTarget({ 135,206,235,0 });
+	//graphicsDevice.ClearRenderTarget({ 135,206,235,0 });
 
-	graphicsDevice.GetShaderManager()->GetShader("Default")->Set();
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle));
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
-	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
+	//graphicsDevice.GetShaderManager()->GetShader("Default")->Set();
+	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle));
+	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
+	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
+	//graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
 
-	graphicsDevice.GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
-	graphicsDevice.GetShaderManager()->GetShader("Line")->Set();
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
-	graphicsDevice.GetMeshManager()->GetMesh("Grid")->Draw();
-
-	//sceneManager->Draw();
+	//graphicsDevice.GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+	//graphicsDevice.GetShaderManager()->GetShader("Line")->Set();
+	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
+	//graphicsDevice.GetMeshManager()->GetMesh("Grid")->Draw();
+	graphicsDevice.GetCBVSRVUAVHeap()->Set();
+	sceneManager->Draw();
 	graphicsDevice.ScreenFlip();
 }
 

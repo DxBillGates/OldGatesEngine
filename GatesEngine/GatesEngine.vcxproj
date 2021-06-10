@@ -31,6 +31,7 @@
     <ClInclude Include="Header\Graphics\CBVSRVUAVHeap.h" />
     <ClInclude Include="Header\Graphics\COMRelease.h" />
     <ClInclude Include="Header\Graphics\DescriptorHeapManager.h" />
+    <ClInclude Include="Header\Graphics\Graphics.h" />
     <ClInclude Include="Header\Graphics\GraphicsDevice.h" />
     <ClInclude Include="Header\Graphics\Helper\MeshCreater.h" />
     <ClInclude Include="Header\Graphics\Manager\MeshManager.h" />

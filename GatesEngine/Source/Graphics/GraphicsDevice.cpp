@@ -2,8 +2,8 @@
 #include "..\..\Header\Graphics\COMRelease.h"
 #include "..\..\Header\Graphics\RenderTarget.h"
 #include "..\..\Header\Graphics\DescriptorHeapManager.h"
-#include "..\..\Header\Graphics\Manager\ShaderManager.h"
 #include "..\..\Header\Graphics\Manager\MeshManager.h"
+#include "..\..\Header\Graphics\Manager\ShaderManager.h"
 #include "..\..\Header\Graphics\CBVSRVUAVHeap.h"
 #include "..\..\Header\Graphics\CBufferAllocater.h"
 
@@ -95,7 +95,7 @@ bool GatesEngine::GraphicsDevice::Create(Window* mainWindow)
 	cBufferAllocater = new CBufferAllocater();
 
 	cbvSrvUavHeap->SetGraphicsDevice(this);
-	cbvSrvUavHeap->Create({ 10000,256,0 });
+	cbvSrvUavHeap->Create({ 100000,256,0 });
 
 	cBufferAllocater->SetGraphicsDevice(this);
 	cBufferAllocater->SetHeap(cbvSrvUavHeap);
@@ -116,7 +116,7 @@ void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, Render
 		renderTarget = mRenderTarget;
 		SetResourceBarrier(mFrameBuffer[mSwapChain->GetCurrentBackBufferIndex()], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 		rtvHandle = renderTarget->GetHeap()->GetCPUDescriptorHandleForHeapStart();
-		rtvHandle.ptr += mSwapChain->GetCurrentBackBufferIndex() * mDevice->GetDescriptorHandleIncrementSize(renderTarget->GetHeap()->GetDesc().Type);
+		rtvHandle.ptr += (UINT64)mSwapChain->GetCurrentBackBufferIndex() * mDevice->GetDescriptorHandleIncrementSize(renderTarget->GetHeap()->GetDesc().Type);
 		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
 		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 	}
@@ -153,7 +153,7 @@ void GatesEngine::GraphicsDevice::ClearRenderTargetOutDsv(const Vector4& color, 
 		renderTarget = mRenderTarget;
 		SetResourceBarrier(mFrameBuffer[mSwapChain->GetCurrentBackBufferIndex()], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 		rtvHandle = renderTarget->GetHeap()->GetCPUDescriptorHandleForHeapStart();
-		rtvHandle.ptr += mSwapChain->GetCurrentBackBufferIndex() * mDevice->GetDescriptorHandleIncrementSize(renderTarget->GetHeap()->GetDesc().Type);
+		rtvHandle.ptr += (UINT64)mSwapChain->GetCurrentBackBufferIndex() * mDevice->GetDescriptorHandleIncrementSize(renderTarget->GetHeap()->GetDesc().Type);
 		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
 		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, nullptr);
 		//ClearDepthStencil();

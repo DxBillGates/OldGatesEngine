@@ -1,6 +1,16 @@
 #include "..\..\Header\Graphics\CBVSRVUAVHeap.h"
 #include "..\..\Header\Graphics\COMRelease.h"
 
+GatesEngine::CBVSRVUAVHeap::CBVSRVUAVHeap()
+	: graphicsDevice(nullptr)
+	, heap(nullptr)
+	, useCount({})
+	, isCreated(false)
+	, incrementSize(0)
+	, nextSrvDescriptorNum(0)
+{
+}
+
 GatesEngine::CBVSRVUAVHeap::~CBVSRVUAVHeap()
 {
 	COM_RELEASE(heap);
@@ -62,4 +72,10 @@ D3D12_GPU_DESCRIPTOR_HANDLE GatesEngine::CBVSRVUAVHeap::GetSRVHandleForSRV(int n
 	handle.ptr += (UINT64)incrementSize * ((UINT64)useCount.x + 1);
 	handle.ptr += (UINT64)incrementSize * number;
 	return handle;
+}
+
+void GatesEngine::CBVSRVUAVHeap::Set()
+{
+	ID3D12DescriptorHeap* ppHeaps[] = { heap };
+	graphicsDevice->GetCmdList()->SetDescriptorHeaps(1, ppHeaps);
 }

@@ -68,9 +68,6 @@ void GatesEngine::CBufferAllocater::BindAndAttachData(int descIndex, const void*
 	D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = heap->GetHeap()->GetGPUDescriptorHandleForHeapStart();
 	gpuHandle.ptr += (UINT64)graphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * currentUseNumber;
 
-	ID3D12DescriptorHeap* ppHeaps[] = { heap->GetHeap() };
-	graphicsDevice->GetCmdList()->SetDescriptorHeaps(1, ppHeaps);
-
 	graphicsDevice->GetCmdList()->SetGraphicsRootDescriptorTable(descIndex, gpuHandle);
 
 	currentUseNumber += numRequired;

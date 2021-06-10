@@ -77,3 +77,23 @@ GatesEngine::SceneManager* GatesEngine::Application::GetSceneManager()
 {
 	return sceneManager;
 }
+
+GatesEngine::GraphicsDevice* GatesEngine::Application::GetGraphicsDevice()
+{
+	return &graphicsDevice;
+}
+
+GatesEngine::Window* GatesEngine::Application::GetWindow()
+{
+	return &mainWindow;
+}
+
+GatesEngine::Input* GatesEngine::Application::GetInput()
+{
+	return input;
+}
+
+GatesEngine::Camera* GatesEngine::Application::GetMainCamera()
+{
+	return &mainCamera;
+}

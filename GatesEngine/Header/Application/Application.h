@@ -36,5 +36,9 @@ namespace GatesEngine
 
 		Util::Timer* GetTimer();
 		SceneManager* GetSceneManager();
+		GraphicsDevice* GetGraphicsDevice();
+		Window* GetWindow();
+		Input* GetInput();
+		Camera* GetMainCamera();
 	};
 }

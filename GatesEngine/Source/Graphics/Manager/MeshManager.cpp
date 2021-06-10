@@ -1,4 +1,5 @@
 #include "..\..\..\Header\Graphics\Manager\MeshManager.h"
+#include "..\..\..\Header\Graphics\Mesh.h"
 
 GatesEngine::MeshManager::MeshManager(GraphicsDevice* pGraphicsDevice)
 	: graphicsDevice(pGraphicsDevice)

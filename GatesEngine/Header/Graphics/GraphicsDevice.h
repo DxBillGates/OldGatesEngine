@@ -8,12 +8,12 @@
 
 namespace GatesEngine
 {
+	class DescriptorHeapManager;
+	class RenderTarget;
 	class ShaderManager;
 	class MeshManager;
-	class DescriptorHeapManager;
 	class CBVSRVUAVHeap;
 	class CBufferAllocater;
-	class RenderTarget;
 	class GraphicsDevice
 	{
 	private:

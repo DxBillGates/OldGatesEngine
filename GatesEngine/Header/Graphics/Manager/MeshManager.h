@@ -1,10 +1,11 @@
 #pragma once
-#include "..\..\Graphics\Mesh.h"
 #include <map>
 #include <string>
 
 namespace GatesEngine
 {
+	class Mesh;
+	class GraphicsDevice;
 	class MeshManager
 	{
 	private:

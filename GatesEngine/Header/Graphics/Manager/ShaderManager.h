@@ -1,10 +1,11 @@
 #pragma once
-#include "..\..\Graphics\Shader.h"
 #include <map>
 #include <string>
 
 namespace GatesEngine
 {
+	class GraphicsDevice;
+	class Shader;
 	class ShaderManager
 	{
 	private:

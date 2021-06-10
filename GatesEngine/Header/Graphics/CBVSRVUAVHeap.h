@@ -13,6 +13,7 @@ namespace GatesEngine
 		int incrementSize;
 		int nextSrvDescriptorNum;
 	public:
+		CBVSRVUAVHeap();
 		~CBVSRVUAVHeap();
 		void SetGraphicsDevice(GraphicsDevice* pGraphicsDevice);
 		void Create(const Math::Vector3& useCount);
@@ -20,5 +21,6 @@ namespace GatesEngine
 		Math::Vector3 GetUseCount();
 		void CreateSRV(ID3D12Resource* buffer);
 		D3D12_GPU_DESCRIPTOR_HANDLE GetSRVHandleForSRV(int number);
+		void Set();
 	};
 }

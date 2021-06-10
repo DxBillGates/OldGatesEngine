@@ -1,4 +1,5 @@
 #include "..\..\..\Header\Graphics\Manager\ShaderManager.h"
+#include "..\..\..\Header\Graphics\Shader.h"
 
 GatesEngine::ShaderManager::ShaderManager(GraphicsDevice* pGraphicsDevice)
 	: graphicsDevice(pGraphicsDevice)

@@ -4,9 +4,12 @@
 namespace GatesEngine
 {
 	class Application;
+	class GraphicsDevice;
 	class Scene
 	{
 	protected:
+		Application* app;
+		GraphicsDevice* graphicsDevice;
 		GameObjectManager gameObjectManager;
 		const char* sceneName;
 		bool changeNextSceneFlag;
