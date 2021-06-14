@@ -52,7 +52,7 @@ GatesEngine::Pipeline::~Pipeline()
 	COM_RELEASE(wirePso);
 }
 
-void GatesEngine::Pipeline::Create(std::vector<ID3DBlob*> blobs, bool depthFlag)
+void GatesEngine::Pipeline::Create(std::vector<ID3DBlob*> blobs, bool depthFlag, int rtvCount)
 {
 	D3D12_INPUT_ELEMENT_DESC* inputDesc = new D3D12_INPUT_ELEMENT_DESC[(int)inputLayout.size()];
 	//引数のインプットレイアウトからPSOのインプットレイアウトを設定
@@ -111,8 +111,14 @@ void GatesEngine::Pipeline::Create(std::vector<ID3DBlob*> blobs, bool depthFlag)
 	psoDesc.InputLayout.pInputElementDescs = inputDesc;
 	psoDesc.InputLayout.NumElements = (int)inputLayout.size();
 	psoDesc.PrimitiveTopologyType = topologyType;
-	psoDesc.NumRenderTargets = 1;
-	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	psoDesc.NumRenderTargets = rtvCount;
+	//psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+	for (int i = 0; i < rtvCount; ++i)
+	{
+		psoDesc.RTVFormats[i] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	}
+
 	psoDesc.SampleDesc.Count = 1;
 	psoDesc.pRootSignature = rootSignature->Get();
 	result = pGraphicsDevice->GetDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&solidPso));

@@ -2,11 +2,11 @@
 #include "SampleScene.h"
 #include "Header/Graphics/Graphics.h"
 
-Game::Game():Application()
+Game::Game() :Application()
 {
 }
 
-Game::Game(const GatesEngine::Math::Vector2& wSize, const char* title):Application(wSize,title)
+Game::Game(const GatesEngine::Math::Vector2& wSize, const char* title) : Application(wSize, title)
 {
 }
 
@@ -22,22 +22,30 @@ bool Game::LoadContents()
 	using namespace GatesEngine;
 	using namespace GatesEngine::Math;
 
-	auto* testTexShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"Texture")),"Texture");
-	testTexShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV },BlendMode::BLENDMODE_ALPHA,D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,false);
+	auto* testTexShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"Texture")), "Texture");
+	testTexShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
 
-	auto* testLineShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"Line")),"Line");
+	auto* testLineShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"Line")), "Line");
 	testLineShader->Create({ InputLayout::POSITION,InputLayout::COLOR }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE, true);
 
 	auto* defaultMeshShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"DefaultMesh")), "DefaultMeshShader");
 	defaultMeshShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV });
 
 	auto* defaultSpriteShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"DefaultSprite")), "DefaultSpriteShader");
-	defaultSpriteShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD}, { RangeType::CBV,RangeType::CBV,RangeType::CBV });
+	defaultSpriteShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD }, { RangeType::CBV,RangeType::CBV,RangeType::CBV });
+
+	auto* testMultiRTVShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"TestMultiRTV")), "testMultiRTVShader");
+	testMultiRTVShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false, 2);
 
 	//板ポリ生成
 	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
 	MeshCreater::CreateQuad({ 100,100 }, { 1,1 }, testMeshData);
 	graphicsDevice.GetMeshManager()->Add("Plane")->Create(&graphicsDevice, testMeshData);
+
+	//画面サイズ / 10 板ポリ生成
+	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData2;
+	MeshCreater::CreateQuad({ 1920,1080 }, { 1,1 }, testMeshData2);
+	graphicsDevice.GetMeshManager()->Add("ScreenPlane")->Create(&graphicsDevice, testMeshData2);
 
 	//グリッド生成
 	MeshData<VertexInfo::Vertex_Color> testLineMeshData;
@@ -47,6 +55,8 @@ bool Game::LoadContents()
 	auto* g = gameObjectManager.Add(new GameObject());
 
 	testRenderTex.Create(&graphicsDevice, { 1920,1080 });
+	testRenderTex2.Create(&graphicsDevice, { 1920,1080 });
+	testRenderTex3.Create(&graphicsDevice, { 1920,1080 });
 
 	graphicsDevice.GetCBVSRVUAVHeap()->CreateSRV(graphicsDevice.GetDepthBuffer());
 
@@ -112,6 +122,43 @@ void Game::Draw()
 	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
 	//graphicsDevice.GetMeshManager()->GetMesh("Grid")->Draw();
 	sceneManager->Draw();
+
+	graphicsDevice.ClearRenderTarget({ 135,206,235,0 }, false);
+	graphicsDevice.GetShaderManager()->GetShader("DefaultMeshShader")->Set();
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle));
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
+	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
+
+	graphicsDevice.ClearRenderTarget({ 1,1,1,1 }, true, &testRenderTex);
+	graphicsDevice.GetShaderManager()->GetShader("DefaultMeshShader")->Set();
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle));
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
+	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
+
+
+	graphicsDevice.SetMultiRenderTarget({ &testRenderTex2,&testRenderTex3 });
+	graphicsDevice.GetShaderManager()->GetShader("testMultiRTVShader")->Set();
+	testRenderTex.Set(4);
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
+	graphicsDevice.GetMeshManager()->GetMesh("ScreenPlane")->Draw();
+
+	graphicsDevice.ClearRenderTarget({ 135,206,235,0 }, false);
+	graphicsDevice.GetShaderManager()->GetShader("Texture")->Set();
+	testRenderTex2.Set(4);
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({ -100, 0, 0 }));
+	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
+	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
+
+	testRenderTex3.Set(4);
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({  100, 0, 0 }));
+	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
+	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
+
+
 	graphicsDevice.ScreenFlip();
 }
 

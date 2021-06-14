@@ -1,7 +1,7 @@
 #include "SampleScene.h"
 #include "Header/Application/Application.h"
 #include "Header/Graphics/Graphics.h"
-//#include "Header/Math/Math.h"
+#include "Header/Math/Math.h"
 #include <stdio.h>
 
 SampleScene::SampleScene() :Scene()
@@ -53,16 +53,16 @@ void SampleScene::Draw()
 	graphicsDevice->GetCBufferAllocater()->ResetCurrentUseNumber();
 	graphicsDevice->ClearRenderTarget({ 135,206,235,0 });
 
-	//シェーダー、カメラ、ライトをセット
-	graphicsDevice->GetShaderManager()->GetShader("DefaultMeshShader")->Set();
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
+	////シェーダー、カメラ、ライトをセット
+	//graphicsDevice->GetShaderManager()->GetShader("DefaultMeshShader")->Set();
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
 
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, Matrix4x4::Scale(Vector3(1, a, 1)) * Matrix4x4::Translate(Vector3(-100, 0, 0)));
-	graphicsDevice->GetMeshManager()->GetMesh("Plane")->Draw();
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, Matrix4x4::Scale(Vector3(1, a, 1)) * Matrix4x4::Translate(Vector3(-100, 0, 0)));
+	//graphicsDevice->GetMeshManager()->GetMesh("Plane")->Draw();
 
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, Matrix4x4::Scale(Vector3(1, b, 1)) * Matrix4x4::Translate(Vector3(100, 0, 0)));
-	graphicsDevice->GetMeshManager()->GetMesh("Plane")->Draw();
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, Matrix4x4::Scale(Vector3(1, b, 1)) * Matrix4x4::Translate(Vector3(100, 0, 0)));
+	//graphicsDevice->GetMeshManager()->GetMesh("Plane")->Draw();
 
 	//2D描画
 	graphicsDevice->GetShaderManager()->GetShader("DefaultSpriteShader")->Set();

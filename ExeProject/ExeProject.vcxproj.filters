@@ -57,6 +57,12 @@
     <FxCompile Include="Resources\Shader\DefaultSpritePS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shader\TestMultiRTVPS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\TestMultiRTVVS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\DefaultShader.hlsli">
@@ -66,6 +72,9 @@
       <Filter>シェーダー</Filter>
     </None>
     <None Include="Resources\Shader\DefaultSpriteShader.hlsli">
+      <Filter>シェーダー</Filter>
+    </None>
+    <None Include="Resources\Shader\TestMultiRTVShader.hlsli">
       <Filter>シェーダー</Filter>
     </None>
   </ItemGroup>

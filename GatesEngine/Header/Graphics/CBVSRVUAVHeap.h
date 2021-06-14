@@ -21,6 +21,7 @@ namespace GatesEngine
 		Math::Vector3 GetUseCount();
 		void CreateSRV(ID3D12Resource* buffer);
 		D3D12_GPU_DESCRIPTOR_HANDLE GetSRVHandleForSRV(int number);
+		int GetNextSrvNumber();
 		void Set();
 	};
 }

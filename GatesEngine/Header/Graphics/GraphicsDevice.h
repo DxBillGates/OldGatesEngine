@@ -62,6 +62,7 @@ namespace GatesEngine
 		void SetResourceBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
 		void SetViewport(const Vector2& size, const Vector2& pos = {});
 		void SetDescriptorHeap();
+		void SetMultiRenderTarget(std::vector<RenderTarget*> renderTargets);
 
 		ID3D12Device* GetDevice();
 		ID3D12GraphicsCommandList* GetCmdList();

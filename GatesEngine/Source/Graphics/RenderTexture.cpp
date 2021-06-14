@@ -18,6 +18,7 @@ void GatesEngine::RenderTexture::Prepare()
 	//SRV‚©‚çRTV‚É•ÏX
 	if (currentResourceState != D3D12_RESOURCE_STATE_RENDER_TARGET)
 	{
+		currentResourceState = D3D12_RESOURCE_STATE_RENDER_TARGET;
 		pGraphicsDevice->SetResourceBarrier(texBuff, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	}
 }
@@ -59,15 +60,17 @@ void GatesEngine::RenderTexture::Create(GraphicsDevice* graphicsDevice, const Ga
 	pResources[0] = texBuff;
 	//pGraphicsDevice = wrapper;
 
+	srvNumber = graphicsDevice->GetCBVSRVUAVHeap()->GetNextSrvNumber();
 	graphicsDevice->GetCBVSRVUAVHeap()->CreateSRV(texBuff);
 	//graphicsDevice->GetDescriptorHeapManager()->CreateSRV(texBuff);
 
 	pGraphicsDevice = graphicsDevice;
 }
 
-void GatesEngine::RenderTexture::Set()
+void GatesEngine::RenderTexture::Set(int descIndex)
 {
-	pGraphicsDevice->GetCmdList()->SetGraphicsRootDescriptorTable(4, pGraphicsDevice->GetCBVSRVUAVHeap()->GetSRVHandleForSRV(0));
+	if (currentResourceState == D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE)EndDraw();
+	pGraphicsDevice->GetCmdList()->SetGraphicsRootDescriptorTable(descIndex, pGraphicsDevice->GetCBVSRVUAVHeap()->GetSRVHandleForSRV(srvNumber));
 }
 
 void GatesEngine::RenderTexture::EndDraw()

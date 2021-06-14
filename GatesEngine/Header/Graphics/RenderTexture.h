@@ -11,12 +11,13 @@ namespace GatesEngine
 	private:
 		//TextureƒNƒ‰ƒX‚ğì‚ê‚Ä‚¢‚È‚¢‚½‚ßŒ±“I«
 		ID3D12Resource* texBuff;
+		int srvNumber;
 	public:
 		RenderTexture();
 		~RenderTexture();
 		void Prepare() override;
 		void Create(GraphicsDevice* graphicsDevice,const GatesEngine::Math::Vector2& size);
-		void Set() override;
+		void Set(int descIndex) override;
 		void EndDraw();
 	};
 }

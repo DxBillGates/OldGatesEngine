@@ -11,6 +11,8 @@ class Game : public GatesEngine::Application
 private:
 	float angle;
 	GatesEngine::RenderTexture testRenderTex;
+	GatesEngine::RenderTexture testRenderTex2;
+	GatesEngine::RenderTexture testRenderTex3;
 public:
 	Game();
 	Game(const GatesEngine::Math::Vector2& wSize, const char* title);

@@ -24,7 +24,7 @@ namespace GatesEngine
 		Shader(GraphicsDevice* graphicsDevice, const std::wstring& fileName);
 		~Shader();
 		void Create(const std::vector<InputLayout>& inputLayouts, const std::vector<RangeType>& rangeTypes,
-			        BlendMode blendMode = BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,bool depthFlag = true);
+			        BlendMode blendMode = BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,bool depthFlag = true,int rtvCount = 1);
 		//void Create(Pipeline* pPipeline, RootSignature* pRootSignature);
 		void Set(bool wireFrame = false);
 	};

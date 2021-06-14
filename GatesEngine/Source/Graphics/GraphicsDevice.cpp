@@ -244,6 +244,38 @@ void GatesEngine::GraphicsDevice::SetDescriptorHeap()
 	descriptorHeapManager->Set();
 }
 
+void GatesEngine::GraphicsDevice::SetMultiRenderTarget(std::vector<RenderTarget*> renderTargets)
+{
+	int renderTargetSize = (int)renderTargets.size();
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
+	handles.resize(renderTargetSize);
+
+	std::vector<D3D12_VIEWPORT> viewports;
+	std::vector<D3D12_RECT> rects;
+
+	viewports.resize(renderTargetSize);
+	rects.resize(renderTargetSize);
+
+	for (int i = 0; i < renderTargetSize; ++i)
+	{
+		renderTargets[i]->Prepare();
+		handles[i] = renderTargets[i]->GetHeap()->GetCPUDescriptorHandleForHeapStart();
+		viewports[i] = mViewport;
+		rects[i] = mRect;
+
+		//useRenderTarget‚ðcolor‚Å“h‚è‚Â‚Ô‚·
+		float rgba[] = { 1,1,1,1 };
+		mCmdList->ClearRenderTargetView(handles[i], rgba, 0, nullptr);
+	}
+
+
+	mCmdList->OMSetRenderTargets(renderTargetSize, handles.data(), false, nullptr);
+
+	mCmdList->RSSetViewports(renderTargetSize, viewports.data());
+	mCmdList->RSSetScissorRects(renderTargetSize, rects.data());
+	mCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
 ID3D12Device* GatesEngine::GraphicsDevice::GetDevice()
 {
 	return mDevice;

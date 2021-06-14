@@ -6,6 +6,6 @@ namespace GatesEngine
 	class Texture
 	{
 	public:
-		virtual void Set() {}
+		virtual void Set(int descIndex) {}
 	};
 }

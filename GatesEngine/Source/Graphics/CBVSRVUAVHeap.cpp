@@ -74,6 +74,11 @@ D3D12_GPU_DESCRIPTOR_HANDLE GatesEngine::CBVSRVUAVHeap::GetSRVHandleForSRV(int n
 	return handle;
 }
 
+int GatesEngine::CBVSRVUAVHeap::GetNextSrvNumber()
+{
+	return nextSrvDescriptorNum;
+}
+
 void GatesEngine::CBVSRVUAVHeap::Set()
 {
 	ID3D12DescriptorHeap* ppHeaps[] = { heap };

@@ -43,13 +43,13 @@ GatesEngine::Shader::~Shader()
 	}
 }
 
-void GatesEngine::Shader::Create(const std::vector<InputLayout>& inputLayouts, const std::vector<RangeType>& rangeTypes, BlendMode blendMode, D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType, bool depthFlag)
+void GatesEngine::Shader::Create(const std::vector<InputLayout>& inputLayouts, const std::vector<RangeType>& rangeTypes, BlendMode blendMode, D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType, bool depthFlag, int rtvCount)
 {
 	rootSignature = new RootSignature(pGraphicsDevice, rangeTypes);
 	rootSignature->Create();
 
 	pipeline = new Pipeline(pGraphicsDevice, rootSignature, inputLayouts,blendMode,topologyType);
-	pipeline->Create({vsBlob,psBlob,gsBlob},depthFlag);
+	pipeline->Create({vsBlob,psBlob,gsBlob},depthFlag,rtvCount);
 
 	isCreate = true;
 	isCreatePipelineOrRootSignature = true;
