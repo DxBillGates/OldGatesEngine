@@ -33,12 +33,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shader\DefaultPS.hlsl">
-      <Filter>シェーダー</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\DefaultVS.hlsl">
-      <Filter>シェーダー</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\Shader\TexturePS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
@@ -51,9 +45,27 @@
     <FxCompile Include="Resources\Shader\LinePS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shader\DefaultMeshVS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\DefaultMeshPS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\DefaultSpriteVS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\DefaultSpritePS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\DefaultShader.hlsli">
+      <Filter>シェーダー</Filter>
+    </None>
+    <None Include="Resources\Shader\DefaultMeshShader.hlsli">
+      <Filter>シェーダー</Filter>
+    </None>
+    <None Include="Resources\Shader\DefaultSpriteShader.hlsli">
       <Filter>シェーダー</Filter>
     </None>
   </ItemGroup>

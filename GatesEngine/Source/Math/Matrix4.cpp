@@ -246,6 +246,19 @@ GatesEngine::Math::Matrix4x4 GatesEngine::Math::Matrix4x4::GetPerspectiveMatrix(
 	return result;
 }
 
+GatesEngine::Math::Matrix4x4 GatesEngine::Math::Matrix4x4::GetOrthographMatrix(const Vector2& size)
+{
+	Matrix4x4 result;
+	result =
+	{
+		2.0f/size.x,0,0,0,
+		0,-2.0f/size.y,0,0,
+		0,0,1,0,
+		-1,1,0,1
+	};
+	return result;
+}
+
 GatesEngine::Math::Matrix4x4 & GatesEngine::Math::operator*=(Matrix4x4 & m1, const Matrix4x4 & m2)
 {
 	Matrix4x4 result;

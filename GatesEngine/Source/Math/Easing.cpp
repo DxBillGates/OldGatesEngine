@@ -2,6 +2,11 @@
 #include "..\..\Header\Math\Easing.h"
 #include <cmath>
 
+float GatesEngine::Math::Easing::Lerp(float s, float e, float t)
+{
+	return s * (1.0f - t) + e * t;;
+}
+
 float GatesEngine::Math::Easing::EaseInSine(float t)
 {
 	return 1 - cosf((t * PI) / 2);
@@ -89,12 +94,7 @@ float GatesEngine::Math::Easing::EaseOutExpo(float x)
 
 float GatesEngine::Math::Easing::EaseInOutExpo(float x)
 {
-	return x == 0
-		? 0
-		: x == 1
-		? 1
-		: x < 0.5f ? powf(2, 20 * x - 10) / 2
-		: (2 - powf(2, -20 * x + 10)) / 2;
+	return x == 0 ? 0 : x == 1 ? 1 : x < 0.5f ? powf(2, 20 * x - 10) / 2 : (2 - powf(2, -20 * x + 10)) / 2;
 }
 
 float GatesEngine::Math::Easing::EaseInCirc(float x)
@@ -109,9 +109,7 @@ float GatesEngine::Math::Easing::EaseOutCirc(float x)
 
 float GatesEngine::Math::Easing::EaseInOutCirc(float x)
 {
-	return x < 0.5f
-		? (1 - sqrtf(1 - powf(2 * x, 2))) / 2
-		: (sqrtf(1 - powf(-2 * x + 2, 2)) + 1) / 2;
+	return x < 0.5f ? (1 - sqrtf(1 - powf(2 * x, 2))) / 2 : (sqrtf(1 - powf(-2 * x + 2, 2)) + 1) / 2;
 }
 
 float GatesEngine::Math::Easing::EaseInBack(float x)
@@ -135,20 +133,14 @@ float GatesEngine::Math::Easing::EaseInOutBack(float x)
 	const float c1 = 1.70158f;
 	const float c2 = c1 * 1.525f;
 
-	return x < 0.5
-		? (powf(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2
-		: (powf(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
+	return x < 0.5 ? (powf(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2 : (powf(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
 }
 
 float GatesEngine::Math::Easing::EaseInElastic(float x)
 {
 	const float c4 = (2 * PI) / 3;
 
-	return x == 0
-		? 0
-		: x == 1
-		? 1
-		: -powf(2, 10 * x - 10) * sinf((x * 10 - 10.75f) * c4);
+	return x == 0 ? 0 : x == 1 ? 1 : -powf(2, 10 * x - 10) * sinf((x * 10 - 10.75f) * c4);
 }
 
 float GatesEngine::Math::Easing::EaseOutElastic(float x)

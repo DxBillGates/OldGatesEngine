@@ -3,6 +3,9 @@
 #include "..\..\Header\Graphics\COMRelease.h"
 
 GatesEngine::RenderTarget::RenderTarget()
+	:pGraphicsDevice(nullptr)
+	,rtvHeap(nullptr)
+	,currentResourceState(D3D12_RESOURCE_STATES())
 {
 }
 
@@ -62,4 +65,14 @@ bool GatesEngine::RenderTarget::Create(GraphicsDevice* wrapper, ID3D12Resource* 
 	pResources[0] = resource;
 	pGraphicsDevice = wrapper;
 	return false;
+}
+
+D3D12_RESOURCE_STATES GatesEngine::RenderTarget::GetCurrentResourceState()
+{
+	return currentResourceState;
+}
+
+void GatesEngine::RenderTarget::SetCurrentResourceState(D3D12_RESOURCE_STATES state)
+{
+	currentResourceState = state;
 }

@@ -21,8 +21,6 @@ bool Game::LoadContents()
 
 	using namespace GatesEngine;
 	using namespace GatesEngine::Math;
-	auto* testShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"Default")),"Default");
-	testShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV});
 
 	auto* testTexShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"Texture")),"Texture");
 	testTexShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV },BlendMode::BLENDMODE_ALPHA,D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,false);
@@ -30,6 +28,11 @@ bool Game::LoadContents()
 	auto* testLineShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"Line")),"Line");
 	testLineShader->Create({ InputLayout::POSITION,InputLayout::COLOR }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE, true);
 
+	auto* defaultMeshShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"DefaultMesh")), "DefaultMeshShader");
+	defaultMeshShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV });
+
+	auto* defaultSpriteShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"DefaultSprite")), "DefaultSpriteShader");
+	defaultSpriteShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD}, { RangeType::CBV,RangeType::CBV,RangeType::CBV });
 
 	//板ポリ生成
 	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
@@ -54,7 +57,7 @@ bool Game::Initialize()
 {
 	gameObjectManager.Start();
 	timer.SetFrameRate(144);
-	timer.SetIsShow(true);
+	timer.SetIsShow(false);
 	return true;
 }
 
@@ -69,9 +72,10 @@ bool Game::Update()
 void Game::Draw()
 {
 	//RenderTexture使うないバージョン
-	//graphicsDevice.ClearRenderTarget({ 1,1,1,1 }, &testRenderTex);
+	//graphicsDevice.ClearRenderTarget({ 1,1,1,1 },true, &testRenderTex);
 
-	//graphicsDevice.GetShaderManager()->GetShader("Default")->Set();
+	graphicsDevice.GetCBVSRVUAVHeap()->Set();
+	//graphicsDevice.GetShaderManager()->GetShader("DefaultMeshShader")->Set();
 	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle));
 	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
 	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });	
@@ -85,6 +89,8 @@ void Game::Draw()
 	//graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(5, graphicsDevice.GetCBVSRVUAVHeap()->GetSRVHandleForSRV(1));
 	//testRenderTex.Set();
 	//graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
+
+	//graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 },false);
 
 	//graphicsDevice.GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 	//graphicsDevice.GetShaderManager()->GetShader("Line")->Set();
@@ -105,7 +111,6 @@ void Game::Draw()
 	//graphicsDevice.GetShaderManager()->GetShader("Line")->Set();
 	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
 	//graphicsDevice.GetMeshManager()->GetMesh("Grid")->Draw();
-	graphicsDevice.GetCBVSRVUAVHeap()->Set();
 	sceneManager->Draw();
 	graphicsDevice.ScreenFlip();
 }

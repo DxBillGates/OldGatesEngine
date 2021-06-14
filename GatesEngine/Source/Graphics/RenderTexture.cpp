@@ -4,6 +4,7 @@
 #include "..\..\Header\Graphics\COMRelease.h"
 
 GatesEngine::RenderTexture::RenderTexture()
+	:texBuff(nullptr)
 {
 }
 
@@ -15,7 +16,10 @@ GatesEngine::RenderTexture::~RenderTexture()
 void GatesEngine::RenderTexture::Prepare()
 {
 	//SRVからRTVに変更
-	pGraphicsDevice->SetResourceBarrier(texBuff, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	if (currentResourceState != D3D12_RESOURCE_STATE_RENDER_TARGET)
+	{
+		pGraphicsDevice->SetResourceBarrier(texBuff, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	}
 }
 
 void GatesEngine::RenderTexture::Create(GraphicsDevice* graphicsDevice, const GatesEngine::Math::Vector2& size)
@@ -69,5 +73,6 @@ void GatesEngine::RenderTexture::Set()
 void GatesEngine::RenderTexture::EndDraw()
 {
 	//RTVからSRVに変更してシェーダーにセット
+	currentResourceState = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 	pGraphicsDevice->SetResourceBarrier(texBuff, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 }

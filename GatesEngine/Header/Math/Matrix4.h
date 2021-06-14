@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Axis.h"
@@ -46,6 +47,7 @@ namespace GatesEngine
 			static Matrix4x4 GetViewMatrixLookAt(const Vector3& pos, const Vector3& focasPos, const Vector3& upDir);
 			static Matrix4x4 GetViewMatrixLookTo(const Vector3& pos, const Vector3& direction, const Vector3& upDir);
 			static Matrix4x4 GetPerspectiveMatrix(float fov, float aspect, float nearClip = 1.0f, float farClip = 10000.0f);
+			static Matrix4x4 GetOrthographMatrix(const Vector2& size);
 		};
 		Matrix4x4& operator*=(Matrix4x4& m1, const Matrix4x4& m2);
 		Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2);

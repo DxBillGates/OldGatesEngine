@@ -105,7 +105,7 @@ bool GatesEngine::GraphicsDevice::Create(Window* mainWindow)
 	return true;
 }
 
-void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, RenderTarget* renderTarget)
+void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, bool clearFlag, RenderTarget* renderTarget)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle;
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle;
@@ -114,7 +114,11 @@ void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, Render
 	if (renderTarget == nullptr)
 	{
 		renderTarget = mRenderTarget;
-		SetResourceBarrier(mFrameBuffer[mSwapChain->GetCurrentBackBufferIndex()], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		if (renderTarget->GetCurrentResourceState() != D3D12_RESOURCE_STATE_RENDER_TARGET)
+		{
+			renderTarget->SetCurrentResourceState(D3D12_RESOURCE_STATE_RENDER_TARGET);
+			SetResourceBarrier(mFrameBuffer[mSwapChain->GetCurrentBackBufferIndex()], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		}
 		rtvHandle = renderTarget->GetHeap()->GetCPUDescriptorHandleForHeapStart();
 		rtvHandle.ptr += (UINT64)mSwapChain->GetCurrentBackBufferIndex() * mDevice->GetDescriptorHandleIncrementSize(renderTarget->GetHeap()->GetDesc().Type);
 		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
@@ -127,22 +131,26 @@ void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, Render
 		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
 		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 	}
-	//useRenderTarget‚ðcolor‚Å“h‚è‚Â‚Ô‚·
-	Vector4 setColor = color;
-	if (setColor.x > 1)setColor.x /= 255.0f;
-	if (setColor.y > 1)setColor.y /= 255.0f;
-	if (setColor.z > 1)setColor.z /= 255.0f;
 
-	float rgba[] = { setColor.x,setColor.y,setColor.z,setColor.w };
-	mCmdList->ClearRenderTargetView(rtvHandle, rgba, 0, nullptr);
-	ClearDepthStencil();
+	if (clearFlag)
+	{
+		//useRenderTarget‚ðcolor‚Å“h‚è‚Â‚Ô‚·
+		Vector4 setColor = color;
+		if (setColor.x > 1)setColor.x /= 255.0f;
+		if (setColor.y > 1)setColor.y /= 255.0f;
+		if (setColor.z > 1)setColor.z /= 255.0f;
+
+		float rgba[] = { setColor.x,setColor.y,setColor.z,setColor.w };
+		mCmdList->ClearRenderTargetView(rtvHandle, rgba, 0, nullptr);
+		ClearDepthStencil();
+	}
 
 	mCmdList->RSSetViewports(1, &mViewport);
 	mCmdList->RSSetScissorRects(1, &mRect);
 	mCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void GatesEngine::GraphicsDevice::ClearRenderTargetOutDsv(const Vector4& color, RenderTarget* renderTarget)
+void GatesEngine::GraphicsDevice::ClearRenderTargetOutDsv(const Vector4& color, bool clearFlag, RenderTarget* renderTarget)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle;
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle;
@@ -151,7 +159,11 @@ void GatesEngine::GraphicsDevice::ClearRenderTargetOutDsv(const Vector4& color, 
 	if (renderTarget == nullptr)
 	{
 		renderTarget = mRenderTarget;
-		SetResourceBarrier(mFrameBuffer[mSwapChain->GetCurrentBackBufferIndex()], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		if (renderTarget->GetCurrentResourceState() != D3D12_RESOURCE_STATE_RENDER_TARGET)
+		{
+			renderTarget->SetCurrentResourceState(D3D12_RESOURCE_STATE_RENDER_TARGET);
+			SetResourceBarrier(mFrameBuffer[mSwapChain->GetCurrentBackBufferIndex()], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		}
 		rtvHandle = renderTarget->GetHeap()->GetCPUDescriptorHandleForHeapStart();
 		rtvHandle.ptr += (UINT64)mSwapChain->GetCurrentBackBufferIndex() * mDevice->GetDescriptorHandleIncrementSize(renderTarget->GetHeap()->GetDesc().Type);
 		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
@@ -165,14 +177,18 @@ void GatesEngine::GraphicsDevice::ClearRenderTargetOutDsv(const Vector4& color, 
 		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
 		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, nullptr);
 	}
-	//useRenderTarget‚ðcolor‚Å“h‚è‚Â‚Ô‚·
-	Vector4 setColor = color;
-	if (setColor.x > 1)setColor.x /= 255.0f;
-	if (setColor.y > 1)setColor.y /= 255.0f;
-	if (setColor.z > 1)setColor.z /= 255.0f;
 
-	float rgba[] = { setColor.x,setColor.y,setColor.z,setColor.w };
-	mCmdList->ClearRenderTargetView(rtvHandle, rgba, 0, nullptr);
+	if (clearFlag)
+	{
+		//useRenderTarget‚ðcolor‚Å“h‚è‚Â‚Ô‚·
+		Vector4 setColor = color;
+		if (setColor.x > 1)setColor.x /= 255.0f;
+		if (setColor.y > 1)setColor.y /= 255.0f;
+		if (setColor.z > 1)setColor.z /= 255.0f;
+
+		float rgba[] = { setColor.x,setColor.y,setColor.z,setColor.w };
+		mCmdList->ClearRenderTargetView(rtvHandle, rgba, 0, nullptr);
+	}
 
 	mCmdList->RSSetViewports(1, &mViewport);
 	mCmdList->RSSetScissorRects(1, &mRect);
@@ -187,7 +203,11 @@ void GatesEngine::GraphicsDevice::ClearDepthStencil()
 
 void GatesEngine::GraphicsDevice::ScreenFlip()
 {
-	SetResourceBarrier(mFrameBuffer[mSwapChain->GetCurrentBackBufferIndex()], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	if (mRenderTarget->GetCurrentResourceState() != D3D12_RESOURCE_STATE_PRESENT)
+	{
+		mRenderTarget->SetCurrentResourceState(D3D12_RESOURCE_STATE_PRESENT);
+		SetResourceBarrier(mFrameBuffer[mSwapChain->GetCurrentBackBufferIndex()], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	}
 	mCmdList->Close();
 	ID3D12CommandList* cmdLists[] = { mCmdList };
 	mCmdQueue->ExecuteCommandLists(1, cmdLists);

@@ -3,6 +3,8 @@
 class SampleScene : public GatesEngine::Scene
 {
 private:
+	float t;
+	bool flag;
 public:
 	SampleScene();
 	SampleScene(const char* sceneName);

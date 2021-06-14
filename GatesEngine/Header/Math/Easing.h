@@ -7,6 +7,7 @@ namespace GatesEngine
 		class Easing
 		{
 		public:
+			static float Lerp(float s, float e, float t);
 			static float EaseInSine(float t);
 			static float EaseOutSine(float t);
 			static float EaseInOutSine(float t);
