@@ -154,7 +154,7 @@ void Game::Draw()
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
-	//バックバッファにパス目で出力した2枚のテクスチャを描画
+	//バックバッファに2パス目で出力した2枚のテクスチャを描画
 	graphicsDevice.ClearRenderTarget({ 135,206,235,0 }, false);
 	graphicsDevice.GetShaderManager()->GetShader("Texture")->Set();
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());

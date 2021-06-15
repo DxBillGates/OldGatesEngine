@@ -23,7 +23,7 @@ PSOutput main(VSOutput input)
 	{
 		for (int k = 0; k < sampleCount * 2; ++k)
 		{
-			addNearPixelColor += tex.Sample(smp, offset + float2(pixel.x * j, pixel.y * k));
+			addNearPixelColor += tex.Sample(smp, saturate(offset + float2(pixel.x * j, pixel.y * k)));
 			++count;
 		}
 	}
