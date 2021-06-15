@@ -13,6 +13,13 @@ private:
 	GatesEngine::RenderTexture testRenderTex;
 	GatesEngine::RenderTexture testRenderTex2;
 	GatesEngine::RenderTexture testRenderTex3;
+	std::vector<float> gaussData;
+
+	struct TestData
+	{
+		float data[8];
+	};
+	TestData testData;
 public:
 	Game();
 	Game(const GatesEngine::Math::Vector2& wSize, const char* title);
@@ -21,4 +28,5 @@ public:
 	bool Initialize()override;
 	bool Update()override;
 	void Draw()override;
+	std::vector<float> GetGaussData(size_t count, float s);
 };
