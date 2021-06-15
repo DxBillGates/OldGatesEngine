@@ -5,7 +5,7 @@ SamplerState smp : register(s0);
 
 PSOutput main(VSOutput input)
 {
-	float4 texColor = tex.Sample(smp, input.uv);
+	float4 texColor = tex.Sample(smp, saturate(input.uv));
 	PSOutput output;
 	//êFîΩì]
 	output.rtv0 = float4(1,1,1,1) - texColor.rgba;

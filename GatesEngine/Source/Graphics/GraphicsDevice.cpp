@@ -260,8 +260,16 @@ void GatesEngine::GraphicsDevice::SetMultiRenderTarget(std::vector<RenderTarget*
 	{
 		renderTargets[i]->Prepare();
 		handles[i] = renderTargets[i]->GetHeap()->GetCPUDescriptorHandleForHeapStart();
+
+		D3D12_RESOURCE_DESC resDesc = renderTargets[i]->GetResource()->GetDesc();
+
 		viewports[i] = mViewport;
+		viewports[i].Height = (float)resDesc.Height;
+		viewports[i].Width = (float)resDesc.Width;
+
 		rects[i] = mRect;
+		rects[i].bottom = (int)resDesc.Height;
+		rects[i].right = (int)resDesc.Width;
 
 		//useRenderTarget‚ðcolor‚Å“h‚è‚Â‚Ô‚·
 		float rgba[] = { 1,1,1,1 };

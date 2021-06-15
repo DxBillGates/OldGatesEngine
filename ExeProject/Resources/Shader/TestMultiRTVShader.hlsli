@@ -12,9 +12,9 @@ cbuffer Material : register(b1)
 
 cbuffer CameraInfo : register(b2)
 {
-	matrix viewMatrix;
+	//matrix viewMatrix;
 	matrix projMatrix;
-	float4 cameraPos;
+	//float4 cameraPos;
 }
 
 cbuffer LightInfo : register(b3)

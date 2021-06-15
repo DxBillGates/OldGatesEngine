@@ -20,5 +20,6 @@ namespace GatesEngine
 		virtual void Prepare() {}
 		D3D12_RESOURCE_STATES GetCurrentResourceState();
 		void SetCurrentResourceState(D3D12_RESOURCE_STATES state);
+		ID3D12Resource* GetResource();
 	};
 }

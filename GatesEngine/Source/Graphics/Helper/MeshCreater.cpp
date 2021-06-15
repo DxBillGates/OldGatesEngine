@@ -38,6 +38,25 @@ void GatesEngine::MeshCreater::CreateQuad(Math::Vector2 size, Math::Vector2 uvMa
 	indices->push_back(0);
 }
 
+void GatesEngine::MeshCreater::Create2DQuad(Math::Vector2 size, Math::Vector2 uvMax, MeshData<VertexInfo::Vertex_UV_Normal>& meshData)
+{
+	std::vector<VertexInfo::Vertex_UV_Normal>* vertices = meshData.GetVertices();
+	std::vector<unsigned short>* indices = meshData.GetIndices();
+
+	using namespace Math;
+	vertices->push_back({ Vector3(-size.x / 2.0f,-size.y / 2.0f,0),Vector2(0,0),Vector3(0,0,-1) });
+	vertices->push_back({ Vector3(size.x / 2.0f,-size.y / 2.0f,0),Vector2(uvMax.x,0),Vector3(0,0,-1) });
+	vertices->push_back({ Vector3(size.x / 2.0f,size.y / 2.0f,0),Vector2(uvMax.x,uvMax.y),Vector3(0,0,0 - 1) });
+	vertices->push_back({ Vector3(-size.x / 2.0f,size.y / 2.0f,0),Vector2(0,uvMax.y),Vector3(0,0,-1) });
+
+	indices->push_back(0);
+	indices->push_back(1);
+	indices->push_back(2);
+	indices->push_back(2);
+	indices->push_back(3);
+	indices->push_back(0);
+}
+
 void GatesEngine::MeshCreater::CreateGrid(Math::Vector2 size, float spaceInterval, MeshData<VertexInfo::Vertex_Color>& meshData)
 {
 	int width = (int)(size.x / spaceInterval);

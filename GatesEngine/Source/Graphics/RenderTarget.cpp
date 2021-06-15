@@ -76,3 +76,8 @@ void GatesEngine::RenderTarget::SetCurrentResourceState(D3D12_RESOURCE_STATES st
 {
 	currentResourceState = state;
 }
+
+ID3D12Resource* GatesEngine::RenderTarget::GetResource()
+{
+	return pResources[0];
+}

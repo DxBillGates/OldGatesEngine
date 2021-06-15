@@ -47,6 +47,10 @@ bool Game::LoadContents()
 	MeshCreater::CreateQuad({ 1920,1080 }, { 1,1 }, testMeshData2);
 	graphicsDevice.GetMeshManager()->Add("ScreenPlane")->Create(&graphicsDevice, testMeshData2);
 
+	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData3;
+	MeshCreater::Create2DQuad({ 1920,1080 }, { 1,1 }, testMeshData3);
+	graphicsDevice.GetMeshManager()->Add("2DPlane")->Create(&graphicsDevice, testMeshData3);
+
 	//グリッド生成
 	MeshData<VertexInfo::Vertex_Color> testLineMeshData;
 	MeshCreater::CreateGrid({ 10000,10000 }, 100, testLineMeshData);
@@ -121,8 +125,11 @@ void Game::Draw()
 	//graphicsDevice.GetShaderManager()->GetShader("Line")->Set();
 	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
 	//graphicsDevice.GetMeshManager()->GetMesh("Grid")->Draw();
+	
+	//Test用のGridや2D描画
 	sceneManager->Draw();
 
+	//バックバッファに回る平面を描画
 	graphicsDevice.ClearRenderTarget({ 135,206,235,0 }, false);
 	graphicsDevice.GetShaderManager()->GetShader("DefaultMeshShader")->Set();
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle));
@@ -130,6 +137,7 @@ void Game::Draw()
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
 	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
 
+	//1パス目にに回る平面を描画
 	graphicsDevice.ClearRenderTarget({ 1,1,1,1 }, true, &testRenderTex);
 	graphicsDevice.GetShaderManager()->GetShader("DefaultMeshShader")->Set();
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle));
@@ -137,25 +145,26 @@ void Game::Draw()
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
 	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
 
-
+	//2パス目に描画した平面をテクスチャ化して色反転とぼかしテクスチャの2枚を出力
 	graphicsDevice.SetMultiRenderTarget({ &testRenderTex2,&testRenderTex3 });
 	graphicsDevice.GetShaderManager()->GetShader("testMultiRTVShader")->Set();
 	testRenderTex.Set(4);
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({1920/2,1080/2,0}));
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, GatesEngine::Math::Matrix4x4::GetOrthographMatrix({1920,1080}));
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
-	graphicsDevice.GetMeshManager()->GetMesh("ScreenPlane")->Draw();
+	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
+	//バックバッファにパス目で出力した2枚のテクスチャを描画
 	graphicsDevice.ClearRenderTarget({ 135,206,235,0 }, false);
 	graphicsDevice.GetShaderManager()->GetShader("Texture")->Set();
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
+
 	testRenderTex2.Set(4);
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({ -100, 0, 0 }));
-	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
 	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
 
 	testRenderTex3.Set(4);
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({  100, 0, 0 }));
-	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
 	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
 
 
