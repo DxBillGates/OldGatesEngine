@@ -18,7 +18,7 @@ float4 main(VSOutput input) : SV_TARGET
 	resultColor += blurData[0] * texColor;
 
 	//c•ûŒü‚Éƒuƒ‰[‚ğ‚©‚¯‚é
-	for (int i = 0; i < 8; ++i)
+	for (uint i = 0; i < 8; ++i)
 	{
 		resultColor += blurData[i >> 2][i % 4] * tex.Sample(smp, saturate(input.uv + float2(0,  pixel.x * i)));
 		resultColor += blurData[i >> 2][i % 4] * tex.Sample(smp, saturate(input.uv + float2(0, -pixel.y * i)));
