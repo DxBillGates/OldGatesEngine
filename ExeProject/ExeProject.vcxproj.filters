@@ -75,6 +75,12 @@
     <FxCompile Include="Resources\Shader\HGaussBlurPS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shader\DepthOfFieldVS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\DepthOfFieldPS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\DefaultShader.hlsli">
@@ -90,6 +96,9 @@
       <Filter>シェーダー</Filter>
     </None>
     <None Include="Resources\Shader\GaussBlurShader.hlsli">
+      <Filter>シェーダー</Filter>
+    </None>
+    <None Include="Resources\Shader\DepthOfFieldShader.hlsli">
       <Filter>シェーダー</Filter>
     </None>
   </ItemGroup>

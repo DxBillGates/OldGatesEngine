@@ -43,6 +43,9 @@ bool Game::LoadContents()
 	auto* testHGaussBlurShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"HGaussBlur")), "HGaussBlurShader");
 	testHGaussBlurShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
 
+	auto* testDOFShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"DepthOfField")), "DepthOfFieldShader");
+	testDOFShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD }, { RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
+
 	//板ポリ生成
 	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
 	MeshCreater::CreateQuad({ 100,100 }, { 1,1 }, testMeshData);
@@ -190,7 +193,7 @@ void Game::Draw()
 	{
 		for (int j = 0; j < 10; ++j)
 		{
-			graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::Translate({ 100*(float)i,100,100* (float)j }));
+			graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(0) * GatesEngine::Math::Matrix4x4::Translate({ 200*(float)i,100,100* (float)j }));
 			graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
 		}
 	}
@@ -205,9 +208,16 @@ void Game::Draw()
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
 	//3パス目で縦にブラー
-	graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 }, false);
+	graphicsDevice.ClearRenderTargetOutDsv({ 1,1,1,1}, true,&testRenderTex3);
 	graphicsDevice.GetShaderManager()->GetShader("VGaussBlurShader")->Set();
 	testRenderTex2.Set(3);
+	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
+
+	graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 }, false);
+	graphicsDevice.GetShaderManager()->GetShader("DepthOfFieldShader")->Set();
+	testRenderTex.Set(2);
+	testRenderTex3.Set(3);
+	graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(4, graphicsDevice.GetCBVSRVUAVHeap()->GetSRVHandleForSRV(3));
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
 	graphicsDevice.ScreenFlip();
