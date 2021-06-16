@@ -195,8 +195,6 @@ void Game::Draw()
 		}
 	}
 
-
-
 	//2パス目で横にブラー
 	graphicsDevice.ClearRenderTargetOutDsv({ 1,1,1,1 }, true, &testRenderTex2);
 	graphicsDevice.GetShaderManager()->GetShader("HGaussBlurShader")->Set();

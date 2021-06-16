@@ -30,15 +30,18 @@ namespace GatesEngine
 
 		//dataのサイズを256アライメントして計算
 		int sizeAligned = (sizeof(T) + 0xff) & ~0xff;
-		//256byteをいくつ使用するかアライメントした結果を256で割る
-		int numRequired = sizeAligned / 0x100;
+		//256byteをいくつ使用するかアライメントした結果を256で割って計算
+		int useValue = sizeAligned / 0x100;
 
-		if (currentUseNumber + numRequired > (int)heap->GetUseCount().x)return;
+		//現在使われ終わってる番号と今から使う容量がヒープの容量を超えている場合はリターン
+		if (currentUseNumber + useValue > (int)heap->GetUseCount().x)return;
 
 		int top = currentUseNumber;
 
+		//先頭アドレスに使う分のポインタを足してmemcpy
 		memcpy(mappedBuffer + top, &data, sizeof(T));
 
+		//ビューを作って値をShaderにアタッチ
 		D3D12_CONSTANT_BUFFER_VIEW_DESC cbDesc = {};
 		cbDesc.BufferLocation = buffer->GetGPUVirtualAddress() + (UINT64)top * 0x100;
 		cbDesc.SizeInBytes = sizeAligned;
@@ -52,6 +55,6 @@ namespace GatesEngine
 
 		graphicsDevice->GetCmdList()->SetGraphicsRootDescriptorTable(descIndex, gpuHandle);
 
-		currentUseNumber += numRequired;
+		currentUseNumber += useValue;
 	}
 }
