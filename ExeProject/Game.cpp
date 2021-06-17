@@ -49,7 +49,8 @@ bool Game::LoadContents()
 	auto* testBrightnessSamplingShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"BrightnessSampling")), "BrightnessSamplingShader");
 	testBrightnessSamplingShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV}, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
 
-
+	auto* bloomShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"Bloom")), "BloomShader");
+	bloomShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD }, { RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
 	//板ポリ生成
 	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
 	MeshCreater::CreateQuad({ 100,100 }, { 1,1 }, testMeshData);
@@ -83,6 +84,7 @@ bool Game::LoadContents()
 	graphicsDevice.GetCBVSRVUAVHeap()->CreateSRV(graphicsDevice.GetDepthBuffer());
 
 	testDepthTex.Create(&graphicsDevice, { 1920,1080 });
+	testRenderTex4.Create(&graphicsDevice, { 1920,1080 });
 
 	return true;
 }
@@ -193,7 +195,7 @@ void Game::Draw()
 	//graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
 
 	//1パス目で普通に描画
-	graphicsDevice.ClearRenderTarget({ 1,1,1,1 }, true, &testRenderTex,&testDepthTex);
+	graphicsDevice.ClearRenderTarget({ 0,0,0,1 }, true, &testRenderTex,&testDepthTex);
 	graphicsDevice.GetShaderManager()->GetShader("DefaultMeshShader")->Set(false);
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::RotationX(angle));
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
@@ -206,34 +208,45 @@ void Game::Draw()
 		graphicsDevice.GetMeshManager()->GetMesh("Cube")->Draw();
 	}
 
-	//2パス目で横にブラー
-	graphicsDevice.ClearRenderTargetOutDsv({ 1,1,1,1 }, true, &testRenderTex2);
-	graphicsDevice.GetShaderManager()->GetShader("HGaussBlurShader")->Set();
+	//2パス目で輝度抽出
+	graphicsDevice.ClearRenderTargetOutDsv({ 0,0,0,1 },true,&testRenderTex4 );
+	graphicsDevice.GetShaderManager()->GetShader("BrightnessSamplingShader")->Set();
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({ 1920 / 2,1080 / 2,0 }));
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(1, GatesEngine::Math::Matrix4x4::GetOrthographMatrix({1920,1080}));
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, testData);
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, GatesEngine::Math::Vector4(0.8f,0,0,0));
 	testRenderTex.Set(3);
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
-	//3パス目で縦にブラー
-	graphicsDevice.ClearRenderTargetOutDsv({ 1,1,1,1}, true,&testRenderTex3);
+	//3パス目で横にブラー
+	graphicsDevice.ClearRenderTargetOutDsv({ 0,0,0,1 }, true, &testRenderTex2);
+	graphicsDevice.GetShaderManager()->GetShader("HGaussBlurShader")->Set();
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, testData);
+	testRenderTex4.Set(3);
+	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
+
+	//4パス目で縦にブラー
+	graphicsDevice.ClearRenderTargetOutDsv({ 0,0,0,1 }, true,&testRenderTex3);
 	graphicsDevice.GetShaderManager()->GetShader("VGaussBlurShader")->Set();
 	testRenderTex2.Set(3);
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
-	graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 }, false);
-	graphicsDevice.GetShaderManager()->GetShader("DepthOfFieldShader")->Set();
+	//5パス目で4パス目の結果と1パス目の結果を合成
+	graphicsDevice.ClearRenderTargetOutDsv({ 0,0,0,1 }, false);
+	graphicsDevice.GetShaderManager()->GetShader("BloomShader")->Set();
 	testRenderTex.Set(2);
 	testRenderTex3.Set(3);
-	//graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(4, graphicsDevice.GetCBVSRVUAVHeap()->GetSRVHandleForSRV(3));
-	testDepthTex.Set(4);
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
+
+
 	//graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 }, false);
-	//graphicsDevice.GetShaderManager()->GetShader("BrightnessSamplingShader")->Set();
-	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, GatesEngine::Math::Vector4(0.5f,0,0,0));
-	//testRenderTex.Set(3);
+	//graphicsDevice.GetShaderManager()->GetShader("DepthOfFieldShader")->Set();
+	//testRenderTex.Set(2);
+	//testRenderTex3.Set(3);
+	////graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(4, graphicsDevice.GetCBVSRVUAVHeap()->GetSRVHandleForSRV(3));
+	//testDepthTex.Set(4);
 	//graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
+
 
 	graphicsDevice.ScreenFlip();
 }

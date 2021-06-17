@@ -14,6 +14,7 @@ private:
 	GatesEngine::RenderTexture testRenderTex;
 	GatesEngine::RenderTexture testRenderTex2;
 	GatesEngine::RenderTexture testRenderTex3;
+	GatesEngine::RenderTexture testRenderTex4;
 	GatesEngine::DepthStencilTexture testDepthTex;
 	std::vector<float> gaussData;
 

@@ -87,6 +87,12 @@
     <FxCompile Include="Resources\Shader\BrightnessSamplingVS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shader\BloomVS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\BloomPS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\DefaultShader.hlsli">
@@ -108,6 +114,9 @@
       <Filter>シェーダー</Filter>
     </None>
     <None Include="Resources\Shader\BrightnessSamplingShader.hlsli">
+      <Filter>シェーダー</Filter>
+    </None>
+    <None Include="Resources\Shader\BloomShader.hlsli">
       <Filter>シェーダー</Filter>
     </None>
   </ItemGroup>
