@@ -204,7 +204,7 @@ void Game::Draw()
 
 	for (int i = 0; i < 10; ++i)
 	{
-		graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::RotationX(angle) * GatesEngine::Math::Matrix4x4::Translate({ 50 * (float)i,100,100 * (float)i }));
+		graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle * i * 0.1f) * GatesEngine::Math::Matrix4x4::RotationX(angle) * GatesEngine::Math::Matrix4x4::Translate({ 50 * (float)i,100,100 * (float)i }));
 		graphicsDevice.GetMeshManager()->GetMesh("Cube")->Draw();
 	}
 
@@ -213,7 +213,7 @@ void Game::Draw()
 	graphicsDevice.GetShaderManager()->GetShader("BrightnessSamplingShader")->Set();
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({ 1920 / 2,1080 / 2,0 }));
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(1, GatesEngine::Math::Matrix4x4::GetOrthographMatrix({1920,1080}));
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, GatesEngine::Math::Vector4(0.8f,0,0,0));
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, GatesEngine::Math::Vector4(0.78f,0,0,0));
 	testRenderTex.Set(3);
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
