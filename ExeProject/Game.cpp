@@ -69,6 +69,11 @@ bool Game::LoadContents()
 	MeshCreater::CreateGrid({ 10000,10000 }, 100, testLineMeshData);
 	graphicsDevice.GetMeshManager()->Add("Grid")->Create(&graphicsDevice, testLineMeshData);
 
+	//Cube生成
+	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData4;
+	MeshCreater::CreateCube({ 50,50,50 }, testMeshData4);
+	graphicsDevice.GetMeshManager()->Add("Cube")->Create(&graphicsDevice, testMeshData4);
+
 	auto* g = gameObjectManager.Add(new GameObject());
 
 	testRenderTex.Create(&graphicsDevice, { 1920,1080 });
@@ -76,6 +81,8 @@ bool Game::LoadContents()
 	testRenderTex3.Create(&graphicsDevice, { 1920,1080 });
 
 	graphicsDevice.GetCBVSRVUAVHeap()->CreateSRV(graphicsDevice.GetDepthBuffer());
+
+	testDepthTex.Create(&graphicsDevice, { 1920,1080 });
 
 	return true;
 }
@@ -186,20 +193,17 @@ void Game::Draw()
 	//graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
 
 	//1パス目で普通に描画
-	graphicsDevice.ClearRenderTarget({ 1,1,1,1 }, true, &testRenderTex);
-	graphicsDevice.GetShaderManager()->GetShader("DefaultMeshShader")->Set();
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle));
+	graphicsDevice.ClearRenderTarget({ 1,1,1,1 }, true, &testRenderTex,&testDepthTex);
+	graphicsDevice.GetShaderManager()->GetShader("DefaultMeshShader")->Set(false);
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::RotationX(angle));
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,1,1,1) });
-	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,0,1,0).Normalize(),GatesEngine::Math::Vector4(0,1,1,1) });
+	graphicsDevice.GetMeshManager()->GetMesh("Cube")->Draw();
 
 	for (int i = 0; i < 10; ++i)
 	{
-		for (int j = 0; j < 10; ++j)
-		{
-			graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle * 0.5f) * GatesEngine::Math::Matrix4x4::Translate({ 200*(float)i,100,100* (float)j }));
-			graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
-		}
+		graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle) * GatesEngine::Math::Matrix4x4::RotationX(angle) * GatesEngine::Math::Matrix4x4::Translate({ 50 * (float)i,100,100 * (float)i }));
+		graphicsDevice.GetMeshManager()->GetMesh("Cube")->Draw();
 	}
 
 	//2パス目で横にブラー
@@ -217,18 +221,19 @@ void Game::Draw()
 	testRenderTex2.Set(3);
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
-	//graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 }, false);
-	//graphicsDevice.GetShaderManager()->GetShader("DepthOfFieldShader")->Set();
-	//testRenderTex.Set(2);
-	//testRenderTex3.Set(3);
-	//graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(4, graphicsDevice.GetCBVSRVUAVHeap()->GetSRVHandleForSRV(3));
-	//graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
-
 	graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 }, false);
-	graphicsDevice.GetShaderManager()->GetShader("BrightnessSamplingShader")->Set();
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, GatesEngine::Math::Vector4(0.5f,0,0,0));
-	testRenderTex.Set(3);
+	graphicsDevice.GetShaderManager()->GetShader("DepthOfFieldShader")->Set();
+	testRenderTex.Set(2);
+	testRenderTex3.Set(3);
+	//graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(4, graphicsDevice.GetCBVSRVUAVHeap()->GetSRVHandleForSRV(3));
+	testDepthTex.Set(4);
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
+
+	//graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 }, false);
+	//graphicsDevice.GetShaderManager()->GetShader("BrightnessSamplingShader")->Set();
+	//graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, GatesEngine::Math::Vector4(0.5f,0,0,0));
+	//testRenderTex.Set(3);
+	//graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
 	graphicsDevice.ScreenFlip();
 }

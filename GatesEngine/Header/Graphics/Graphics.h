@@ -9,3 +9,5 @@
 #include "RenderTexture.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "DepthStencil.h"
+#include "DepthStencilTexture.h"

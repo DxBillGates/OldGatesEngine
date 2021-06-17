@@ -6,6 +6,7 @@
 #include "..\..\Header\Graphics\Manager\ShaderManager.h"
 #include "..\..\Header\Graphics\CBVSRVUAVHeap.h"
 #include "..\..\Header\Graphics\CBufferAllocater.h"
+#include "..\..\Header\Graphics\DepthStencil.h"
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -105,7 +106,7 @@ bool GatesEngine::GraphicsDevice::Create(Window* mainWindow)
 	return true;
 }
 
-void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, bool clearFlag, RenderTarget* renderTarget)
+void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, bool clearFlag, RenderTarget* renderTarget, DepthStencil* depthStencil)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle;
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle;
@@ -121,14 +122,29 @@ void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, bool c
 		}
 		rtvHandle = renderTarget->GetHeap()->GetCPUDescriptorHandleForHeapStart();
 		rtvHandle.ptr += (UINT64)mSwapChain->GetCurrentBackBufferIndex() * mDevice->GetDescriptorHandleIncrementSize(renderTarget->GetHeap()->GetDesc().Type);
-		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
+		if (depthStencil)
+		{
+			dsvHandle = depthStencil->GetHeap()->GetCPUDescriptorHandleForHeapStart();
+		}
+		else
+		{
+			dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
+		}
+
 		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 	}
 	else
 	{
 		renderTarget->Prepare();
 		rtvHandle = renderTarget->GetHeap()->GetCPUDescriptorHandleForHeapStart();
-		dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
+		if (depthStencil)
+		{
+			dsvHandle = depthStencil->GetHeap()->GetCPUDescriptorHandleForHeapStart();
+		}
+		else
+		{
+			dsvHandle = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
+		}
 		mCmdList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 	}
 
@@ -142,11 +158,30 @@ void GatesEngine::GraphicsDevice::ClearRenderTarget(const Vector4& color, bool c
 
 		float rgba[] = { setColor.x,setColor.y,setColor.z,setColor.w };
 		mCmdList->ClearRenderTargetView(rtvHandle, rgba, 0, nullptr);
-		ClearDepthStencil();
+
+		if (depthStencil)
+		{
+			depthStencil->Clear();
+		}
+		else
+		{
+			ClearDepthStencil();
+		}
+
 	}
 
-	mCmdList->RSSetViewports(1, &mViewport);
-	mCmdList->RSSetScissorRects(1, &mRect);
+	D3D12_VIEWPORT viewport = mViewport;
+	D3D12_RECT rect = mRect;
+	D3D12_RESOURCE_DESC resDesc = renderTarget->GetResource()->GetDesc();
+
+	viewport.Height = (float)resDesc.Height;
+	viewport.Width = (float)resDesc.Width;
+
+	rect.bottom = (int)resDesc.Height;
+	rect.right = (int)resDesc.Width;
+
+	mCmdList->RSSetViewports(1, &viewport);
+	mCmdList->RSSetScissorRects(1, &rect);
 	mCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
@@ -190,8 +225,19 @@ void GatesEngine::GraphicsDevice::ClearRenderTargetOutDsv(const Vector4& color, 
 		mCmdList->ClearRenderTargetView(rtvHandle, rgba, 0, nullptr);
 	}
 
-	mCmdList->RSSetViewports(1, &mViewport);
-	mCmdList->RSSetScissorRects(1, &mRect);
+
+	D3D12_VIEWPORT viewport = mViewport;
+	D3D12_RECT rect = mRect;
+	D3D12_RESOURCE_DESC resDesc = renderTarget->GetResource()->GetDesc();
+
+	viewport.Height = (float)resDesc.Height;
+	viewport.Width = (float)resDesc.Width;
+
+	rect.bottom = (int)resDesc.Height;
+	rect.right = (int)resDesc.Width;
+
+	mCmdList->RSSetViewports(1, &viewport);
+	mCmdList->RSSetScissorRects(1, &rect);
 	mCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 

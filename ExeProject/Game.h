@@ -5,6 +5,7 @@
 #include "Header/Graphics/CBuffer.h"
 #include "Header/Graphics/Mesh.h"
 #include "Header/Graphics/RenderTexture.h"
+#include "Header/Graphics/DepthStencilTexture.h"
 
 class Game : public GatesEngine::Application
 {
@@ -13,6 +14,7 @@ private:
 	GatesEngine::RenderTexture testRenderTex;
 	GatesEngine::RenderTexture testRenderTex2;
 	GatesEngine::RenderTexture testRenderTex3;
+	GatesEngine::DepthStencilTexture testDepthTex;
 	std::vector<float> gaussData;
 
 	struct TestData

@@ -5,6 +5,7 @@
 
 GatesEngine::RenderTexture::RenderTexture()
 	:texBuff(nullptr)
+	,srvNumber(0)
 {
 }
 

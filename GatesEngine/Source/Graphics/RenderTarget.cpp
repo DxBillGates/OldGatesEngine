@@ -37,7 +37,7 @@ bool GatesEngine::RenderTarget::Create(GraphicsDevice* wrapper, std::vector<ID3D
 	for (auto& r : *resources)
 	{
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle = rtvHeap->GetCPUDescriptorHandleForHeapStart();
-		rtvHeapHandle.ptr += i * wrapper->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		rtvHeapHandle.ptr += (UINT64)i * wrapper->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 		wrapper->GetDevice()->CreateRenderTargetView((*resources)[i], &rtvDesc, rtvHeapHandle);
 		pResources[i] = (*resources)[i];
 		++i;

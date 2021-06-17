@@ -30,6 +30,8 @@
     <ClInclude Include="Header\Graphics\CBufferStruct.h" />
     <ClInclude Include="Header\Graphics\CBVSRVUAVHeap.h" />
     <ClInclude Include="Header\Graphics\COMRelease.h" />
+    <ClInclude Include="Header\Graphics\DepthStencil.h" />
+    <ClInclude Include="Header\Graphics\DepthStencilTexture.h" />
     <ClInclude Include="Header\Graphics\DescriptorHeapManager.h" />
     <ClInclude Include="Header\Graphics\Graphics.h" />
     <ClInclude Include="Header\Graphics\GraphicsDevice.h" />
@@ -71,6 +73,8 @@
     <ClCompile Include="Source\Graphics\Camera.cpp" />
     <ClCompile Include="Source\Graphics\CBufferAllocater.cpp" />
     <ClCompile Include="Source\Graphics\CBVSRVUAVHeap.cpp" />
+    <ClCompile Include="Source\Graphics\DepthStencil.cpp" />
+    <ClCompile Include="Source\Graphics\DepthStencilTexture.cpp" />
     <ClCompile Include="Source\Graphics\DescriptorHeapManager.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="Source\Graphics\Helper\MeshCreater.cpp" />

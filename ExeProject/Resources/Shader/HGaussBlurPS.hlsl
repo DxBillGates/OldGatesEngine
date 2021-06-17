@@ -10,7 +10,7 @@ float4 main(VSOutput input) : SV_TARGET
 	tex.GetDimensions(0, w, h, level);
 
 	//サイズから1ピクセル分のuv値を取得
-	float perPixel = 2;
+	float perPixel = 1;
 	float2 pixel = float2(perPixel / w, perPixel / h);
 
 	float4 texColor = tex.Sample(smp, input.uv);

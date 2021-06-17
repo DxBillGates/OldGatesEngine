@@ -92,3 +92,83 @@ void GatesEngine::MeshCreater::CreateGrid(Math::Vector2 size, float spaceInterva
 		indices->push_back(i + 1);
 	}
 }
+
+void GatesEngine::MeshCreater::CreateCube(Math::Vector3 size, MeshData<VertexInfo::Vertex_UV_Normal>& meshData)
+{
+	using namespace GatesEngine::Math;
+	std::vector<VertexInfo::Vertex_UV_Normal>* vertices = meshData.GetVertices();
+	std::vector<unsigned short>* indices = meshData.GetIndices();
+
+	//‘O
+	vertices->push_back({ Vector3(-size.x / 2.0f, size.y / 2.0f,-size.z / 2.0f),Vector2(0,0),Vector3(0,0,-1) });
+	vertices->push_back({ Vector3( size.x / 2.0f, size.y / 2.0f,-size.z / 2.0f),Vector2(1,0),Vector3(0,0,-1) });
+	vertices->push_back({ Vector3( size.x / 2.0f,-size.y / 2.0f,-size.z / 2.0f),Vector2(1,1),Vector3(0,0,-1) });
+	vertices->push_back({ Vector3(-size.x / 2.0f,-size.y / 2.0f,-size.z / 2.0f),Vector2(1,0),Vector3(0,0,-1) });
+	//‰E
+	vertices->push_back({ Vector3( size.x / 2.0f, size.y / 2.0f,-size.z / 2.0f),Vector2(0,0),Vector3(1,0,0) });
+	vertices->push_back({ Vector3( size.x / 2.0f, size.y / 2.0f, size.z / 2.0f),Vector2(1,0),Vector3(1,0,0) });
+	vertices->push_back({ Vector3( size.x / 2.0f,-size.y / 2.0f, size.z / 2.0f),Vector2(1,1),Vector3(1,0,0) });
+	vertices->push_back({ Vector3( size.x / 2.0f,-size.y / 2.0f,-size.z / 2.0f),Vector2(1,0),Vector3(1,0,0) });
+	//¶
+	vertices->push_back({ Vector3(-size.x / 2.0f, size.y / 2.0f, size.z / 2.0f),Vector2(0,0),Vector3(-1,0,0) });
+	vertices->push_back({ Vector3(-size.x / 2.0f, size.y / 2.0f,-size.z / 2.0f),Vector2(1,0),Vector3(-1,0,0) });
+	vertices->push_back({ Vector3(-size.x / 2.0f,-size.y / 2.0f,-size.z / 2.0f),Vector2(1,1),Vector3(-1,0,0) });
+	vertices->push_back({ Vector3(-size.x / 2.0f,-size.y / 2.0f, size.z / 2.0f),Vector2(1,0),Vector3(-1,0,0) });
+	//‰œ
+	vertices->push_back({ Vector3( size.x / 2.0f, size.y / 2.0f, size.z / 2.0f),Vector2(0,0),Vector3(0,0,1) });
+	vertices->push_back({ Vector3(-size.x / 2.0f, size.y / 2.0f, size.z / 2.0f),Vector2(1,0),Vector3(0,0,1) });
+	vertices->push_back({ Vector3(-size.x / 2.0f,-size.y / 2.0f, size.z / 2.0f),Vector2(1,1),Vector3(0,0,1) });
+	vertices->push_back({ Vector3( size.x / 2.0f,-size.y / 2.0f, size.z / 2.0f),Vector2(1,0),Vector3(0,0,1) });
+	//ã
+	vertices->push_back({ Vector3(-size.x / 2.0f, size.y / 2.0f, size.z / 2.0f),Vector2(0,0),Vector3(0,1,0) });
+	vertices->push_back({ Vector3( size.x / 2.0f, size.y / 2.0f, size.z / 2.0f),Vector2(1,0),Vector3(0,1,0) });
+	vertices->push_back({ Vector3( size.x / 2.0f, size.y / 2.0f,-size.z / 2.0f),Vector2(1,1),Vector3(0,1,0) });
+	vertices->push_back({ Vector3(-size.x / 2.0f, size.y / 2.0f,-size.z / 2.0f),Vector2(1,0),Vector3(0,1,0) });
+	//‰º
+	vertices->push_back({ Vector3( size.x / 2.0f,-size.y / 2.0f,-size.z / 2.0f),Vector2(0,0),Vector3(0,-1,0) });
+	vertices->push_back({ Vector3( size.x / 2.0f,-size.y / 2.0f, size.z / 2.0f),Vector2(1,0),Vector3(0,-1,0) });
+	vertices->push_back({ Vector3(-size.x / 2.0f,-size.y / 2.0f, size.z / 2.0f),Vector2(1,1),Vector3(0,-1,0) });
+	vertices->push_back({ Vector3(-size.x / 2.0f,-size.y / 2.0f,-size.z / 2.0f),Vector2(1,0),Vector3(0,-1,0) });
+
+	indices->push_back(0);
+	indices->push_back(1);
+	indices->push_back(2);
+	indices->push_back(2);
+	indices->push_back(3);
+	indices->push_back(0);
+
+	indices->push_back(4);
+	indices->push_back(5);
+	indices->push_back(6);
+	indices->push_back(6);
+	indices->push_back(7);
+	indices->push_back(4);
+
+	indices->push_back(8);
+	indices->push_back(9);
+	indices->push_back(10);
+	indices->push_back(10);
+	indices->push_back(11);
+	indices->push_back(8);
+
+	indices->push_back(12);
+	indices->push_back(13);
+	indices->push_back(14);
+	indices->push_back(14);
+	indices->push_back(15);
+	indices->push_back(12);
+
+	indices->push_back(16);
+	indices->push_back(17);
+	indices->push_back(18);
+	indices->push_back(18);
+	indices->push_back(19);
+	indices->push_back(16);
+
+	indices->push_back(20);
+	indices->push_back(21);
+	indices->push_back(22);
+	indices->push_back(22);
+	indices->push_back(23);
+	indices->push_back(20);
+}

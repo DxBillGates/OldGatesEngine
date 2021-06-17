@@ -14,6 +14,7 @@ namespace GatesEngine
 	class MeshManager;
 	class CBVSRVUAVHeap;
 	class CBufferAllocater;
+	class DepthStencil;
 	class GraphicsDevice
 	{
 	private:
@@ -55,7 +56,7 @@ namespace GatesEngine
 		~GraphicsDevice();
 
 		bool Create(Window* mainWindow);
-		void ClearRenderTarget(const Vector4& color = { 0,0,0,0 },bool clearFlag = true, RenderTarget* renderTarget = nullptr);
+		void ClearRenderTarget(const Vector4& color = { 0,0,0,0 },bool clearFlag = true, RenderTarget* renderTarget = nullptr,DepthStencil* depthStencil = nullptr);
 		void ClearRenderTargetOutDsv(const Vector4& color = { 0,0,0,0 }, bool clearFlag = true, RenderTarget* renderTarget = nullptr);
 		void ClearDepthStencil();
 		void ScreenFlip();
