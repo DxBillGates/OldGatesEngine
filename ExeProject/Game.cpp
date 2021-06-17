@@ -46,6 +46,10 @@ bool Game::LoadContents()
 	auto* testDOFShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"DepthOfField")), "DepthOfFieldShader");
 	testDOFShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD }, { RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
 
+	auto* testBrightnessSamplingShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"BrightnessSampling")), "BrightnessSamplingShader");
+	testBrightnessSamplingShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV}, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
+
+
 	//î¬É|Éäê∂ê¨
 	MeshData<VertexInfo::Vertex_UV_Normal> testMeshData;
 	MeshCreater::CreateQuad({ 100,100 }, { 1,1 }, testMeshData);
@@ -80,7 +84,7 @@ bool Game::Initialize()
 {
 	gameObjectManager.Start();
 	timer.SetFrameRate(144);
-	timer.SetIsShow(false);
+	timer.SetIsShow(true);
 	gaussData = GetGaussData(8, 5.0f);
 	for (int i = 0; i < 8; ++i)
 	{
@@ -186,14 +190,14 @@ void Game::Draw()
 	graphicsDevice.GetShaderManager()->GetShader("DefaultMeshShader")->Set();
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle));
 	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, mainCamera.GetData());
-	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,0,0,1) });
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,1,1,0).Normalize(),GatesEngine::Math::Vector4(1,1,1,1) });
 	graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
 
 	for (int i = 0; i < 10; ++i)
 	{
 		for (int j = 0; j < 10; ++j)
 		{
-			graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(0) * GatesEngine::Math::Matrix4x4::Translate({ 200*(float)i,100,100* (float)j }));
+			graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle * 0.5f) * GatesEngine::Math::Matrix4x4::Translate({ 200*(float)i,100,100* (float)j }));
 			graphicsDevice.GetMeshManager()->GetMesh("Plane")->Draw();
 		}
 	}
@@ -213,11 +217,17 @@ void Game::Draw()
 	testRenderTex2.Set(3);
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
+	//graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 }, false);
+	//graphicsDevice.GetShaderManager()->GetShader("DepthOfFieldShader")->Set();
+	//testRenderTex.Set(2);
+	//testRenderTex3.Set(3);
+	//graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(4, graphicsDevice.GetCBVSRVUAVHeap()->GetSRVHandleForSRV(3));
+	//graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
+
 	graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 }, false);
-	graphicsDevice.GetShaderManager()->GetShader("DepthOfFieldShader")->Set();
-	testRenderTex.Set(2);
-	testRenderTex3.Set(3);
-	graphicsDevice.GetCmdList()->SetGraphicsRootDescriptorTable(4, graphicsDevice.GetCBVSRVUAVHeap()->GetSRVHandleForSRV(3));
+	graphicsDevice.GetShaderManager()->GetShader("BrightnessSamplingShader")->Set();
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, GatesEngine::Math::Vector4(0.5f,0,0,0));
+	testRenderTex.Set(3);
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
 	graphicsDevice.ScreenFlip();
