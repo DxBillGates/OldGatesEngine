@@ -17,6 +17,7 @@ private:
 	GatesEngine::RenderTexture testRenderTex4;
 	GatesEngine::DepthStencilTexture testDepthTex;
 	std::vector<float> gaussData;
+	bool effectFlag;
 
 	struct TestData
 	{
