@@ -32,7 +32,7 @@ void GatesEngine::RenderTexture::Create(GraphicsDevice* graphicsDevice, const Ga
 	resDesc.Width = (UINT)size.x;
 	resDesc.Height = (UINT)size.y;
 
-	float color[4] = {1,1,1,1};
+	float color[4] = {0,0,0,1};
 	D3D12_CLEAR_VALUE clearValue;
 	clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	clearValue.Color[0] = color[0];

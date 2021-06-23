@@ -7,11 +7,10 @@ cbuffer Orthograph : register(b1)
 {
 	matrix projMatrix;
 }
-
-cbuffer DOFInfo : register(b2)
+cbuffer ShiftInfo : register(b2)
 {
-	float4 dofValue;
-};
+	float4 shiftInfo;
+}
 
 struct VSInput
 {

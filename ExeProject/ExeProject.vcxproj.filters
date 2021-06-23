@@ -93,6 +93,12 @@
     <FxCompile Include="Resources\Shader\BloomPS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shader\RGBShiftVS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\RGBShiftPS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\DefaultShader.hlsli">
@@ -117,6 +123,9 @@
       <Filter>シェーダー</Filter>
     </None>
     <None Include="Resources\Shader\BloomShader.hlsli">
+      <Filter>シェーダー</Filter>
+    </None>
+    <None Include="Resources\Shader\RGBShiftShader.hlsli">
       <Filter>シェーダー</Filter>
     </None>
   </ItemGroup>

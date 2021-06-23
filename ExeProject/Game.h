@@ -17,7 +17,16 @@ private:
 	GatesEngine::RenderTexture testRenderTex4;
 	GatesEngine::DepthStencilTexture testDepthTex;
 	std::vector<float> gaussData;
-	bool effectFlag;
+
+	float threshold;
+
+	enum class Effects
+	{
+		DOF,
+		BLOOM,
+		RGBSHIFT,
+	};
+	Effects effectFlag;
 
 	struct TestData
 	{
