@@ -276,11 +276,10 @@ void Game::Draw()
 		graphicsDevice.GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ GatesEngine::Math::Vector4(0,0,1,0).Normalize(),GatesEngine::Math::Vector4(0,1,1,1) });
 		graphicsDevice.GetMeshManager()->GetMesh("Cube")->Draw();
 
-		graphicsDevice.GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 		for (int i = 0; i < 10; ++i)
 		{
-			graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Scale({ 10,10,10 }) * GatesEngine::Math::Matrix4x4::RotationY(0 * i * 0.1f) * GatesEngine::Math::Matrix4x4::RotationX(0) * GatesEngine::Math::Matrix4x4::Translate({ 50 * (float)i,100,100 * (float)i }));
-			graphicsDevice.GetMeshManager()->GetMesh("Sphere")->Draw();
+			graphicsDevice.GetCBufferAllocater()->BindAndAttach(0,GatesEngine::Math::Matrix4x4::RotationY(0 * i * 0.1f) * GatesEngine::Math::Matrix4x4::RotationX(0) * GatesEngine::Math::Matrix4x4::Translate({ 50 * (float)i,100,100 * (float)i }));
+			graphicsDevice.GetMeshManager()->GetMesh("Cube")->Draw();
 		}
 		//グリッド描画
 		graphicsDevice.GetCBufferAllocater()->BindAndAttach(2,mainCamera.GetData());
@@ -326,8 +325,8 @@ void Game::Draw()
 
 		for (int i = 0; i < 10; ++i)
 		{
-			graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Scale({10,10,10}) * GatesEngine::Math::Matrix4x4::RotationY(angle * i * 0.1f) * GatesEngine::Math::Matrix4x4::RotationX(angle) * GatesEngine::Math::Matrix4x4::Translate({ 50 * (float)i,100,100 * (float)i }));
-			graphicsDevice.GetMeshManager()->GetMesh("Sphere")->Draw();
+			graphicsDevice.GetCBufferAllocater()->BindAndAttach(0,GatesEngine::Math::Matrix4x4::RotationY(angle * i * 0.1f) * GatesEngine::Math::Matrix4x4::RotationX(angle) * GatesEngine::Math::Matrix4x4::Translate({ 50 * (float)i,100,100 * (float)i }));
+			graphicsDevice.GetMeshManager()->GetMesh("Cube")->Draw();
 		}
 
 		//グリッド描画
@@ -379,7 +378,7 @@ void Game::Draw()
 		for (int i = 0; i < 10; ++i)
 		{
 			graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::RotationY(angle * i * 0.1f) * GatesEngine::Math::Matrix4x4::RotationX(angle) * GatesEngine::Math::Matrix4x4::Translate({ 50 * (float)i,100,100 * (float)i }));
-			graphicsDevice.GetMeshManager()->GetMesh("Sphere")->Draw();
+			graphicsDevice.GetMeshManager()->GetMesh("Cube")->Draw();
 		}
 
 		//グリッド描画
