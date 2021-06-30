@@ -207,6 +207,15 @@
     <ClInclude Include="Header\Graphics\DepthStencilTexture.h">
       <Filter>Header\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Header\Util\FileLoader.h">
+      <Filter>Header\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Graphics\TextureDataFormat.h">
+      <Filter>Header\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Graphics\TextureLoader.h">
+      <Filter>Header\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Easing.cpp">
@@ -315,6 +324,12 @@
       <Filter>Source\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\DepthStencilTexture.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Util\FileLoader.cpp">
+      <Filter>Source\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\TextureLoader.cpp">
       <Filter>Source\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

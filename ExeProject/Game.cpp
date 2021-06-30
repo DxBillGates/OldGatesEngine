@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "SampleScene.h"
 #include "Header/Graphics/Graphics.h"
+#include "Header/Graphics/TextureLoader.h"
 
 Game::Game() :Application()
 {
@@ -92,6 +93,8 @@ bool Game::LoadContents()
 
 	testDepthTex.Create(&graphicsDevice, { 1920,1080 });
 	testRenderTex4.Create(&graphicsDevice, { 1920,1080 });
+
+	TextureLoader::LoadPngTextureData("Resources/Texture/test.png");
 
 	return true;
 }
