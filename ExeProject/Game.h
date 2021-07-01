@@ -17,7 +17,7 @@ private:
 	GatesEngine::RenderTexture testRenderTex4;
 	GatesEngine::DepthStencilTexture testDepthTex;
 	std::vector<float> gaussData;
-
+	GatesEngine::Texture* tex;
 	float threshold;
 
 	enum class Effects

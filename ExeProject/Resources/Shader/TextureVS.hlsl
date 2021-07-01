@@ -1,12 +1,9 @@
-#include "DefaultShader.hlsli"
+#include "DefaultSpriteShader.hlsli"
 
-DefaultVSOutput main(DefaultVSInput vsInput)
+DefaultSpriteVSOutput main(DefaultSpriteVSInput input)
 {
-	DefaultVSOutput vsOutput;
-	vsOutput.svpos = mul(projMatrix, mul(viewMatrix, mul(modelMatrix, vsInput.pos)));
-	//vsOutput.svpos = vsInput.pos;
-	vsOutput.uv = vsInput.uv;
-	vsOutput.normal = mul(modelMatrix, float4(vsInput.normal, 0)).xyz;
-
-	return vsOutput;
+	DefaultSpriteVSOutput output;
+	output.svpos = mul(projMatrix, mul(modelMatrix, input.pos));
+	output.uv = input.uv;
+	return output;
 }

@@ -2,6 +2,7 @@
 #include "SampleScene.h"
 #include "Header/Graphics/Graphics.h"
 #include "Header/Graphics/TextureLoader.h"
+#include "Header/Graphics/Texture.h"
 
 Game::Game() :Application()
 {
@@ -13,6 +14,8 @@ Game::Game(const GatesEngine::Math::Vector2& wSize, const char* title) : Applica
 
 Game::~Game()
 {
+	delete tex;
+	GatesEngine::TextureLoader::DeleteData();
 }
 
 bool Game::LoadContents()
@@ -24,7 +27,7 @@ bool Game::LoadContents()
 	using namespace GatesEngine::Math;
 
 	auto* testTexShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"Texture")), "Texture");
-	testTexShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD ,InputLayout::NORMAL }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
+	testTexShader->Create({ InputLayout::POSITION,InputLayout::TEXCOORD}, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
 
 	auto* testLineShader = graphicsDevice.GetShaderManager()->Add(new Shader(&graphicsDevice, std::wstring(L"Line")), "Line");
 	testLineShader->Create({ InputLayout::POSITION,InputLayout::COLOR }, { RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::CBV,RangeType::SRV,RangeType::SRV }, BlendMode::BLENDMODE_ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE, true);
@@ -95,6 +98,8 @@ bool Game::LoadContents()
 	testRenderTex4.Create(&graphicsDevice, { 1920,1080 });
 
 	TextureLoader::LoadPngTextureData("Resources/Texture/test.png");
+	auto* texdata = TextureLoader::LoadBmpTextureData("Resources/Texture/testBMP.bmp");
+	tex = new Texture(texdata, &graphicsDevice);
 
 	return true;
 }
@@ -408,6 +413,11 @@ void Game::Draw()
 	}
 
 
+	graphicsDevice.GetShaderManager()->GetShader("Texture")->Set();
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({ 1920 / 2,1080 / 2,0 }));
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, GatesEngine::Math::Matrix4x4::GetOrthographMatrix({ 1920,1080 }));
+	tex->Set(3);
+	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
 	//graphicsDevice.ClearRenderTargetOutDsv({ 135,206,235,0 }, false);
 	//graphicsDevice.GetShaderManager()->GetShader("DepthOfFieldShader")->Set();

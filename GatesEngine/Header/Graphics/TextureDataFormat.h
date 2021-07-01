@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 namespace GatesEngine
 {
@@ -83,10 +84,50 @@ namespace GatesEngine
 		IENDChunk endChunk;
 	};
 
+	struct BMPFormatData
+	{
+		struct BMPFileHeader
+		{
+			struct BMPFileHeaderData
+			{
+				unsigned long dataSize;
+				unsigned short reserved1;
+				unsigned short reserved2;
+				unsigned long offset;
+			};
+			char type[2];
+			BMPFileHeaderData data;
+		};
+
+		struct BMPInfoHeader
+		{
+			unsigned long biSize;
+			unsigned long biWidth;
+			unsigned long biHeight;
+			unsigned short biPlanes;
+			unsigned short biBitCount;
+			unsigned long biCompression;
+			unsigned long biSizeImage;
+			unsigned long biXPixPerMeter;
+			unsigned long biYPixPerMeter;
+			unsigned long biClrUsed;
+			unsigned long biCirImportant;
+		};
+
+		struct ColorData
+		{
+			char b, g, r, a;
+		};
+
+		BMPFileHeader fileHeader;
+		BMPInfoHeader infoHeader;
+		std::vector<ColorData> data;
+	};
+
 	struct TextureData
 	{
 		int width;
 		int height;
-		char* data;
+		void* data;
 	};
 }
