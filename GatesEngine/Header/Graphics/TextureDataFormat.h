@@ -26,7 +26,7 @@ namespace GatesEngine
 			char compression;
 			char filter;
 			char interlace;
-			int crc;
+			unsigned long crc;
 		};
 
 		struct GAMAChunk
@@ -47,14 +47,14 @@ namespace GatesEngine
 			int greenY;
 			int blueX;
 			int blueY;
-			int crc;
+			unsigned long crc;
 		};
 
 		struct SRGBChunk
 		{
 			Chunk chunk;
 			char mode;
-			int crc;
+			unsigned long crc;
 		};
 
 		struct PLTEChunk
@@ -65,13 +65,13 @@ namespace GatesEngine
 		{
 			Chunk chunk;
 			char* data;
-			int crc;
+			unsigned long crc;
 		};
 
 		struct IENDChunk
 		{
 			Chunk chunk;
-			int crc;
+			unsigned long crc;
 		};
 
 		PNGSignature signature;
@@ -82,6 +82,11 @@ namespace GatesEngine
 		PLTEChunk platteChunk;
 		IDATChunk dataChunk;
 		IENDChunk endChunk;
+	};
+
+	struct ColorData
+	{
+		char b, g, r, a;
 	};
 
 	struct BMPFormatData
@@ -114,10 +119,6 @@ namespace GatesEngine
 			unsigned long biCirImportant;
 		};
 
-		struct ColorData
-		{
-			char b, g, r, a;
-		};
 
 		BMPFileHeader fileHeader;
 		BMPInfoHeader infoHeader;

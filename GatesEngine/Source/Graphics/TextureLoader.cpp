@@ -29,30 +29,23 @@ GatesEngine::TextureData* GatesEngine::TextureLoader::LoadPngTextureData(const s
 
 	//PNGシグネチャを読み込む
 	file.read((char*)&backupPNGFormatData->signature, sizeof(PNGFormatData::PNGSignature));
+	//IHDRチャンク読込
+	file.read((char*)&backupPNGFormatData->iHDRChunk, sizeof(PNGFormatData::IHDRChunk)-3);
+	//エンディアン変換
+	backupPNGFormatData->iHDRChunk.chunk.chunkDataSize = FileLoader::Swap32bit(backupPNGFormatData->iHDRChunk.chunk.chunkDataSize);
+	backupPNGFormatData->iHDRChunk.width = FileLoader::Swap32bit(backupPNGFormatData->iHDRChunk.width);
+	backupPNGFormatData->iHDRChunk.height = FileLoader::Swap32bit(backupPNGFormatData->iHDRChunk.height);
 
-	//IHDRまでスキップ(IHDRチャンクの構造体はアライメントが起きるので1個ずつ読み込む)
-	if (FileLoader::Skip("IHDR", file))
+	//IDATチャンク読込
+	if (FileLoader::Skip("IDAT", file))
 	{
-		//IHDR識別バイナリの前に4バイト分データサイズがあるから現在位置から4バイト分戻る
 		FileLoader::Skip(-4, file);
-
-		//チャンクのデータサイズと識別バイナリを読み込む(8byte)
-		file.read((char*)&backupPNGFormatData->iHDRChunk.chunk, sizeof(PNGFormatData::IHDRChunk::chunk));
-
-		//画像サイズを読み込む
-		file.read((char*)&backupPNGFormatData->iHDRChunk.width, sizeof(PNGFormatData::IHDRChunk::width));
-		file.read((char*)&backupPNGFormatData->iHDRChunk.height, sizeof(PNGFormatData::IHDRChunk::height));
-
-		//ビット深度を読み込む
-		file.read((char*)&backupPNGFormatData->iHDRChunk.bitDepth, sizeof(char));
-
-		//圧縮手法、フィルター手法、インターレース手法を読み込む
-		file.read((char*)&backupPNGFormatData->iHDRChunk.compression, sizeof(char));
-		file.read((char*)&backupPNGFormatData->iHDRChunk.filter, sizeof(char));
-		file.read((char*)&backupPNGFormatData->iHDRChunk.interlace, sizeof(char));
-
-		//CRC読み込み
-		file.read((char*)&backupPNGFormatData->iHDRChunk.crc, sizeof(PNGFormatData::IHDRChunk::crc));
+		file.read((char*)&backupPNGFormatData->dataChunk.chunk, sizeof(PNGFormatData::Chunk));
+		backupPNGFormatData->dataChunk.chunk.chunkDataSize = FileLoader::Swap32bit(backupPNGFormatData->dataChunk.chunk.chunkDataSize);
+		std::vector<unsigned char> data(backupPNGFormatData->dataChunk.chunk.chunkDataSize);
+		file.read((char*)data.data(), backupPNGFormatData->dataChunk.chunk.chunkDataSize);
+		file.read((char*)&backupPNGFormatData->dataChunk.crc, sizeof(uint32_t));
+		backupPNGFormatData->dataChunk.crc = FileLoader::Swap32bit(backupPNGFormatData->dataChunk.crc);
 	}
 
 	//IENDチャンク識別バイナリまで飛んで4バイト戻ってIENDチャンクを読み込む

@@ -40,3 +40,13 @@ void GatesEngine::FileLoader::Skip(int byte, std::ifstream& file)
 	auto currentPos = file.tellg();
 	file.seekg((((int)currentPos) + byte), std::ios_base::beg);
 }
+
+uint32_t GatesEngine::FileLoader::Swap32bit(uint32_t value)
+{
+	uint32_t result;
+	result = value << 24;
+	result |= (value & 0x0000FF00) << 8;
+	result |= (value & 0x00FF0000) >> 8;
+	result |= value >> 24;
+	return result;
+}
