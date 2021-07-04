@@ -133,9 +133,9 @@ void SampleScene::Draw()
 
 	using namespace GatesEngine::Math;
 
-	graphicsDevice->GetCBufferAllocater()->ResetCurrentUseNumber();
+	//graphicsDevice->GetCBufferAllocater()->ResetCurrentUseNumber();
 	//graphicsDevice->ClearRenderTarget({ 135,206,235,0 });
-	graphicsDevice->ClearRenderTarget({ 0,0,0,0 });
+	//graphicsDevice->ClearRenderTarget({ 0,0,0,0 });
 
 	//ƒOƒŠƒbƒh•`‰æ
 	graphicsDevice->GetShaderManager()->GetShader("Line")->Set();
