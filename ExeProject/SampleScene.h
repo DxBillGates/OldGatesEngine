@@ -19,8 +19,7 @@ private:
 	ID3D12Resource* posBuffer;
 	std::vector<UAVData> test;
 	std::vector<GatesEngine::Math::Vector4> posDatas;
-	void* data;
-	//void* posData;
+	UAVData* data;
 	GatesEngine::Math::Vector4* posData;
 	int srvNum;
 public:

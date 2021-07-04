@@ -15,8 +15,8 @@ SampleScene::SampleScene(const char* sceneName) : Scene(sceneName)
 
 SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) : Scene(sceneName, app)
 {
-	test.resize(10000);
-	posDatas.resize(10000);
+	test.resize(100000);
+	posDatas.resize(100000);
 
 	//ルートシグネチャの生成
 	rootSignature = new GatesEngine::RootSignature(graphicsDevice, { GatesEngine::RangeType::UAV });
@@ -93,8 +93,14 @@ SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) :
 
 	graphicsDevice->GetDevice()->CreateUnorderedAccessView(buffer, nullptr, &uavDesc, heap->GetCPUDescriptorHandleForHeapStart());
 
-	hr = buffer->Map(0, nullptr, &data);
+	hr = buffer->Map(0, nullptr, (void**)&data);
 	hr = posBuffer->Map(0, nullptr,(void**)&posData);
+
+	for (int i = 0; i < (UINT)test.size(); ++i)
+	{
+		data[i].vel = { (float)std::rand() / RAND_MAX * 100 - 100 / 2.0f,-(float)(rand() % 5),(float)std::rand() / RAND_MAX * 100 - 100 / 2.0f,1 };
+		data[i].vel = data[i].vel.Normalize();
+	}
 }
 
 SampleScene::~SampleScene()
@@ -143,7 +149,7 @@ void SampleScene::Draw()
 	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({0,0,0}));
 	graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
 	graphicsDevice->GetCmdList()->SetGraphicsRootDescriptorTable(3, graphicsDevice->GetCBVSRVUAVHeap()->GetSRVHandleForSRV(srvNum));
-	graphicsDevice->GetMeshManager()->GetMesh("Cube")->Draw((UINT)test.size());
+	graphicsDevice->GetMeshManager()->GetMesh("Point")->Draw((UINT)test.size());
 
 	ID3D12GraphicsCommandList* list = graphicsDevice->GetCmdList();
 	list->SetComputeRootSignature(rootSignature->Get());
