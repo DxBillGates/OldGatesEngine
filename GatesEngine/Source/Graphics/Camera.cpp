@@ -93,7 +93,7 @@ void GatesEngine::Camera::Update()
 
 	viewMatrix = Math::Matrix4x4::GetViewMatrixLookTo(position, direction, axis.y);
 
-	cameraBuffer.Map({ viewMatrix,projectionMatrix });
+	//cameraBuffer.Map({ viewMatrix,projectionMatrix });
 
 }
 
