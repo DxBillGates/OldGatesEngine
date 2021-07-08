@@ -15,11 +15,11 @@ SampleScene::SampleScene(const char* sceneName) : Scene(sceneName)
 
 SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) : Scene(sceneName, app)
 {
-	test.resize(100000);
-	posDatas.resize(100000);
+	test.resize(50000);
+	posDatas.resize(50000);
 
 	//ルートシグネチャの生成
-	rootSignature = new GatesEngine::RootSignature(graphicsDevice, { GatesEngine::RangeType::UAV });
+	rootSignature = new GatesEngine::RootSignature(graphicsDevice, { GatesEngine::RangeType::UAV,GatesEngine::RangeType::SRV });
 	rootSignature->Create();
 
 	//CSのコンパイル＆生成
@@ -63,6 +63,11 @@ SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) :
 
 	hr = graphicsDevice->GetDevice()->CreateCommittedResource(&heapProp, D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&posBuffer));
 
+	//加算ベクトルバッファ生成
+	resDesc.Width = sizeof(GatesEngine::Math::Vector4);
+	hr = graphicsDevice->GetDevice()->CreateCommittedResource(&heapProp, D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&addVectorBuffer));
+
+
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -79,7 +84,7 @@ SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) :
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
 	heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	heapDesc.NodeMask = 0;
-	heapDesc.NumDescriptors = 1;
+	heapDesc.NumDescriptors = 2;
 	heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
 	hr = graphicsDevice->GetDevice()->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&heap));
@@ -91,12 +96,18 @@ SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) :
 	uavDesc.Buffer.NumElements = (UINT)test.size();
 	uavDesc.Buffer.StructureByteStride = sizeof(UAVData);
 
-	graphicsDevice->GetDevice()->CreateUnorderedAccessView(buffer, nullptr, &uavDesc, heap->GetCPUDescriptorHandleForHeapStart());
+	auto handle = heap->GetCPUDescriptorHandleForHeapStart();
+	graphicsDevice->GetDevice()->CreateUnorderedAccessView(buffer, nullptr, &uavDesc, handle);
+
+	handle.ptr += graphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	srvDesc.Buffer.NumElements = 1;
+	graphicsDevice->GetDevice()->CreateShaderResourceView(addVectorBuffer, &srvDesc, handle);
 
 	hr = buffer->Map(0, nullptr, (void**)&data);
-	hr = posBuffer->Map(0, nullptr,(void**)&posData);
+	hr = posBuffer->Map(0, nullptr, (void**)&posData);
+	hr = addVectorBuffer->Map(0, nullptr, (void**)&addVectorData);
 
-	for (int i = 0; i < (UINT)test.size(); ++i)
+	for (int i = 0; i < (int)test.size(); ++i)
 	{
 		data[i].vel = { (float)std::rand() / RAND_MAX * 100 - 100 / 2.0f,-(float)(rand() % 5),(float)std::rand() / RAND_MAX * 100 - 100 / 2.0f,1 };
 		data[i].vel = data[i].vel.Normalize();
@@ -112,17 +123,43 @@ SampleScene::~SampleScene()
 	COM_RELEASE(buffer);
 	COM_RELEASE(shaderBlob);
 	COM_RELEASE(posBuffer);
+	COM_RELEASE(addVectorBuffer);
 }
 
 void SampleScene::Initialize()
 {
+	flag = false;
 }
 
 void SampleScene::Update()
 {
-	for (int i = 0; i < (UINT)test.size(); ++i)
+	for (int i = 0; i < (int)test.size(); ++i)
 	{
 		posData[i] = test[i].pos;
+	}
+
+	if (GatesEngine::Input::GetInstance()->GetKeyboard()->CheckPressTrigger(GatesEngine::Keys::SPACE))
+	{
+		flag = !flag;
+		if (flag)
+		{
+			const float RANGE = 10;
+			const float RANGE_POS = 100;
+			randomVector = {};
+			randomVector.pos = { (float)std::rand() / RAND_MAX * RANGE_POS - RANGE_POS / 2.0f,(float)std::rand() / RAND_MAX * RANGE_POS - RANGE_POS / 2.0f,(float)std::rand() / RAND_MAX * RANGE_POS - RANGE_POS / 2.0f,1 };
+			randomVector.vel = { (float)std::rand() / RAND_MAX * RANGE - RANGE / 2.0f,(float)std::rand() / RAND_MAX * RANGE - RANGE / 2.0f,(float)std::rand() / RAND_MAX * RANGE - RANGE / 2.0f,1 };
+		}
+	}
+
+	if (flag)
+	{
+		addVectorData[0].vel = randomVector.vel / 1000;
+		addVectorData[0].pos = randomVector.pos;
+	}
+	else
+	{
+		addVectorData[0].vel = { 0,0,0,0 };
+		addVectorData[0].pos = { 0,100,0,0 };
 	}
 }
 
@@ -144,9 +181,16 @@ void SampleScene::Draw()
 	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
 	graphicsDevice->GetMeshManager()->GetMesh("Grid")->Draw();
 
+	graphicsDevice->GetShaderManager()->GetShader("DefaultMeshShader")->Set();
+	graphicsDevice->GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ {0,0,1,0},{1,1,1,1} });
+	graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
+	graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0,GatesEngine::Math::Matrix4x4::Scale(0.25f) * GatesEngine::Math::Matrix4x4::Translate({addVectorData[0].pos.x,addVectorData[0].pos.y,addVectorData[0].pos.z}));
+	graphicsDevice->GetMeshManager()->GetMesh("Cube")->Draw();
+
 	graphicsDevice->GetShaderManager()->GetShader("PointShader")->Set();
 	graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({0,0,0}));
+	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({ 0,0,0 }));
 	graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
 	graphicsDevice->GetCmdList()->SetGraphicsRootDescriptorTable(3, graphicsDevice->GetCBVSRVUAVHeap()->GetSRVHandleForSRV(srvNum));
 	graphicsDevice->GetMeshManager()->GetMesh("Point")->Draw((UINT)test.size());
@@ -158,6 +202,8 @@ void SampleScene::Draw()
 
 	auto handle = heap->GetGPUDescriptorHandleForHeapStart();
 	list->SetComputeRootDescriptorTable(0, handle);
+	handle.ptr += graphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	list->SetComputeRootDescriptorTable(1, handle);
 
 	list->Dispatch((UINT)test.size(), 1, 1);
 

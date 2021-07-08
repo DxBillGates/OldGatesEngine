@@ -1,8 +1,11 @@
 #include "PointShader.hlsli"
 
-float4 main(float4 pos : POSITION, uint index : SV_InstanceID) : SV_POSITION
+PSInput main(float4 pos : POSITION, uint index : SV_InstanceID)
 {
-	float4 svpos;
-	svpos = mul(projMatrix, mul(viewMatrix, mul(modelMatrix, pos + posData[index])));
-	return svpos;
+	PSInput output;
+	output.svpos = mul(projMatrix, mul(viewMatrix, mul(modelMatrix, pos + posData[index])));
+	output.pos = posData[index];
+	//float4 svpos;
+	//svpos = mul(projMatrix, mul(viewMatrix, mul(modelMatrix, pos + posData[index])));
+	return output;
 }

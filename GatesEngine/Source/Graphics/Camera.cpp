@@ -51,7 +51,7 @@ void GatesEngine::Camera::Update()
 		//{
 		//	input->GetMouse()->SetMouseCursor({ newPos.x,newPos.y});
 		//}
-		moveSpeed = (input->GetKeyboard()->CheckHitKey(Keys::LSHIFT)) ? 5 : 1;
+		moveSpeed = (input->GetKeyboard()->CheckHitKey(Keys::LSHIFT)) ? 5.0f : 1.0f;
 
 
 		Math::Vector2 inputValue = input->GetMouse()->GetMouseMove() / 500.0f;
