@@ -15,8 +15,8 @@ SampleScene::SampleScene(const char* sceneName) : Scene(sceneName)
 
 SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) : Scene(sceneName, app)
 {
-	test.resize(50000);
-	posDatas.resize(50000);
+	test.resize(10000);
+	posDatas.resize(10000);
 
 	//ルートシグネチャの生成
 	rootSignature = new GatesEngine::RootSignature(graphicsDevice, { GatesEngine::RangeType::UAV,GatesEngine::RangeType::SRV });

@@ -155,6 +155,32 @@ void Game::Draw()
 	testRenderTex2.Set(3);
 	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
 
+	//3パス目で横にブラー
+	graphicsDevice.ClearRenderTargetOutDsv({ 0,0,0,1 }, true, &testRenderTex2);
+	graphicsDevice.GetShaderManager()->GetShader("HGaussBlurShader")->Set();
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, testData);
+	testRenderTex3.Set(3);
+	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
+
+	//4パス目で縦にブラー
+	graphicsDevice.ClearRenderTargetOutDsv({ 0,0,0,1 }, true, &testRenderTex3);
+	graphicsDevice.GetShaderManager()->GetShader("VGaussBlurShader")->Set();
+	testRenderTex2.Set(3);
+	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
+
+	//3パス目で横にブラー
+	graphicsDevice.ClearRenderTargetOutDsv({ 0,0,0,1 }, true, &testRenderTex2);
+	graphicsDevice.GetShaderManager()->GetShader("HGaussBlurShader")->Set();
+	graphicsDevice.GetCBufferAllocater()->BindAndAttach(2, testData);
+	testRenderTex3.Set(3);
+	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
+
+	//4パス目で縦にブラー
+	graphicsDevice.ClearRenderTargetOutDsv({ 0,0,0,1 }, true, &testRenderTex3);
+	graphicsDevice.GetShaderManager()->GetShader("VGaussBlurShader")->Set();
+	testRenderTex2.Set(3);
+	graphicsDevice.GetMeshManager()->GetMesh("2DPlane")->Draw();
+
 	//5パス目で4パス目の結果と1パス目の結果を合成
 	graphicsDevice.ClearRenderTargetOutDsv({ 0,0,0,1 }, false);
 	graphicsDevice.GetShaderManager()->GetShader("BloomShader")->Set();
