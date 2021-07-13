@@ -112,6 +112,12 @@ SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) :
 		data[i].vel = { (float)std::rand() / RAND_MAX * 100 - 100 / 2.0f,-(float)(rand() % 5),(float)std::rand() / RAND_MAX * 100 - 100 / 2.0f,1 };
 		data[i].vel = data[i].vel.Normalize();
 	}
+
+	gpuParticleManager = new GatesEngine::GPUParticleManager(graphicsDevice);
+	gpuParticleEmitter.Create(gpuParticleManager, 250000);
+	gpuParticleEmitter2.Create(gpuParticleManager, 250000);
+	gpuParticleEmitter3.Create(gpuParticleManager, 250000);
+	gpuParticleEmitter4.Create(gpuParticleManager, 250000);
 }
 
 SampleScene::~SampleScene()
@@ -124,6 +130,7 @@ SampleScene::~SampleScene()
 	COM_RELEASE(shaderBlob);
 	COM_RELEASE(posBuffer);
 	COM_RELEASE(addVectorBuffer);
+	delete gpuParticleManager;
 }
 
 void SampleScene::Initialize()
@@ -161,6 +168,10 @@ void SampleScene::Update()
 		addVectorData[0].vel = { 0,0,0,0 };
 		addVectorData[0].pos = { 0,100,0,0 };
 	}
+	gpuParticleEmitter.Update();
+	gpuParticleEmitter2.Update();
+	gpuParticleEmitter3.Update();
+	gpuParticleEmitter4.Update();
 }
 
 void SampleScene::Draw()
@@ -175,11 +186,11 @@ void SampleScene::Draw()
 	//graphicsDevice->ClearRenderTarget({ 0,0,0,0 });
 
 	//ƒOƒŠƒbƒh•`‰æ
-	graphicsDevice->GetShaderManager()->GetShader("Line")->Set();
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
-	graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
-	graphicsDevice->GetMeshManager()->GetMesh("Grid")->Draw();
+	//graphicsDevice->GetShaderManager()->GetShader("Line")->Set();
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
+	//graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
+	//graphicsDevice->GetMeshManager()->GetMesh("Grid")->Draw();
 
 	graphicsDevice->GetShaderManager()->GetShader("DefaultMeshShader")->Set();
 	graphicsDevice->GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ {0,0,1,0},{1,1,1,1} });
@@ -188,24 +199,29 @@ void SampleScene::Draw()
 	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0,GatesEngine::Math::Matrix4x4::Scale(0.25f) * GatesEngine::Math::Matrix4x4::Translate({addVectorData[0].pos.x,addVectorData[0].pos.y,addVectorData[0].pos.z}));
 	graphicsDevice->GetMeshManager()->GetMesh("Cube")->Draw();
 
-	graphicsDevice->GetShaderManager()->GetShader("PointShader")->Set();
-	graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({ 0,0,0 }));
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
-	graphicsDevice->GetCmdList()->SetGraphicsRootDescriptorTable(3, graphicsDevice->GetCBVSRVUAVHeap()->GetSRVHandleForSRV(srvNum));
-	graphicsDevice->GetMeshManager()->GetMesh("Point")->Draw((UINT)test.size());
+	//graphicsDevice->GetShaderManager()->GetShader("PointShader")->Set();
+	//graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Translate({ 110,0,0 }));
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
+	//graphicsDevice->GetCmdList()->SetGraphicsRootDescriptorTable(3, graphicsDevice->GetCBVSRVUAVHeap()->GetSRVHandleForSRV(srvNum));
+	//graphicsDevice->GetMeshManager()->GetMesh("Point")->Draw((UINT)test.size());
 
-	ID3D12GraphicsCommandList* list = graphicsDevice->GetCmdList();
-	list->SetComputeRootSignature(rootSignature->Get());
-	list->SetPipelineState(pipeline);
-	list->SetDescriptorHeaps(1, &heap);
+	//ID3D12GraphicsCommandList* list = graphicsDevice->GetCmdList();
+	//list->SetComputeRootSignature(rootSignature->Get());
+	//list->SetDescriptorHeaps(1, &heap);
+	//list->SetPipelineState(pipeline);
 
-	auto handle = heap->GetGPUDescriptorHandleForHeapStart();
-	list->SetComputeRootDescriptorTable(0, handle);
-	handle.ptr += graphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	list->SetComputeRootDescriptorTable(1, handle);
+	//auto handle = heap->GetGPUDescriptorHandleForHeapStart();
+	//list->SetComputeRootDescriptorTable(0, handle);
+	//handle.ptr += graphicsDevice->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	//list->SetComputeRootDescriptorTable(1, handle);
 
-	list->Dispatch((UINT)test.size(), 1, 1);
+	//list->Dispatch((UINT)test.size(), 1, 1);
+
+	gpuParticleEmitter.Draw(app->GetMainCamera(),pipeline,rootSignature->Get(),10);
+	gpuParticleEmitter2.Draw(app->GetMainCamera(), pipeline, rootSignature->Get(), 100);
+	gpuParticleEmitter3.Draw(app->GetMainCamera(), pipeline, rootSignature->Get(), 500);
+	gpuParticleEmitter4.Draw(app->GetMainCamera(), pipeline, rootSignature->Get(), 1000);
 
 	//graphicsDevice->ScreenFlip();
 

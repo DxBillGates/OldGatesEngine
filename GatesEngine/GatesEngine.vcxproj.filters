@@ -73,6 +73,12 @@
     <Filter Include="Source\Graphics\Manager">
       <UniqueIdentifier>{d6ec8435-146e-4fe8-8f23-c34c2a1ddc4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header\Graphics\GPUParticle">
+      <UniqueIdentifier>{02314b9d-83d2-417b-b1a6-36f507fb4f8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\GPUParticle">
+      <UniqueIdentifier>{d27baa3a-aec1-498d-8977-320ee76ca797}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\Math\Easing.h">
@@ -207,6 +213,12 @@
     <ClInclude Include="Header\Graphics\DepthStencilTexture.h">
       <Filter>Header\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Header\Graphics\GPUParticle\GPUParticleManager.h">
+      <Filter>Header\Graphics\GPUParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Graphics\GPUParticle\GPUParticleEmitter.h">
+      <Filter>Header\Graphics\GPUParticle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Easing.cpp">
@@ -316,6 +328,12 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\DepthStencilTexture.cpp">
       <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GPUParticle\GPUParticleManager.cpp">
+      <Filter>Source\Graphics\GPUParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GPUParticle\GPUParticleEmitter.cpp">
+      <Filter>Source\Graphics\GPUParticle</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
