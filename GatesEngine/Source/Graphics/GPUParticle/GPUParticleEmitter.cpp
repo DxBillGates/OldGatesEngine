@@ -25,10 +25,10 @@ GatesEngine::GPUParticleEmitter::~GPUParticleEmitter()
 
 void GatesEngine::GPUParticleEmitter::Update()
 {
-	std::vector<ParticleData> date(useParticleValue);
+	//std::vector<ParticleData> date(useParticleValue);
 	//ComputeShaderでUpdateしたパーティクルデータを先頭アドレスずらしてSRVのバッファにコピー
 	memcpy(updateParticleData + useParticleOffset, particleData + useParticleOffset, sizeof(ParticleData) * useParticleValue);
-	date.assign((ParticleData*)updateParticleData + useParticleOffset, (ParticleData*)updateParticleData + useParticleOffset + useParticleValue);
+	//date.assign((ParticleData*)updateParticleData + useParticleOffset, (ParticleData*)updateParticleData + useParticleOffset + useParticleValue);
 }
 
 void GatesEngine::GPUParticleEmitter::Draw(Camera* camera, ID3D12PipelineState* pipeline, ID3D12RootSignature* rootSignature, const Math::Vector3& pos)
