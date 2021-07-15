@@ -4,12 +4,11 @@
 #include "Header/Math/Math.h"
 #include "Header/Graphics/GPUParticle/GPUParticleManager.h"
 #include "Header/Graphics/GPUParticle/GPUParticleEmitter.h"
+#include "Header/Graphics/ComputePipeline.h"
 class SampleScene : public GatesEngine::Scene
 {
 private:
-	GatesEngine::RootSignature* rootSignature;
-	ID3DBlob* shaderBlob;
-	ID3D12PipelineState* pipeline;
+	GatesEngine::ComputePipeline* testComputeShader;
 
 	GatesEngine::GPUParticleManager* gpuParticleManager;
 	GatesEngine::GPUParticleEmitter gpuParticleEmitter;

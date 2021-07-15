@@ -1,5 +1,6 @@
 #pragma once
 #include "GPUParticleManager.h"
+#include "..\ComputePipeline.h"
 #include "..\Camera.h"
 
 namespace GatesEngine
@@ -21,7 +22,7 @@ namespace GatesEngine
 		GPUParticleEmitter();
 		virtual ~GPUParticleEmitter();
 		virtual void Update();
-		virtual void Draw(Camera* camera,ID3D12PipelineState* pipeline,ID3D12RootSignature* rootSignature,const Math::Vector3& pos);
+		virtual void Draw(Camera* camera,ComputePipeline* computeShader,const Math::Vector3& pos);
 		void Create(GPUParticleManager* manager,UINT useParticleValue);
 	};
 }

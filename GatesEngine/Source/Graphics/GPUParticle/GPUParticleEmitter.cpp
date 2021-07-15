@@ -31,7 +31,7 @@ void GatesEngine::GPUParticleEmitter::Update()
 	//date.assign((ParticleData*)updateParticleData + useParticleOffset, (ParticleData*)updateParticleData + useParticleOffset + useParticleValue);
 }
 
-void GatesEngine::GPUParticleEmitter::Draw(Camera* camera, ID3D12PipelineState* pipeline, ID3D12RootSignature* rootSignature, const Math::Vector3& pos)
+void GatesEngine::GPUParticleEmitter::Draw(Camera* camera, ComputePipeline* computeShader, const Math::Vector3& pos)
 {
 	addData[0].pos = { pos.x,pos.y,pos.z,0 };
 	//addData[0].vel = { 1,0,0,0 };
@@ -46,15 +46,14 @@ void GatesEngine::GPUParticleEmitter::Draw(Camera* camera, ID3D12PipelineState* 
 	graphicsDevice->GetMeshManager()->GetMesh("Point")->Draw(useParticleValue);
 
 	ID3D12DescriptorHeap* heap = manager->GetHeap();
-	graphicsDevice->GetCmdList()->SetComputeRootSignature(rootSignature);
+	computeShader->Set();
 	manager->GetDevice()->GetCmdList()->SetDescriptorHeaps(1, &heap);
-	graphicsDevice->GetCmdList()->SetPipelineState(pipeline);
 
 	auto handle = heap->GetGPUDescriptorHandleForHeapStart();
-	handle.ptr += manager->GetDevice()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * uavValue;
+	handle.ptr += (UINT64)manager->GetDevice()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * uavValue;
 	manager->GetDevice()->GetCmdList()->SetComputeRootDescriptorTable(0, handle);
 	handle = heap->GetGPUDescriptorHandleForHeapStart();
-	handle.ptr += manager->GetDevice()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * 200 + manager->GetDevice()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * addDataSrvValue;
+	handle.ptr += (UINT64)manager->GetDevice()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * 200 + (UINT64)manager->GetDevice()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * addDataSrvValue;
 	manager->GetDevice()->GetCmdList()->SetComputeRootDescriptorTable(1, handle);
 
 	manager->GetDevice()->GetCmdList()->Dispatch(useParticleValue/128.0f, 1, 1);

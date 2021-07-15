@@ -15,36 +15,21 @@ SampleScene::SampleScene(const char* sceneName) : Scene(sceneName)
 
 SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) : Scene(sceneName, app)
 {
-	//ルートシグネチャの生成
-	rootSignature = new GatesEngine::RootSignature(graphicsDevice, { GatesEngine::RangeType::UAV,GatesEngine::RangeType::SRV });
-	rootSignature->Create();
-
-	//CSのコンパイル＆生成
-	auto hr = D3DCompileFromFile(L"Resources/Shader/testCS.hlsl", nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "cs_5_1", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &shaderBlob, nullptr);
-
-	D3D12_COMPUTE_PIPELINE_STATE_DESC pipeDesc = {};
-	pipeDesc.CS.pShaderBytecode = shaderBlob->GetBufferPointer();
-	pipeDesc.CS.BytecodeLength = shaderBlob->GetBufferSize();
-	pipeDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
-	pipeDesc.NodeMask = 0;
-	pipeDesc.pRootSignature = rootSignature->Get();
-
-	hr = graphicsDevice->GetDevice()->CreateComputePipelineState(&pipeDesc, IID_PPV_ARGS(&pipeline));
+	testComputeShader = new GatesEngine::ComputePipeline(graphicsDevice, L"test");
+	testComputeShader->Create({ GatesEngine::RangeType::UAV,GatesEngine::RangeType::SRV });
 
 	gpuParticleManager = new GatesEngine::GPUParticleManager(graphicsDevice);
-	int value = 25000;
+	int value = 100000;
 	gpuParticleEmitter.Create(gpuParticleManager, value);
-	gpuParticleEmitter2.Create(gpuParticleManager, value);
-	gpuParticleEmitter3.Create(gpuParticleManager, value);
-	gpuParticleEmitter4.Create(gpuParticleManager, value);
+	//gpuParticleEmitter2.Create(gpuParticleManager, value);
+	//gpuParticleEmitter3.Create(gpuParticleManager, value);
+	//gpuParticleEmitter4.Create(gpuParticleManager, value);
 }
 
 SampleScene::~SampleScene()
 {
-	delete rootSignature;
-	COM_RELEASE(pipeline);
-	COM_RELEASE(shaderBlob);
 	delete gpuParticleManager;
+	delete testComputeShader;
 }
 
 void SampleScene::Initialize()
@@ -54,9 +39,9 @@ void SampleScene::Initialize()
 void SampleScene::Update()
 {
 	gpuParticleEmitter.Update();
-	gpuParticleEmitter2.Update();
-	gpuParticleEmitter3.Update();
-	gpuParticleEmitter4.Update();
+	//gpuParticleEmitter2.Update();
+	//gpuParticleEmitter3.Update();
+	//gpuParticleEmitter4.Update();
 }
 
 void SampleScene::Draw()
@@ -82,10 +67,10 @@ void SampleScene::Draw()
 	graphicsDevice->GetMeshManager()->GetMesh("Cube")->Draw();
 
 
-	gpuParticleEmitter.Draw(app->GetMainCamera(),pipeline,rootSignature->Get(),10);
-	gpuParticleEmitter2.Draw(app->GetMainCamera(), pipeline, rootSignature->Get(), 100);
-	gpuParticleEmitter3.Draw(app->GetMainCamera(), pipeline, rootSignature->Get(), 500);
-	gpuParticleEmitter4.Draw(app->GetMainCamera(), pipeline, rootSignature->Get(), 1000);
+	gpuParticleEmitter.Draw(app->GetMainCamera() ,testComputeShader,1000);
+	//gpuParticleEmitter2.Draw(app->GetMainCamera(),testComputeShader, 100);
+	//gpuParticleEmitter3.Draw(app->GetMainCamera(),testComputeShader, 500);
+	//gpuParticleEmitter4.Draw(app->GetMainCamera(),testComputeShader, 1000);
 
 	//graphicsDevice->ScreenFlip();
 
