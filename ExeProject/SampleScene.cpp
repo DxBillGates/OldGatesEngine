@@ -19,11 +19,11 @@ SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) :
 	testComputeShader->Create({ GatesEngine::RangeType::UAV,GatesEngine::RangeType::SRV });
 
 	gpuParticleManager = new GatesEngine::GPUParticleManager(graphicsDevice);
-	int value = 100000;
+	int value = 10000;
 	gpuParticleEmitter.Create(gpuParticleManager, value);
-	//gpuParticleEmitter2.Create(gpuParticleManager, value);
-	//gpuParticleEmitter3.Create(gpuParticleManager, value);
-	//gpuParticleEmitter4.Create(gpuParticleManager, value);
+	gpuParticleEmitter2.Create(gpuParticleManager, value);
+	gpuParticleEmitter3.Create(gpuParticleManager, value);
+	gpuParticleEmitter4.Create(gpuParticleManager, value);
 }
 
 SampleScene::~SampleScene()
@@ -39,9 +39,9 @@ void SampleScene::Initialize()
 void SampleScene::Update()
 {
 	gpuParticleEmitter.Update();
-	//gpuParticleEmitter2.Update();
-	//gpuParticleEmitter3.Update();
-	//gpuParticleEmitter4.Update();
+	gpuParticleEmitter2.Update();
+	gpuParticleEmitter3.Update();
+	gpuParticleEmitter4.Update();
 }
 
 void SampleScene::Draw()
@@ -68,9 +68,9 @@ void SampleScene::Draw()
 
 
 	gpuParticleEmitter.Draw(app->GetMainCamera() ,testComputeShader,1000);
-	//gpuParticleEmitter2.Draw(app->GetMainCamera(),testComputeShader, 100);
-	//gpuParticleEmitter3.Draw(app->GetMainCamera(),testComputeShader, 500);
-	//gpuParticleEmitter4.Draw(app->GetMainCamera(),testComputeShader, 1000);
+	gpuParticleEmitter2.Draw(app->GetMainCamera(),testComputeShader, 100);
+	gpuParticleEmitter3.Draw(app->GetMainCamera(),testComputeShader, 500);
+	gpuParticleEmitter4.Draw(app->GetMainCamera(),testComputeShader, 1000);
 
 	//graphicsDevice->ScreenFlip();
 
