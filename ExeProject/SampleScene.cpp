@@ -32,7 +32,7 @@ SampleScene::SampleScene(const char* sceneName, GatesEngine::Application* app) :
 	hr = graphicsDevice->GetDevice()->CreateComputePipelineState(&pipeDesc, IID_PPV_ARGS(&pipeline));
 
 	gpuParticleManager = new GatesEngine::GPUParticleManager(graphicsDevice);
-	int value = 25000;
+	int value = 5000;
 	gpuParticleEmitter.Create(gpuParticleManager, value);
 	gpuParticleEmitter2.Create(gpuParticleManager, value);
 	gpuParticleEmitter3.Create(gpuParticleManager, value);
@@ -64,22 +64,23 @@ void SampleScene::Draw()
 	using namespace GatesEngine::Math;
 
 	//graphicsDevice->GetCBufferAllocater()->ResetCurrentUseNumber();
-	//graphicsDevice->ClearRenderTarget({ 135,206,235,0 });
-	//graphicsDevice->ClearRenderTarget({ 0,0,0,0 });
+	graphicsDevice->ClearRenderTarget({ 135,206,235,0 });
+	//graphicsdevice->clearrendertarget({ 0,0,0,0 });
 
 	//ƒOƒŠƒbƒh•`‰æ
-	//graphicsDevice->GetShaderManager()->GetShader("Line")->Set();
-	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
-	//graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
-	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
-	//graphicsDevice->GetMeshManager()->GetMesh("Grid")->Draw();
-
+	graphicsDevice->GetShaderManager()->GetShader("Line")->Set();
+	graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
+	graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
+	graphicsDevice->GetMeshManager()->GetMesh("Grid")->Draw();
+	static float angle = 0;
+	angle += 0.02f;
 	graphicsDevice->GetShaderManager()->GetShader("DefaultMeshShader")->Set();
 	graphicsDevice->GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ {0,0,1,0},{1,1,1,1} });
 	graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
 	graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0,GatesEngine::Math::Matrix4x4::Identity());
-	graphicsDevice->GetMeshManager()->GetMesh("Cube")->Draw();
+	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0,GatesEngine::Math::Matrix4x4::Scale(1) * GatesEngine::Math::Matrix4x4::RotationY(angle));
+	graphicsDevice->GetMeshManager()->GetMesh("Sphere")->Draw();
 
 
 	gpuParticleEmitter.Draw(app->GetMainCamera(),pipeline,rootSignature->Get(),10);

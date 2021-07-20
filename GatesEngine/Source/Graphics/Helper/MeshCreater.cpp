@@ -180,6 +180,7 @@ void GatesEngine::MeshCreater::CreateSphere(Math::Vector3 size, int vTess, int h
 	std::vector<unsigned short>* indices = meshData.GetIndices();
 
 	vertices->resize(vTess * (hTess + 1));
+
 	for (int v = 0; v <= hTess; v++) 
 	{
 		for (int u = 0; u < vTess; u++) 
@@ -194,35 +195,101 @@ void GatesEngine::MeshCreater::CreateSphere(Math::Vector3 size, int vTess, int h
 		}
 	}
 
+	//c—ñ
+	for (int i = 0; i < hTess; ++i)
+	{
+		if (i >= hTess)continue;
+		//‰¡—ñ
+		for (int j = 0; j < vTess; ++j)
+		{
+			if (j == vTess - 1)
+			{
+				int offset = i * vTess;
+				int jPlusOffset = j + offset;
 
-	//int maxIndex = vTess * hTess * 6;
-	//for (int i = 0; i < maxIndex / 6; ++i)
-	//{
-	//	indices->push_back(i);
-	//	indices->push_back(i + 1);
-	//	indices->push_back(i + 12);
-	//	indices->push_back(i + 12);
-	//	indices->push_back(i + 11);
-	//	indices->push_back(i);
-	//}
+				indices->push_back(jPlusOffset);
 
-	int i = 0;
-	indices->resize(2 * hTess * (vTess + 1));
+				int jPlusMinusVTessMinusOne = jPlusOffset - (vTess - 1);
+				indices->push_back(jPlusMinusVTessMinusOne);
 
-	for (int v = 0; v < hTess; v++) {
-		for (int u = 0; u <= vTess; u++) {
-			if (u == vTess) {
-				(*indices)[i] = v * vTess;
-				++i;
-				(*indices)[i] = (v + 1) * vTess;
-				++i;
+				int jPlusOne = jPlusOffset + 1;
+				indices->push_back(jPlusOne);
+
+				Math::Vector3 normal, ba, cb;
+				ba = (*vertices)[jPlusMinusVTessMinusOne].point - (*vertices)[jPlusOffset].point;
+				cb = (*vertices)[jPlusOne].point - (*vertices)[jPlusMinusVTessMinusOne].point;
+				normal = Math::Vector3::Cross(ba, cb);
+				(*vertices)[jPlusOffset].normal = normal;
+				(*vertices)[jPlusMinusVTessMinusOne].normal = normal;
+				(*vertices)[jPlusOne].normal = normal;
+
+				indices->push_back(jPlusOne);
+
+				int jPlusVTessMinusOne = jPlusOffset + vTess;
+				indices->push_back(jPlusVTessMinusOne);
+
+				indices->push_back(jPlusOffset);
+
+				ba = (*vertices)[jPlusVTessMinusOne].point - (*vertices)[jPlusOne].point;
+				cb = (*vertices)[jPlusOffset].point - (*vertices)[jPlusVTessMinusOne].point;
+				normal = Math::Vector3::Cross(ba, cb);
+				(*vertices)[jPlusOne].normal = normal;
+				(*vertices)[jPlusVTessMinusOne].normal = normal;
+				(*vertices)[jPlusOffset].normal = normal;
+
+				continue;
 			}
-			else {
-				(*indices)[i] = (v * vTess) + u;
-				++i;
-				(*indices)[i] = (*indices)[i - 1] + vTess;
-				++i;
-			}
+
+			int offset = i * vTess;
+			int jPlusOffset = j + offset;
+
+			indices->push_back(jPlusOffset);
+
+			int jPlusOne = jPlusOffset + 1;
+			indices->push_back(jPlusOne);
+
+			int jPlusVTess = jPlusOffset + vTess + 1;
+			indices->push_back(jPlusVTess);
+
+			Math::Vector3 normal, ba, cb;
+			ba = (*vertices)[jPlusOne].point - (*vertices)[jPlusOffset].point;
+			cb = (*vertices)[jPlusVTess].point - (*vertices)[jPlusOffset].point;
+			normal = Math::Vector3::Cross(ba, cb);
+			(*vertices)[jPlusOffset].normal = normal;
+			(*vertices)[jPlusOne].normal = normal;
+			(*vertices)[jPlusVTess].normal = normal;
+
+
+			indices->push_back(jPlusVTess);
+
+			int jPlusVTessMinusOne = jPlusVTess - 1;
+			indices->push_back(jPlusVTessMinusOne);
+
+			indices->push_back(jPlusOffset);
+
+			ba = (*vertices)[jPlusVTessMinusOne].point - (*vertices)[jPlusVTess].point;
+			cb = (*vertices)[jPlusOffset].point - (*vertices)[jPlusVTessMinusOne].point;
+			normal = Math::Vector3::Cross(ba, cb);
+
+			(*vertices)[jPlusVTess].normal = normal;
+			(*vertices)[jPlusVTessMinusOne].normal = normal;
+			(*vertices)[jPlusOffset].normal = normal;
 		}
 	}
+	//for (int v = 0; v < hTess; v++) {
+	//	for (int u = 0; u <= vTess; u++) {
+	//		if (u == vTess) {
+	//			(*indices)[i] = v * vTess;
+	//			++i;
+	//			(*indices)[i] = (v + 1) * vTess;
+	//			++i;
+	//		}
+	//		else {
+	//			(*indices)[i] = (v * vTess) + u;
+	//			++i;
+	//			(*indices)[i] = (*indices)[i - 1] + vTess;
+	//			++i;
+	//		}
+	//	}
+	//}
 }
