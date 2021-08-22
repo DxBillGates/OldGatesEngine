@@ -76,10 +76,10 @@ void SampleScene::Draw()
 	static float angle = 0;
 	angle += 0.02f;
 	graphicsDevice->GetShaderManager()->GetShader("DefaultMeshShader")->Set();
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ {0,0,1,0},{1,1,1,1} });
+	graphicsDevice->GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ {0,-1,0,0},{1,1,1,1} });
 	graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
 	graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0,GatesEngine::Math::Matrix4x4::Scale(1) * GatesEngine::Math::Matrix4x4::RotationY(angle));
+	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0,GatesEngine::Math::Matrix4x4::Scale(100) * GatesEngine::Math::Matrix4x4::RotationY(angle));
 	graphicsDevice->GetMeshManager()->GetMesh("Sphere")->Draw();
 
 

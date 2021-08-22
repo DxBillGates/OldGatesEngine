@@ -233,6 +233,7 @@ void GatesEngine::MeshCreater::CreateSphere(Math::Vector3 size, int vTess, int h
 				ba = (*vertices)[jPlusVTessMinusOne].point - (*vertices)[jPlusOne].point;
 				cb = (*vertices)[jPlusOffset].point - (*vertices)[jPlusVTessMinusOne].point;
 				normal = Math::Vector3::Cross(ba, cb);
+				normal = normal.Normalize();
 				(*vertices)[jPlusOne].normal = normal;
 				(*vertices)[jPlusVTessMinusOne].normal = normal;
 				(*vertices)[jPlusOffset].normal = normal;
@@ -270,6 +271,7 @@ void GatesEngine::MeshCreater::CreateSphere(Math::Vector3 size, int vTess, int h
 			ba = (*vertices)[jPlusVTessMinusOne].point - (*vertices)[jPlusVTess].point;
 			cb = (*vertices)[jPlusOffset].point - (*vertices)[jPlusVTessMinusOne].point;
 			normal = Math::Vector3::Cross(ba, cb);
+			normal = normal.Normalize();
 
 			(*vertices)[jPlusVTess].normal = normal;
 			(*vertices)[jPlusVTessMinusOne].normal = normal;
