@@ -64,7 +64,7 @@ void SampleScene::Draw()
 	using namespace GatesEngine::Math;
 
 	//graphicsDevice->GetCBufferAllocater()->ResetCurrentUseNumber();
-	graphicsDevice->ClearRenderTarget({ 135,206,235,0 });
+	graphicsDevice->ClearRenderTarget({ 0,0,0,0 });
 	//graphicsdevice->clearrendertarget({ 0,0,0,0 });
 
 	//ƒOƒŠƒbƒh•`‰æ
@@ -73,14 +73,14 @@ void SampleScene::Draw()
 	graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0, GatesEngine::Math::Matrix4x4::Identity());
 	graphicsDevice->GetMeshManager()->GetMesh("Grid")->Draw();
-	static float angle = 0;
-	angle += 0.02f;
-	graphicsDevice->GetShaderManager()->GetShader("DefaultMeshShader")->Set();
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ {0,-1,0,0},{1,1,1,1} });
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
-	graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	graphicsDevice->GetCBufferAllocater()->BindAndAttach(0,GatesEngine::Math::Matrix4x4::Scale(100) * GatesEngine::Math::Matrix4x4::RotationY(angle));
-	graphicsDevice->GetMeshManager()->GetMesh("Sphere")->Draw();
+	//static float angle = 0;
+	//angle += 0.02f;
+	//graphicsDevice->GetShaderManager()->GetShader("DefaultMeshShader")->Set();
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(3, GatesEngine::B3{ {0,-1,0,0},{1,1,1,1} });
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(2, app->GetMainCamera()->GetData());
+	//graphicsDevice->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//graphicsDevice->GetCBufferAllocater()->BindAndAttach(0,GatesEngine::Math::Matrix4x4::Scale(100) * GatesEngine::Math::Matrix4x4::RotationY(angle));
+	//graphicsDevice->GetMeshManager()->GetMesh("Sphere")->Draw();
 
 
 	gpuParticleEmitter.Draw(app->GetMainCamera(),pipeline,rootSignature->Get(),10);

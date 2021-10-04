@@ -28,7 +28,7 @@ void GatesEngine::Camera::Initialize()
 	viewMatrix = Math::Matrix4x4::Identity();
 	projectionMatrix = Math::Matrix4x4::GetPerspectiveMatrix(90, pMainWindow->GetWindowAspect());
 
-	position = Math::Vector3(0, 0, -10);
+	position = Math::Vector3(0, 1000, -1000);
 	direction = Math::Vector3(0, 0, 1);
 	up = Math::Vector3(0, 1, 0);
 	rotation = Math::Matrix4x4::Identity();

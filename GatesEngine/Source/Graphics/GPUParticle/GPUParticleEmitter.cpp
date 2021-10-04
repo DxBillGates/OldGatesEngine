@@ -34,6 +34,7 @@ void GatesEngine::GPUParticleEmitter::Update()
 void GatesEngine::GPUParticleEmitter::Draw(Camera* camera, ID3D12PipelineState* pipeline, ID3D12RootSignature* rootSignature, const Math::Vector3& pos)
 {
 	addData[0].pos = { pos.x,pos.y,pos.z,0 };
+	addData[0].vel = { 10,0,0,0 };
 	//addData[0].vel = { 1,0,0,0 };
 
 	GraphicsDevice* graphicsDevice = manager->GetDevice();
