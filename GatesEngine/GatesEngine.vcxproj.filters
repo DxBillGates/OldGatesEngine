@@ -219,6 +219,9 @@
     <ClInclude Include="Header\Graphics\GPUParticle\GPUParticleEmitter.h">
       <Filter>Header\Graphics\GPUParticle</Filter>
     </ClInclude>
+    <ClInclude Include="Header\Graphics\ComputePipeline.h">
+      <Filter>Header\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Easing.cpp">
@@ -334,6 +337,9 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\GPUParticle\GPUParticleEmitter.cpp">
       <Filter>Source\Graphics\GPUParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\ComputePipeline.cpp">
+      <Filter>Source\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
